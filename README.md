@@ -6,6 +6,12 @@ Riffando é um projeto de aplicativo para aprender e praticar guitarra, criado c
 
 > **Estado:** planejamento. Ainda não há aplicativo implementado ou versão disponível para instalação.
 
+## Retomar o projeto em outra conversa ou agente
+
+**Comece pelo [Contexto mestre do projeto](docs/PROJECT_CONTEXT.md).** Ele contém as decisões já tomadas, o estado real do trabalho, as pendências e a ordem recomendada de execução. Consulte também o [registro de decisões](docs/DECISIONS.md), o [PRD](docs/product/PRD.md), o [roadmap](docs/product/ROADMAP.md) e as [issues](https://github.com/dvmarques/riffando/issues).
+
+> Para continuar com outro assistente: “Leia o repositório `dvmarques/riffando`, começando por `docs/PROJECT_CONTEXT.md`, `docs/DECISIONS.md` e as issues abertas. Confirme o estado atual antes de propor ou executar alterações.”
+
 ## Visão do produto
 
 Uma experiência integrada para guitarristas iniciantes e intermediários, com:
