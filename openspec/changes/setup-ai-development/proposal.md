@@ -9,7 +9,7 @@ Preparar desenvolvimento assistido por IA reproduzível e independente de conver
 - Templates GitHub, CI de documentação/ferramentas e validações reais.
 - Registro de referências analisadas, decisões preservadas e limitações.
 
-Fora do escopo: implementar GC-001…GC-041, escolher motor de áudio/monorepo, alterar licença, ativar proteção de main, merge ou archive.
+Fora do escopo desta implementação: implementar GC-001…GC-041, escolher motor de áudio/monorepo, alterar licença ou ativar proteção de main. A documentação prepara o ciclo de conclusão; executar archive e merge depende das autorizações aplicáveis, seguindo AGENTS.md.
 
 ## Capabilities
 

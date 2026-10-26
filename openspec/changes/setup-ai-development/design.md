@@ -14,7 +14,7 @@ Reprodução por npm ci e scripts versionados; docs, skills e validação em CI.
 - Codex skills em .agents; Claude skills e comandos próprios. Preservar ambos os formatos gerados oficialmente em vez de symlinks que prejudicam Windows. AGENTS contém a política comum; CLAUDE só referencia/importa AGENTS.
 - Ferramentas Node na raiz não constituem monorepo nem fundação mobile. Organização final do aplicativo permanece pendente de #11; app único é alternativa a avaliar.
 - CI executa Markdown, links locais, integridade da geração, smoke do CLI e validação estrita. Gates mobile entram em #14 junto aos scripts reais.
-- Archive da change real permanece bloqueado até autorização e merge; testar lifecycle somente em diretório temporário descartável.
+- Padrão aprovado: concluir todas as tarefas, obter autorização aplicável e arquivar/sincronizar na branch da PR antes do merge por squash. Testes de lifecycle continuam em diretório temporário descartável; executar archive real somente quando autorizado.
 
 ## Risks / Trade-offs
 
@@ -22,7 +22,7 @@ Discovery de skills exige reinício das sessões. CLI não é agente autenticado
 
 ## Migration Plan
 
-Sem migração do app. Reverter o PR remove a configuração. Atualizações futuras mudam versão/lock, regeneram integrações e repetem validate em PR. Após merge autorizado, sincronizar/arquivar em PR de acompanhamento autorizado.
+Sem migração do app. Reverter o PR remove a configuração. Atualizações futuras mudam versão/lock, regeneram integrações e repetem validate em PR. Concluir todas as tarefas e arquivar/sincronizar na mesma PR antes do squash autorizado. Somente uma restrição concreta documentada e aprovada permite integrar primeiro e arquivar em PR de acompanhamento, também por squash.
 
 ## Revisão complementar — PR #52
 

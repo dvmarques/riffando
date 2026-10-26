@@ -25,7 +25,10 @@
 - [x] 4.3 Executar segunda revisão com Claude Code e corrigir os problemas encontrados. Isolamento CODEX_HOME/XDG_DATA_HOME e regressão em ai:check; ver VALIDATION.md.
 - [x] 4.4 Atualizar evidências e descrição da PR com os resultados reais. VALIDATION.md e PR #52 atualizados após as duas revisões.
 
-## 5. Após autorização futura
+## 5. Processo de conclusão aprovado pelo mantenedor
 
-- [ ] 5.1 Obter aprovação e autorização explícita para merge.
-- [ ] 5.2 Após merge, atualizar issue e sincronizar/arquivar a change em PR de acompanhamento autorizado.
+- [x] 5.1 Documentar tasks concluídas → archive/sync → merge por squash, com exceção restrita à integração prévia necessária.
+- [x] 5.2 Reclassificar autorização, archive, merge e fechamento administrativo como gates da PR, preservando os critérios reais de implementação.
+- [x] 5.3 Validar a documentação, regras OpenSpec e consistência do fluxo atualizado. npm run validate e git diff --check aprovados; política, specs, contexto, roadmap e template alinhados.
+
+As antigas tarefas administrativas 5.1/5.2 foram substituídas pelo checklist de conclusão da PR, não marcadas como executadas. Aprovação/autorização, archive e squash ainda não foram realizados. Nenhuma entrega depende de integração prévia nesta change; aplica-se o fluxo padrão.

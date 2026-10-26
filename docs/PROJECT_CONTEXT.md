@@ -78,5 +78,5 @@ Configuração proposta na branch `chore/ai-development-setup`, change `setup-ai
 - [Validação](development/VALIDATION.md) registra evidências e limites; [GitHub](development/GITHUB.md) documenta templates, taxonomia e proteção recomendada.
 - CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.
 - A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
-- Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → merge autorizado → archive/sync autorizado em PR de acompanhamento.
-- Não fazer merge, squash ou archive sem autorização explícita; a change de preparação permanece ativa até lá.
+- Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash.
+- Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. A change permanece ativa enquanto seu arquivamento não for autorizado/executado.

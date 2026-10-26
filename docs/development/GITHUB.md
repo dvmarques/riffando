@@ -27,3 +27,7 @@ Esta é recomendação, não configuração aplicada. Verificar permissões admi
 O workflow inicial executa `npm ci --ignore-scripts` e `npm run validate` em Linux e Windows, sem credenciais nem permissões de escrita. Não possui scripts fictícios de Expo/TypeScript.
 
 Em #11/#14, após escopo aprovado, adicionar TypeScript estrito, lint React Native, testes de domínio/UI/migração e build Android reproduzível. Avaliar SDK/JDK, development builds e cache conforme o Expo escolhido. Maestro e demais propostas exigem validação. Não colocar segredos EAS/loja em PRs de forks; publicar exige fluxo e autorização próprios.
+
+## Conclusão da PR
+
+A seção **Conclusão de changes e merge** de [AGENTS.md](../../AGENTS.md) define o fluxo: tasks completas, archive/sync na própria PR, revisão/CI final e squash merge. O template registra os gates e eventual exceção por restrição concreta de integração prévia. Não exigir uma tarefa de executar o merge ou de fechar administrativamente a issue dentro da change. Configurações administrativas do repositório não foram alteradas; a regra de usar squash aplica-se à execução do merge.

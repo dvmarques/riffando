@@ -60,7 +60,13 @@ npm run validate
 
 `new change` cria metadados; a skill Propose escreve os artefatos pelos templates. `status.isPlanningComplete` informa a existência dos artefatos. A skill Verify compara a implementação com a change; `validate` verifica o formato. Nenhum desses resultados representa aprovação humana ou teste do app.
 
-Para consultar os inputs de conclusão: `npm exec -- openspec instructions archive --change nome-da-change --json`. Depois dos gates definidos em AGENTS.md, o comando de arquivamento é `npm exec -- openspec archive nome-da-change`; ele sincroniza os deltas por padrão.
+Para consultar os inputs de conclusão: `npm exec -- openspec instructions archive --change nome-da-change --json`. Com todas as tarefas concluídas e os gates/autorização definidos em AGENTS.md, execute `npm exec -- openspec archive nome-da-change` na branch da PR; ele sincroniza os deltas por padrão. Inclua archive e specs no commit da PR e execute novamente `npm run validate`. Após revisão do diff final, CI verde e autorização de merge, use squash:
+
+```bash
+gh pr merge <numero-da-pr> --squash --match-head-commit <sha-final-revisado>
+```
+
+Use o SHA final aprovado para impedir integração acidental de commits posteriores à revisão. Esses comandos são exemplos e não concedem autorização de execução. O fluxo de exceção por restrição de integração prévia está em AGENTS.md; registrar sua justificativa/aprovação na seção Conclusão da PR antes de executar a sequência alternativa.
 
 ## Retomar em outro chat ou agente
 

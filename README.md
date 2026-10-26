@@ -22,7 +22,7 @@ npm run ai:setup
 npm run validate
 ```
 
-Requer Node.js 24. Estes comandos preparam e verificam ferramentas; não iniciam o aplicativo. Veja [evidências e limitações](docs/development/VALIDATION.md) e [políticas GitHub](docs/development/GITHUB.md). Merge e arquivamento dependem de autorização explícita.
+Requer Node.js 24. Estes comandos preparam e verificam ferramentas; não iniciam o aplicativo. Veja [evidências e limitações](docs/development/VALIDATION.md) e [políticas GitHub](docs/development/GITHUB.md). Fluxo padrão: concluir todas as tarefas, arquivar/sincronizar a change na PR e então fazer merge por squash, respeitando as autorizações. Exceções por restrição concreta estão em AGENTS.md.
 
 ## Visão do produto
 

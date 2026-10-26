@@ -17,7 +17,7 @@ Siga as políticas de [AGENTS.md](AGENTS.md) e as regras de artefatos em `opensp
 2. Revisão da proposta e aprovação de decisões arquiteturais antes de Apply.
 3. Implementação autorizada → testes/Verify → revisão do diff e código.
 4. PR para `main` → CI verde → code review.
-5. Merge/squash somente com autorização; após merge, atualizar issue e archive/sync em PR de acompanhamento autorizado.
+5. Concluir todas as tarefas da change → archive/sync autorizado na branch da PR → revisar e validar o diff final/CI → merge autorizado sempre por squash. Exceção apenas por restrição concreta de integração prévia, documentada e aprovada conforme AGENTS.md.
 
 Use branches `feat/<issue>-<descricao>`, `fix/...`, `chore/...` ou `docs/...` e Conventional Commits. Os templates GitHub orientam evidências e limites. `Refs #N` para escopo parcial; `Closes #N` somente para entrega integral.
 

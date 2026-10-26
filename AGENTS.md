@@ -36,14 +36,24 @@ O aplicativo permanece não implementado. A preparação de ferramentas não aut
 5. Apply somente do escopo autorizado. Atualizar tarefas com evidências e manter artefatos coerentes.
 6. Verify: validar contra proposta/specs/tasks, executar `npm run validate` e verificações do app quando existirem. Revisar diff e código antes do PR. Validação sintática OpenSpec não prova comportamento nem aprovação.
 7. Abrir PR para `main`, acompanhar CI e corrigir falhas antes de solicitar code review. Relatar limitações reais; nunca afirmar testes não executados.
-8. Aguardar aprovação. **Não fazer merge, squash ou archive sem autorização explícita.** Após merge autorizado, atualizar issue, arquivar e sincronizar specs em branch/PR de acompanhamento autorizado; nunca gravar direto em `main`. O CLI archive sincroniza deltas por padrão: não usar `--skip-specs` quando houver deltas nem promover propostas não aprovadas ao baseline.
+8. Após revisão e CI verde, conferir que todas as tarefas da change estão realmente concluídas. Com autorização para arquivar, sincronizar specs e arquivar a change na própria branch da PR, antes do merge. Seguir a seção **Conclusão de changes e merge**.
+9. Revisar o diff do arquivamento/sincronização, executar novamente as validações e aguardar CI verde no commit final. Com aprovação e autorização de merge, integrar a PR **sempre por squash**. Nunca gravar diretamente na branch de integração.
+
+## Conclusão de changes e merge
+
+- Padrão: **todas as tarefas concluídas → revisão/CI → archive com sync na branch da PR → validação/revisão do diff final e CI → merge por squash**. A branch de integração é `main` neste projeto; usar `develop` apenas quando definida como base do trabalho.
+- `tasks.md` contém entregas verificáveis de implementação, testes, revisão e documentação. Aprovação/autorização, executar archive, executar merge e fechamento administrativo de issues são gates/ações do ciclo da PR, registrados no checklist da PR; não criar tarefas que dependam do próprio archive/merge para concluir a change. Não marcar entrega incompleta como feita nem remover critério de aceite real para permitir archive.
+- Archive exige 100% das tarefas concluídas, evidências e autorização aplicável. Merge exige aprovação/autorização aplicável e CI verde no commit final, incluindo archive e specs sincronizadas. Reutilizar autorizações já concedidas para o mesmo escopo; a definição deste processo, por si só, não autoriza executar archive ou merge de uma PR específica.
+- O CLI archive sincroniza deltas por padrão: não usar `--skip-specs` quando houver deltas nem promover proposta não aprovada ao baseline. Incluir archive e specs sincronizadas na mesma PR, de modo que o squash entregue implementação e documentação juntas.
+- **Exceção somente por restrição concreta:** quando uma entrega/validação precisa estar em `main` ou `develop` antes de concluir a change (por exemplo, validação disponível apenas após integração), registrar na PR e no design a restrição, evidência, tarefas dependentes, branch de destino e sequência alternativa. Obter aprovação da exceção antes de integrar; conveniência não é justificativa. Preservar as tarefas dependentes abertas até sua execução real.
+- Na exceção, integrar por squash com a change ativa, executar e validar o trabalho dependente, concluir todas as tarefas e só então sincronizar/arquivar em PR de acompanhamento, também integrada por squash. A exceção altera a ordem entre integração e archive; nunca dispensa tarefas completas antes de archive nem autoriza merge commit ou rebase merge.
 
 ## Git, CI e conclusão
 
 - Branches `chore/<issue>-<descricao>`, `feat/...`, `fix/...`, `docs/...`; commits Conventional Commits (`chore:`, `feat:`, `fix:`, `docs:`, `test:`). Não misturar refatorações fora do escopo.
 - PR deve conter issue/change, problema e resultado, limites, testes, riscos, privacidade/acessibilidade e evidência de aparelho quando aplicável. Use `Closes #N` somente para escopo integralmente entregue; caso parcial, `Refs #N`.
 - Nesta fase, `npm run validate` verifica Markdown, links locais, integrações geradas, smoke do CLI e OpenSpec estrito. Não há lint/typecheck/test/build mobile. Ao criar código, adicionar scripts reais, testes relevantes e gates obrigatórios no CI; não substituir verificações por comandos que apenas retornam sucesso.
-- Concluir implementação somente com critérios atendidos, revisão de código, CI verde e documentação atualizada. Merge e archive são etapas separadas, dependentes de autorização.
+- Concluir implementação somente com critérios atendidos, revisão de código, CI verde e documentação atualizada. Archive e merge seguem a ordem e os gates da seção **Conclusão de changes e merge**; merge sempre por squash.
 - Ao mudar decisões, atualizar contexto, registro de decisões, documentos afetados e ADR quando estrutural. Não duplicar PRD/arquitetura em instruções operacionais.
 
 ## Agentes e dependências

@@ -43,7 +43,7 @@ Templates usam labels padrão existentes; custom labels/milestones estão prepar
 - CI ampliado para Linux e Windows com os mesmos comandos e permissões somente de leitura.
 - Markdownlint-cli2 atualizado para 0.24.0; KaTeX transitivo fixado em 0.18.2 por override limitado, com justificativa em design.md. `npm audit`: zero vulnerabilidades após a atualização.
 - Adicionado [changelog](../../CHANGELOG.md) em Unreleased. Assignee `dvmarques` e label `documentation` já presentes na PR.
-- Nenhum código mobile, merge, squash ou archive da change real realizado. As tarefas de autorização/conclusão após merge permanecem pendentes.
+- Nenhum código mobile, merge, squash ou archive da change real realizado. Na revisão anterior, autorização e conclusão após merge ainda constavam como tarefas; foram reclassificadas no ajuste de processo abaixo.
 
 ## Segunda revisão com Claude Code — 26/10/2026
 
@@ -62,4 +62,13 @@ Templates usam labels padrão existentes; custom labels/milestones estão prepar
 - Sete workflows explicitados no cenário de instalação da spec; nomes dos checks definidos explicitamente pela plataforma no workflow.
 - A sessão Codex atual começou no checkout principal antes de existir a configuração; discovery das novas skills nessa mesma sessão não foi testado. Regeneração oficial, execução dos scripts e ativação de skill numa sessão Claude real foram verificadas.
 
-- [CI Linux/Windows da revisão](https://github.com/dvmarques/riffando/actions/runs/40393245594), commit `f950833`: ambos os checks aprovados (Linux 13s, Windows 35s). Tarefas 4.1 a 4.4 concluídas; somente autorização de merge e acompanhamento pós-merge permanecem abertos.
+- [CI Linux/Windows da revisão](https://github.com/dvmarques/riffando/actions/runs/40393245594), commit `f950833`: ambos os checks aprovados (Linux 13s, Windows 35s). Tarefas 4.1 a 4.4 concluídas naquela revisão; a organização das ações de conclusão foi atualizada no ajuste abaixo.
+
+## Ajuste do processo de conclusão — 26/10/2026
+
+Pedido do mantenedor: todas as tarefas completas antes do archive; archive/sync na branch da PR antes do squash; merge sempre por squash. Exceção somente por restrição concreta que exija integração prévia em main/develop, documentada e aprovada, mantendo todas as tarefas obrigatórias antes do archive e squash em todo merge.
+
+- Políticas em AGENTS.md, regras OpenSpec, spec da capacidade, design, proposta, contexto, decisões, contribuição, roadmap e guias alinhados. Template da PR registra gates de conclusão e justificativa da exceção.
+- Antigas tarefas administrativas de autorização e ações pós-merge substituídas por tarefas verificáveis de preparação do processo. Não foram marcadas como executadas. As ações de archive e merge ficam no checklist da PR, evitando dependência circular. Nenhum critério real de entrega foi retirado.
+- `npm run validate`: passou (Markdown, links locais, geração oficial, smoke temporário e OpenSpec estrito). `git diff --check`: passou.
+- Esta change não tem restrição concreta que exija integração prévia. Todas as tarefas de implementação/documentação estão concluídas. Archive real e squash permanecem sem execução, dependentes das autorizações aplicáveis.

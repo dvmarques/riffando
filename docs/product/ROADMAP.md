@@ -44,7 +44,7 @@ Os códigos GC são **identificadores de planejamento**, não números de issues
 
 ## Fluxo de desenvolvimento
 
-Issue → Explore somente leitura → Propose OpenSpec → revisão da proposta → Apply autorizado em branch → testes/Verify → revisão do código → PR → CI → code review → merge autorizado → atualização da issue e archive/sync autorizado. Políticas e gates em [AGENTS.md](../../AGENTS.md); exemplos de comandos em [AI_WORKFLOW](../development/AI_WORKFLOW.md). O projeto **não está autorizado a implementar automaticamente** por esta documentação.
+Issue → Explore somente leitura → Propose OpenSpec → revisão da proposta → Apply autorizado em branch → testes/Verify → revisão do código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash → atualização administrativa da issue. Políticas e gates em [AGENTS.md](../../AGENTS.md); exemplos de comandos em [AI_WORKFLOW](../development/AI_WORKFLOW.md). O projeto **não está autorizado a implementar automaticamente** por esta documentação.
 
 ## Licenciamento
 

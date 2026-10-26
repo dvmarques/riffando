@@ -29,7 +29,8 @@ rules:
   tasks:
     - Criar incrementos pequenos e verificáveis com testes, revisão de código, documentação e CI.
     - Executar npm run validate; adicionar lint, tipos, testes e build mobile reais quando houver código.
-    - Separar implementação de merge e archive, que exigem autorização após revisão.
+    - Incluir somente entregas verificáveis que possam ser concluídas antes do archive; registrar autorização, archive, merge e fechamento administrativo no checklist da PR, sem dependência circular em tasks.md.
+    - Não marcar tarefas incompletas como feitas; se uma entrega real depender de integração prévia, mantê-la aberta e documentar a exceção em design e PR conforme AGENTS.md.
 
 operations:
   apply:
@@ -38,5 +39,6 @@ operations:
       - Atualizar tarefas com evidências; não iniciar backlog funcional durante preparação de ferramentas.
   archive:
     guidance:
-      - Exigir autorização explícita e merge aprovado; conferir tarefas, CI e revisão antes de arquivar.
-      - Sincronizar deltas com specs permanentes, atualizar issue e documentos por branch e PR autorizado.
+      - Exigir todas as tarefas concluídas, revisão, CI e autorização aplicável; no fluxo padrão, arquivar e sincronizar na própria branch da PR antes do merge por squash.
+      - Revisar e validar archive e specs sincronizadas; exigir CI verde no commit final antes do squash. Seguir AGENTS.md para gates e autorizações.
+      - Somente restrição concreta documentada e aprovada permite integração prévia em main/develop; nesse caso, concluir tarefas dependentes depois da integração e arquivar em PR de acompanhamento, sempre com merge por squash.
