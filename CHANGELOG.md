@@ -17,6 +17,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `ci-skip-draft-prs` - O CI de Pull Request deixa de executar em PRs Draft e passa a rodar ao marcar Ready for review; push na `main` e execução manual não mudam.
+
 - `setup-ai-development` (PR #52) - Conclusão de todas as tarefas antes de archive/sync e merge sempre por squash; integração prévia restrita a exceções documentadas/aprovadas. Autorizações e ações administrativas ficam no checklist da PR, evitando tarefas circulares.
 - `setup-ai-development` (PR #52) - Changelog organizado por versão em andamento e categorias Added, Changed e Fixed, com identificação da change/issue e efeito objetivo; convenção de fechamento com data em português brasileiro e abertura da próxima versão em andamento.
 

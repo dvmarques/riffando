@@ -22,6 +22,10 @@ Preparar ruleset com PR obrigatório, uma aprovação independente quando dispon
 
 Esta é recomendação, não configuração aplicada. Verificar permissões administrativas, plano GitHub, colaboradores capazes de revisar e impactos antes de ativar: exigir aprovador independente pode bloquear mantenedor único. Não usar aprovação automática por IA nem auto-merge como substituto.
 
+## CI e PRs Draft
+
+Enquanto a PR estiver em **Draft**, o job de validação do CI fica skipped. Ao marcar **Ready for review**, o evento `ready_for_review` executa a validação completa (Linux e Windows) sobre o commit corrente. `push` na `main` e execução manual continuam rodando normalmente. Em Draft, rode `npm run validate` localmente; a integração exige CI verde no commit final, portanto a PR precisa estar Ready.
+
 ## Evolução do CI mobile
 
 O workflow inicial executa `npm ci --ignore-scripts` e `npm run validate` em Linux e Windows, sem credenciais nem permissões de escrita. Não possui scripts fictícios de Expo/TypeScript.
