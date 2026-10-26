@@ -1,0 +1,62 @@
+# Riffando 🎸
+
+**Toque. Aprenda. Evolua.**
+
+Riffando é um projeto de aplicativo para aprender e praticar guitarra, criado com foco em **português brasileiro**, experiência acessível e acompanhamento da evolução musical.
+
+> **Estado:** planejamento. Ainda não há aplicativo implementado ou versão disponível para instalação.
+
+## Visão do produto
+
+Uma experiência integrada para guitarristas iniciantes e intermediários, com:
+
+- Afinador cromático com entrada pelo microfone e, quando suportado, interface de áudio USB.
+- Metrônomo com compassos, subdivisões e progressão de velocidade.
+- Braço de guitarra interativo, acordes, escalas e afinações alternativas.
+- Exercícios progressivos, rotinas de prática e histórico local.
+- Treinador de notas e ritmo com feedback em português, baseado em análise de áudio.
+- Em etapas futuras, reprodução de áudio local, repetição de trechos e acompanhamento de progresso.
+
+As funcionalidades serão desenvolvidas **por fases**; esta lista representa a visão do produto, não recursos já entregues.
+
+## Princípios
+
+- **Português brasileiro em primeiro lugar:** interface, instruções e feedback.
+- **Privacidade e funcionamento offline:** priorizar dados locais, sem exigir conta ou servidor.
+- **Transparência:** distinguir medições reais, estimativas e avaliações do usuário.
+- **Acessibilidade:** leitura clara, controles adequados e suporte a tecnologias assistivas.
+- **Baixo custo:** evitar infraestrutura recorrente.
+
+## Tecnologia planejada
+
+- React Native, Expo e TypeScript.
+- Expo Router para navegação.
+- SQLite para persistência local.
+- Motor de áudio nativo para captura, análise e temporização; implementação e viabilidade ainda sujeitas a validação em dispositivos reais.
+- Android como primeira plataforma, com arquitetura preparada para eventual suporte a iOS.
+
+## Roadmap resumido
+
+1. Fundação: documentação, arquitetura, projeto mobile, qualidade e CI.
+2. Ferramentas musicais: teoria, braço interativo e metrônomo.
+3. Captura de áudio, afinador, exercícios e sessões.
+4. Treinador inteligente e indicadores de progresso.
+5. Estúdio de áudio local, acessibilidade, testes e publicação Android.
+
+O roadmap e as estimativas serão refinados antes do início da implementação.
+
+## Licenciamento
+
+O código deste projeto está disponível sob a **[PolyForm Noncommercial License 1.0.0](LICENSE)**. Isso significa que o código é público e pode ser utilizado nos termos da licença, **mas não é software open source segundo a definição da OSI**, pois há restrições ao uso comercial.
+
+O licenciamento comercial exige autorização separada dos titulares dos direitos aplicáveis. O nome e os elementos de identidade visual seguem a política descrita em [TRADEMARKS.md](TRADEMARKS.md).
+
+> A licença anterior MIT, se aplicada a versões já publicadas, não tem suas permissões retroativamente revogadas.
+
+## Contribuições
+
+Contribuições não comerciais e propostas de melhorias são bem-vindas. Antes de enviar código, leia [CONTRIBUTING.md](CONTRIBUTING.md), inclusive as condições de direitos autorais.
+
+## Aviso
+
+O projeto está em fase inicial. Informações de compatibilidade de dispositivos, precisão de análise musical e datas de lançamento só serão confirmadas após testes.
