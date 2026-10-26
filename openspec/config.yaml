@@ -29,6 +29,7 @@ rules:
   tasks:
     - Criar incrementos pequenos e verificáveis com testes, revisão de código, documentação e CI.
     - Executar npm run validate; adicionar lint, tipos, testes e build mobile reais quando houver código.
+    - Registrar mudanças relevantes no CHANGELOG.md na versão Em andamento, sob Added, Changed ou Fixed, identificando change ou issue e efeito conforme AGENTS.md.
     - Incluir somente entregas verificáveis que possam ser concluídas antes do archive; registrar autorização, archive, merge e fechamento administrativo no checklist da PR, sem dependência circular em tasks.md.
     - Não marcar tarefas incompletas como feitas; se uma entrega real depender de integração prévia, mantê-la aberta e documentar a exceção em design e PR conforme AGENTS.md.
 

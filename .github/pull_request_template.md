@@ -14,6 +14,7 @@
 - [ ] `npm run validate` passou.
 - [ ] Testes, lint, typecheck e build mobile executados quando disponíveis; limitações descritas.
 - [ ] Diff e código revisados; documentação e decisões atualizadas.
+- [ ] CHANGELOG atualizado na versão em andamento, em Added/Changed/Fixed, com change/issue e efeito; ou ausência de mudança registrável justificada.
 - [ ] pt-BR, acessibilidade, offline e privacidade avaliados, ou não aplicabilidade justificada.
 - [ ] Áudio/USB/latência: aparelho, OS, entrada e resultados registrados quando aplicável.
 - [ ] CI verde antes de solicitar code review.

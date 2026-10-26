@@ -32,3 +32,7 @@
 - [x] 5.3 Validar a documentação, regras OpenSpec e consistência do fluxo atualizado. npm run validate e git diff --check aprovados; política, specs, contexto, roadmap e template alinhados.
 
 As antigas tarefas administrativas 5.1/5.2 foram substituídas pelo checklist de conclusão da PR, não marcadas como executadas. Aprovação/autorização, archive e squash ainda não foram realizados. Nenhuma entrega depende de integração prévia nesta change; aplica-se o fluxo padrão.
+
+## 6. Padrão de changelog
+
+- [x] 6.1 Comparar o projeto de referência, alinhar formato/versionamento/categorias e instruções futuras, preservando as entradas e validar a documentação. npm run validate, git diff --check e parser original da referência aprovados; simulação de fechamento somente em memória.

@@ -72,3 +72,9 @@ Pedido do mantenedor: todas as tarefas completas antes do archive; archive/sync 
 - Antigas tarefas administrativas de autorização e ações pós-merge substituídas por tarefas verificáveis de preparação do processo. Não foram marcadas como executadas. As ações de archive e merge ficam no checklist da PR, evitando dependência circular. Nenhum critério real de entrega foi retirado.
 - `npm run validate`: passou (Markdown, links locais, geração oficial, smoke temporário e OpenSpec estrito). `git diff --check`: passou.
 - Esta change não tem restrição concreta que exija integração prévia. Todas as tarefas de implementação/documentação estão concluídas. Archive real e squash permanecem sem execução, dependentes das autorizações aplicáveis.
+
+## Alinhamento do changelog — 26/10/2026
+
+O registro inicial em Unreleased foi substituído pelo padrão do projeto de referência do mantenedor: cabeçalho `### [X.Y.Z] - Em andamento`, categorias `#### Added`, `#### Changed`, `#### Fixed`, identificação da change/issue e efeito objetivo em pt-BR. A versão 0.0.1 é o placeholder do próximo patch do manifest 0.0.0; nenhuma versão foi fechada ou publicada. Regras de manutenção e fechamento futuro documentadas em AGENTS.md, contribuição, config OpenSpec e checklist de PR. O nível intermediário Histórico de versões preserva a hierarquia Markdown sem alterar o formato dos cabeçalhos de versão/categoria.
+
+Validação: `npm run validate` e `git diff --check` aprovados. O parser original `parseChangelog` do projeto de referência reconheceu uma seção em andamento 0.0.1 e nenhuma versão fechada; `prepareChangelog` simulou em memória o fechamento com `26-out-2026` e a abertura de 0.0.2. Nenhum arquivo ou configuração do projeto de referência foi modificado.
