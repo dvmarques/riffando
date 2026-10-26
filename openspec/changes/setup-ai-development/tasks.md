@@ -20,10 +20,10 @@
 
 ## 4. Revisão complementar da PR #52
 
-- [ ] 4.1 Corrigir a validação em Windows/CRLF e validar em CI Linux/Windows. Correção local validada no Windows; pendente evidência remota da matriz.
+- [x] 4.1 Corrigir a validação em Windows/CRLF e validar em CI Linux/Windows. CI 40393245594 aprovado nas duas plataformas (commit f950833).
 - [x] 4.2 Atualizar dependências Markdown vulneráveis e registrar changelog. `npm audit`: 0 vulnerabilidades; KaTeX 0.18.2 validado.
 - [x] 4.3 Executar segunda revisão com Claude Code e corrigir os problemas encontrados. Isolamento CODEX_HOME/XDG_DATA_HOME e regressão em ai:check; ver VALIDATION.md.
-- [ ] 4.4 Atualizar evidências e descrição da PR com os resultados reais.
+- [x] 4.4 Atualizar evidências e descrição da PR com os resultados reais. VALIDATION.md e PR #52 atualizados após as duas revisões.
 
 ## 5. Após autorização futura
 

@@ -61,3 +61,5 @@ Templates usam labels padrão existentes; custom labels/milestones estão prepar
 - KaTeX transitivo validado também por renderização inline e display com micromark.
 - Sete workflows explicitados no cenário de instalação da spec; nomes dos checks definidos explicitamente pela plataforma no workflow.
 - A sessão Codex atual começou no checkout principal antes de existir a configuração; discovery das novas skills nessa mesma sessão não foi testado. Regeneração oficial, execução dos scripts e ativação de skill numa sessão Claude real foram verificadas.
+
+- [CI Linux/Windows da revisão](https://github.com/dvmarques/riffando/actions/runs/40393245594), commit `f950833`: ambos os checks aprovados (Linux 13s, Windows 35s). Tarefas 4.1 a 4.4 concluídas; somente autorização de merge e acompanhamento pós-merge permanecem abertos.
