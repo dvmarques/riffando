@@ -9,6 +9,7 @@ Escolha um modelo disponível capaz de concluir a tarefa com qualidade. A escolh
 | Crítico (áudio nativo, dados, segurança, arquitetura, acessibilidade complexa) | maior capacidade/revisão independente | ampliar evidências e avaliação de especialistas |
 
 ## Por fase
+
 - Explore e proposal: contexto seletivo; revisar decisões arquiteturais.
 - Design/specs: raciocínio proporcional a riscos e alternativas.
 - Apply: validar incrementos reais, não executar comandos fictícios.
@@ -16,4 +17,5 @@ Escolha um modelo disponível capaz de concluir a tarefa com qualidade. A escolh
 - Sync/archive: seguir gates existentes; custo baixo não autoriza archive prematuro.
 
 ## Medição sem alegações infundadas
+
 Em tarefas comparáveis, registrar ferramenta, versão, esforço, escopo, tokens quando disponíveis, duração, tentativas, testes aprovados, regressões e retrabalho. Compare taxa de sucesso e custo efetivo por entrega validada. Campos não expostos devem ser registrados como **não disponíveis**, nunca estimados como medição. Não enviar segredos ou dados privados a serviços de benchmark.

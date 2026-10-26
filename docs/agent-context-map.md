@@ -15,6 +15,7 @@ Leia primeiro [AGENTS.md](../AGENTS.md) e a issue. Este índice é uma rota de l
 | Modelos e skills | [modelos](models.md), [workflow](development/AI_WORKFLOW.md) | consistência das skills; não editar geradas |
 
 ## Leitura incremental
+
 1. Identifique issue, arquivos e change; leia as políticas de AGENTS.md e a configuração OpenSpec.
 2. Leia fontes específicas do domínio acima, depois arquivos diretamente afetados; não carregue o repositório inteiro sem necessidade.
 3. Amplie o contexto em alterações críticas, dependências entre domínios ou duas tentativas sem progresso.

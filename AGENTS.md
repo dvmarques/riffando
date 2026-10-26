@@ -4,7 +4,9 @@
 
 Riffando é um aplicativo de aprendizado e prática de guitarra para iniciantes e intermediários, com pt-BR como idioma principal. GitHub é a fonte da verdade: código, documentos, issues, PRs e histórico. Não dependa de conversas ou memória externa.
 
-Após estas regras, use [o mapa de contexto](docs/agent-context-map.md) para leitura seletiva e a skill própria `adaptive-ai-workflow` para classificar o risco (Fast/Standard/Critical). Os guias [modelos](docs/models.md) e [qualidade](docs/quality.md) complementam as políticas sem dispensar validações.\n\nAntes de modificar arquivos, leia [README](README.md), [contexto mestre](docs/PROJECT_CONTEXT.md), [decisões](docs/DECISIONS.md), [PRD](docs/product/PRD.md), [arquitetura](docs/architecture/ARCHITECTURE.md), [modelo de dados](docs/architecture/DATA_MODEL.md), [roadmap](docs/product/ROADMAP.md), a issue e as specs/changes pertinentes. Leia também `openspec/config.yaml`, que centraliza contexto e regras dos artefatos/operações OpenSpec. O [guia rápido](docs/development/AI_WORKFLOW.md) contém somente instalação, comandos e retomada.
+Após estas regras, use [o mapa de contexto](docs/agent-context-map.md) para leitura seletiva e a skill própria `adaptive-ai-workflow` para classificar o risco (Fast/Standard/Critical). Os guias [modelos](docs/models.md) e [qualidade](docs/quality.md) complementam as políticas sem dispensar validações.
+
+Antes de modificar arquivos, leia `README.md`, `openspec/config.yaml`, a issue e a change pertinente. Consulte `docs/PROJECT_CONTEXT.md`, `docs/DECISIONS.md`, PRD, arquitetura, modelo de dados e roadmap conforme o mapa de contexto e o impacto da tarefa. Em mudanças transversais ou críticas, amplie a leitura das fontes relevantes; nenhuma otimização dispensa regras e gates obrigatórios. O guia rápido `docs/development/AI_WORKFLOW.md` contém instalação, comandos e retomada.
 
 O aplicativo permanece não implementado. A preparação de ferramentas não autoriza iniciar as 41 tarefas GC-001…GC-041. Preserve a distinção entre decisões aprovadas e hipóteses; solicite aprovação antes de mudanças arquiteturais relevantes.
 
