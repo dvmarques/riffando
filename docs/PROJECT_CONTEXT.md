@@ -70,7 +70,7 @@ Escolher um spike de áudio Android que valide: microfone, interface USB (em dis
 
 ## Preparação de desenvolvimento com IA — 26/10/2026
 
-Configuração proposta na branch `chore/ai-development-setup`, change `setup-ai-development`; aprovação e merge devem ser confirmados no GitHub. Nenhuma das 41 tarefas funcionais foi implementada ou encerrada.
+Configuração da [PR #52](https://github.com/dvmarques/riffando/pull/52), aprovada pelo mantenedor em 26/10/2026. A change [setup-ai-development](../openspec/changes/archive/2026-10-26-setup-ai-development/proposal.md) foi arquivada com 18/18 tarefas concluídas e a spec sincronizada antes do squash; consultar no GitHub o estado da integração. Nenhuma das 41 tarefas funcionais foi implementada ou encerrada.
 
 - [AGENTS.md](../AGENTS.md) é a instrução operacional comum; CLAUDE apenas referencia/importa esse arquivo.
 - [AI_WORKFLOW](development/AI_WORKFLOW.md) contém instalação, comandos Codex/Claude e retomada; políticas e gates ficam em AGENTS.md, e regras OpenSpec em config.yaml.
@@ -79,4 +79,4 @@ Configuração proposta na branch `chore/ai-development-setup`, change `setup-ai
 - CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.
 - A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
 - Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash.
-- Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. A change permanece ativa enquanto seu arquivamento não for autorizado/executado.
+- Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. Nesta preparação, o archive já foi autorizado e executado antes do squash.

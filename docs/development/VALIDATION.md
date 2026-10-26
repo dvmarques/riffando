@@ -78,3 +78,7 @@ Pedido do mantenedor: todas as tarefas completas antes do archive; archive/sync 
 O registro inicial em Unreleased foi substituído pelo padrão do projeto de referência do mantenedor: cabeçalho `### [X.Y.Z] - Em andamento`, categorias `#### Added`, `#### Changed`, `#### Fixed`, identificação da change/issue e efeito objetivo em pt-BR. A versão 0.0.1 é o placeholder do próximo patch do manifest 0.0.0; nenhuma versão foi fechada ou publicada. Regras de manutenção e fechamento futuro documentadas em AGENTS.md, contribuição, config OpenSpec e checklist de PR. O nível intermediário Histórico de versões preserva a hierarquia Markdown sem alterar o formato dos cabeçalhos de versão/categoria.
 
 Validação: `npm run validate` e `git diff --check` aprovados. O parser original `parseChangelog` do projeto de referência reconheceu uma seção em andamento 0.0.1 e nenhuma versão fechada; `prepareChangelog` simulou em memória o fechamento com `26-out-2026` e a abertura de 0.0.2. Nenhum arquivo ou configuração do projeto de referência foi modificado.
+
+## Archive antes do squash — 26/10/2026
+
+Após aprovação/autorização do mantenedor, list/status confirmaram 18/18 tarefas e todos os artefatos completos. O CLI oficial arquivou setup-ai-development em openspec/changes/archive/2026-10-26-setup-ai-development e sincronizou quatro requisitos em openspec/specs/ai-development-workflow/spec.md. Contexto e índice de specs atualizados. O diff final é validado e submetido ao CI antes do squash autorizado; registros anteriores de change ativa descrevem a fase anterior ao archive.
