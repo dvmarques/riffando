@@ -1,0 +1,17 @@
+{
+  "node": "24.21.0",
+  "npm": "12.2.1",
+  "expo": "58.0.19",
+  "react": "19.3.0",
+  "reactNative": "0.88.0",
+  "typescript": "6.0.3",
+  "javaMajor": 17,
+  "compileSdk": 37,
+  "buildTools": "37.0.0",
+  "commandLineTools": "latest",
+  "sources": [
+    "https://expo.dev/changelog/sdk-58",
+    "https://docs.expo.dev/versions/v58.0.0/",
+    "https://developer.android.com/build/jdks"
+  ]
+}

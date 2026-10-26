@@ -1,6 +1,6 @@
 # Tasks
 
-Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** Topologia app único aprovada para planejamento em 26/10/2026; iniciar somente após nova solicitação Apply. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
+Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implementação em andamento.** Topologia app único aprovada para planejamento em 26/10/2026; iniciar somente após nova solicitação Apply. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
 
 ## 1. Matriz e instalação (CA-01)
 
@@ -12,18 +12,18 @@ Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** T
 
 ## 2. Tipagem e fronteiras (CA-01, CA-03)
 
-- [ ] 2.1 Configurar TS estrito, aliases e lint de dependências/ciclos conforme design; verificar typecheck e lint no código efetivo, sem pacotes/diretórios vazios para representar features futuras.
-- [ ] 2.2 Verificar resolução consistente em Metro/Jest/TS/ESLint e rejeição de import proibido por alias e caminho relativo; registrar prova negativa revertida e documentar direção das dependências.
+- [x] 2.1 Configurar TS estrito, aliases e lint de dependências/ciclos conforme design; verificar typecheck e lint no código efetivo, sem pacotes/diretórios vazios para representar features futuras.
+- [x] 2.2 Verificar resolução consistente em Metro/Jest/TS/ESLint e rejeição de import proibido por alias e caminho relativo; registrar prova negativa revertida e documentar direção das dependências.
 
 ## 3. Shell e comportamento (CA-02, CA-04)
 
-- [ ] 3.1 Criar rotas início/informações com Expo Router e recursos pt-BR, retorno Android e indicação de recursos em preparação; incluir testes RNTL/Jest de ida/volta e indisponibilidade, verificando ações por nome/papel acessível.
-- [ ] 3.2 Adicionar recuperação de erro e testar shell imediato sem loading/delay artificial, indisponibilidade pt-BR e falha injetada/recuperação sem stack trace sensível ou debug publicado; apenas se houver operação assíncrona necessária, testar promessa controlada pendente → sucesso/erro e retirada do loader; documentar aplicabilidade sem criar operação fictícia.
+- [x] 3.1 Criar rotas início/informações com Expo Router e recursos pt-BR, retorno Android e indicação de recursos em preparação; incluir testes RNTL/Jest de ida/volta e indisponibilidade, verificando ações por nome/papel acessível.
+- [x] 3.2 Adicionar recuperação de erro e testar shell imediato sem loading/delay artificial, indisponibilidade pt-BR e falha injetada/recuperação sem stack trace sensível ou debug publicado; apenas se houver operação assíncrona necessária, testar promessa controlada pendente → sucesso/erro e retirada do loader; documentar aplicabilidade sem criar operação fictícia.
 - [ ] 3.3 Verificar manifest/configuração sem microfone, USB, telemetria ou upload solicitados pelo shell; documentar distinção entre transporte de desenvolvimento e funcionamento offline do APK embarcado.
 
 ## 4. Testes e comandos JS (CA-03, CA-05)
 
-- [ ] 4.1 Configurar jest-expo/RNTL e scripts lint/typecheck/test/test:ci/check:expo/export:android reais; verificar suite não vazia, relatórios e exportação Android, documentando limites dos mocks.
+- [x] 4.1 Configurar jest-expo/RNTL e scripts lint/typecheck/test/test:ci/check:expo/export:android reais; verificar suite não vazia, relatórios e exportação Android, documentando limites dos mocks.
 - [ ] 4.2 Agregar checks JS ao validate preservando todos os checks atuais; provar falha por erro TS, lint e teste de comportamento temporariamente quebrado, reverter regressões e registrar resultados.
 
 ## 5. Android e smoke (CA-04, CA-05)
@@ -44,3 +44,11 @@ Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** T
 
 - [ ] 7.1 Consolidar README/guia de execução com comandos realmente executados em Windows/Linux, troubleshooting, versões/licenças e evidências Android; preservar a arquitetura aprovada no ADR/contexto/decisões/arquitetura e registrar apenas entregas efetivamente verificadas no CHANGELOG na versão em andamento com define-mobile-foundation/#11.
 - [ ] 7.2 Conferir igualdade de escopo/exclusões/CA-01…CA-06 entre issue/proposal, cobertura integral pela spec e cada cenário contra tarefa/evidência, executar npm run validate, lint, tipos, testes, exportação e APK; revisar diff/código e registrar resultados, riscos restantes e CI verde sem declarar features fora do escopo como entregues.
+
+## Evidências parciais do Apply — 26/10/2026
+
+- 2.1/2.2: lint/typecheck aprovados; fronteiras rejeitam react-native, alias UI e relativos infra/rotas; dependência pura aceita. Alias também validado pelo Metro.
+- 3.1/3.2: 2 suites Jest/RNTL, 3 cenários aprovados de navegação/abertura direta e erro/recuperação. Sem loading/delay fictício.
+- 4.1: scripts reais, testes não vazios, cobertura informativa, Expo doctor 20/20 e exportação Android concluída.
+- 65 casos tooling aprovados. Windows/Linux nos testes de ambiente são fixtures, não builds reais.
+- Pendente: nativo/CI, smoke/acessibilidade, inventário/licenças e transitivas conforme docs/development/DEPENDENCIES.md. Sem archive/merge.
