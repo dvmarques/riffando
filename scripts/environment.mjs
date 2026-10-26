@@ -8,7 +8,7 @@ export class EnvironmentError extends Error {
     this.kind = kind;
   }
 }
-export function checkEnvironment({ native = false, runner = run, env = process.env, exists = fs.existsSync, platform = process.platform } = {}) {
+export function checkEnvironment({ native = false, runner = run, env = process.env, exists = fs.existsSync, read = fs.readFileSync, platform = process.platform } = {}) {
   const logs = [];
   const check = (file, args, item) => {
     const r = runner(file, args);
@@ -35,11 +35,21 @@ export function checkEnvironment({ native = false, runner = run, env = process.e
   const sdk = env.ANDROID_HOME || env.ANDROID_SDK_ROOT;
   if (!sdk || !exists(sdk)) throw new EnvironmentError('Pré-requisito ausente', 'Android SDK', 'ANDROID_HOME válido', sdk || 'não definido', 'sdkmanager --list', 'Instale o SDK e configure ANDROID_HOME');
   if (env.ANDROID_HOME && env.ANDROID_SDK_ROOT && path.resolve(env.ANDROID_HOME) !== path.resolve(env.ANDROID_SDK_ROOT)) throw new EnvironmentError('Pré-requisito incompatível', 'Android SDK', 'mesma raiz', 'raízes divergentes', 'sdkmanager --list', 'Alinhe ANDROID_HOME e ANDROID_SDK_ROOT');
-  const manager = path.join(sdk, 'cmdline-tools', matrix.commandLineTools, 'bin', platform === 'win32' ? 'sdkmanager.bat' : 'sdkmanager');
-  check(manager, ['--version'], 'Android command-line tools');
-  const installed = check(manager, ['--list'], 'Android SDK').split('Available Packages:')[0];
-  for (const pkg of ['platform-tools', matrix.platformPackage, 'build-tools;' + matrix.buildTools]) {
-    if (!installed.includes(pkg)) throw new EnvironmentError('Pré-requisito ausente', pkg, 'pacote instalado', 'ausente', manager + ' --list', 'Instale o pacote pelo Android SDK Manager');
+  const toolsRoot = env.ANDROID_CMDLINE_TOOLS_ROOT || path.join(sdk, 'cmdline-tools', matrix.commandLineToolsDirectory);
+  const propertiesPath = path.join(toolsRoot, 'source.properties');
+  if (!exists(propertiesPath)) throw new EnvironmentError('Pré-requisito ausente', 'Android command-line tools', matrix.commandLineTools, toolsRoot, 'android --version', 'Configure ANDROID_CMDLINE_TOOLS_ROOT para a revisão da matriz');
+  const revision = read(propertiesPath, 'utf8').match(/Pkg.Revision\s*=\s*([^\r\n]+)/)?.[1]?.trim();
+  if (revision !== matrix.commandLineTools) throw new EnvironmentError('Pré-requisito incompatível', 'Android command-line tools', matrix.commandLineTools, revision || 'desconhecida', propertiesPath, 'Instale a revisão fixada');
+  const modern = path.join(toolsRoot, 'bin', platform === 'win32' ? 'android.exe' : 'android');
+  const manager = exists(modern) ? modern : path.join(toolsRoot, 'bin', platform === 'win32' ? 'sdkmanager.bat' : 'sdkmanager');
+  const modernCli = manager === modern;
+  check(manager, [modernCli ? '-V' : '--version'], 'Android command-line tools');
+  const listArgs = modernCli ? ['sdk', 'list'] : ['--list'];
+  const installed = check(manager, listArgs, 'Android SDK').split(/Available packages:/i)[0];
+  if (!/Installed packages:/i.test(installed)) throw new EnvironmentError('Falha de diagnóstico', 'Android SDK', 'seção Installed packages', installed.slice(0,200), manager + ' sdk list', 'Confira a saída das ferramentas da matriz');
+  for (const pkg of ['platform-tools', matrix.platformPackage, 'build-tools;' + matrix.buildTools, 'ndk;' + matrix.ndk]) {
+    const paths = installed.split('\n').map(line => line.trim().split(/\s+/)[0]);
+    if (!paths.includes(pkg) && !paths.includes(pkg.replaceAll(';', '/'))) throw new EnvironmentError('Pré-requisito ausente', pkg, 'pacote instalado', 'ausente', manager + ' sdk list', 'Instale o pacote pelo Android SDK Manager');
   }
   check(path.join(sdk, 'platform-tools', platform === 'win32' ? 'adb.exe' : 'adb'), ['version'], 'ADB');
   if (!exists(path.join(sdk, 'licenses', 'android-sdk-license'))) throw new EnvironmentError('Pré-requisito ausente', 'Licenças Android', 'licenças aceitas pelo desenvolvedor', 'não identificadas', 'sdkmanager --licenses', 'Leia e aceite as licenças aplicáveis manualmente');

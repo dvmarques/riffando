@@ -57,10 +57,10 @@ try {
     await tap('Conhecer a fundação');
     await waitText('Sobre esta versão', 'informacoes-' + scale);
     adb('shell', 'input', 'keyevent', '4');
-    await waitText('Riffando', 'voltar-android-' + scale);
+    await waitText('Conhecer a fundação', 'voltar-android-' + scale);
     await tap('Conhecer a fundação');
     await tap('Voltar ao início');
-    await waitText('Riffando', 'voltar-acao-' + scale);
+    await waitText('Conhecer a fundação', 'voltar-acao-' + scale);
     evidence.checks.push('Inicialização fria offline, navegação/voltar Android/ação e reabertura com fonte ' + scale);
   }
   evidence.passed = true;

@@ -10,7 +10,7 @@ Node 24.21.0, npm 12.2.1, Expo 58.0.19, React/React DOM 19.3.0, RN 0.88.0, TS 6.
 
 Fontes: [Expo 58](https://expo.dev/changelog/sdk-58), [matriz Expo](https://docs.expo.dev/versions/v58.0.0/), [JDK Android](https://developer.android.com/build/jdks), [SDK Manager](https://developer.android.com/tools/sdkmanager) e catálogos das versões fixadas no lock. React DOM alinha peer do Router; não há app web. Nenhum JDK global foi alterado.
 
-Windows PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Confira node --version/npm --version antes dos scripts Node. Instale JDK 17/Android SDK pelos canais oficiais; alinhe JAVA_HOME, ANDROID_HOME, PATH e Gradle JDK do Android Studio. Command-line tools 23.0 em cmdline-tools/23.0, platform-tools, plataforma/build-tools/NDK da matriz; leia/aceite licenças aplicáveis. Não altere ferramentas de outros projetos.
+Windows PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Confira node --version/npm --version antes dos scripts Node. Instale JDK 17/Android SDK pelos canais oficiais; alinhe JAVA_HOME, ANDROID_HOME, PATH e Gradle JDK do Android Studio. Command-line tools 23.0; o action instala no diretório cmdline-tools/16111833. ANDROID_CMDLINE_TOOLS_ROOT permite indicar outro diretório com source.properties da revisão exata, platform-tools, plataforma/build-tools/NDK da matriz; leia/aceite licenças aplicáveis. Não altere ferramentas de outros projetos.
 
 ## Comandos na raiz do worktree
 
@@ -32,7 +32,7 @@ android instala development build; start usa Metro. build:android gera APK artif
 
 ## Diagnóstico e recuperação
 
-check:env verifica versões Node/npm; check:env:android verifica Java/javac PATH/JAVA_HOME, raiz SDK, sdkmanager --version/--list, pacotes instalados, adb e evidência de licença. O build verifica JVM efetiva do Gradle antes de assemble. Diagnóstico não instala nem aceita licenças automaticamente.
+check:env verifica versões Node/npm; check:env:android verifica Java/javac PATH/JAVA_HOME, raiz SDK, Android CLI -V/sdk list (ou shim sdkmanager legado), pacotes instalados, adb e evidência de licença. O build verifica JVM efetiva do Gradle antes de assemble. Diagnóstico não instala nem aceita licenças automaticamente.
 
 Mensagens pt-BR distinguem pré-requisito ausente, incompatível e diagnóstico inconclusivo com comando/esperado/observado/correção. npm ci falhando é instalação; prebuild/Gradle após ambiente válido é compilação, sem declarar APK gerado. Falta de emulador impede smoke, não compilação. Windows local tem JDK 25 e nenhum Android SDK/AVD; diagnóstico o rejeita corretamente. Usar JDK 17 local isolado ou CI; não suprimir verificação. Fixtures de teste não comprovam ambiente/build real.
 
