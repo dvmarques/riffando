@@ -4,7 +4,7 @@ export default { rules: { boundaries: {
   create(context) {
     const filename = context.filename.replaceAll('\\', '/');
     function check(node, value) {
-      if (typeof value !== 'string') return;
+      if (typeof value !== 'string') { if (filename.includes('/src/domain/')) context.report({ node, messageId: 'boundary', data: { source: 'import dinâmico não verificável' } }); return; }
       const resolved = (value.startsWith('@/') ? path.resolve('src', value.slice(2)) : value.startsWith('.') ? path.resolve(path.dirname(context.filename), value) : value).replaceAll('\\', '/');
       if (filename.includes('/src/domain/') && (!resolved.includes('/src/domain/') || /(^|\/)node_modules\//.test(resolved))) {
         context.report({ node, messageId: 'boundary', data: { source: value } });

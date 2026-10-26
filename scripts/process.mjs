@@ -1,6 +1,6 @@
-import { spawnSync } from 'node:child_process';
+import crossSpawn from 'cross-spawn';
 export function run(file, args = [], options = {}) {
-  const result = spawnSync(file, args, { encoding: 'utf8', timeout: 120_000, shell: process.platform === 'win32' && /\.(cmd|bat)$/.test(file), ...options });
+  const result = crossSpawn.sync(file, args, { encoding: 'utf8', timeout: 120_000, ...options });
   if (result.error) return { status: 1, output: result.error.message, missing: result.error.code === 'ENOENT' };
   return { status: result.status ?? 1, output: (result.stdout ?? '') + (result.stderr ?? '') };
 }

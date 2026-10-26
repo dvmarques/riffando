@@ -8,10 +8,13 @@
   "javaMajor": 17,
   "compileSdk": 37,
   "buildTools": "37.0.0",
-  "commandLineTools": "latest",
+  "commandLineTools": "16.0",
   "sources": [
     "https://expo.dev/changelog/sdk-58",
     "https://docs.expo.dev/versions/v58.0.0/",
     "https://developer.android.com/build/jdks"
-  ]
+  ],
+  "gradle": "9.4.1",
+  "androidGradlePlugin": "9.2.1",
+  "ndk": "27.1.12297006"
 }
