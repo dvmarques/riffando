@@ -16,4 +16,4 @@ Orientação simples, verificável e portátil entre agentes; preservar generate
 
 ## Risks
 
-Conflito com setup oficial: sincronizador limitado ao diretório da skill própria e teste de equivalência. Mudança CRLF: normalização somente de finais de linha. Divergência de conteúdo: check falha, não corrige sozinho. No app futuro, reavaliar regras com código real.
+Conflito com setup oficial: sincronizador limitado ao diretório da skill própria e teste de equivalência. `ai:check` exigia igualdade exata dos diretórios de skills e falhou no CI com a skill própria; passou a excluir somente `adaptive-ai-workflow` da comparação (exigindo sua presença em `.agents` e `.claude`), mantendo a comparação integral das skills oficiais. Mudança CRLF: normalização somente de finais de linha. Divergência de conteúdo: check falha, não corrige sozinho. No app futuro, reavaliar regras com código real.
