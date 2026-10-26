@@ -42,3 +42,19 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 ## Como registrar uma nova decisão
 
 Documentar: data, contexto, alternativas, decisão, consequências, evidências de teste, issue/PR associado. Criar ADR em `docs/adr/` para mudanças estruturais de arquitetura.
+
+## Preparação operacional de IA — 26/10/2026
+
+Escopo solicitado: OpenSpec, Codex, Claude Code, documentação, templates e CI, entregue por PR sem merge. A change `setup-ai-development` registra a preparação e aguarda aprovação humana no GitHub. OpenSpec 1.15.0 fixado; AGENTS central; CLAUDE somente referência/importação. Ver [guia](development/AI_WORKFLOW.md).
+
+Nenhuma proposta de stack do aplicativo foi promovida a decisão aprovada. A estrutura monorepo de #11 e da arquitetura deve ser comparada com app único antes de implementar; não criar workspaces nesta etapa. Merge, squash e archive exigem autorização explícita.
+
+## Conclusão de changes e squash — 26/10/2026
+
+O mantenedor definiu o padrão: todas as tarefas concluídas → archive/sync na branch da PR → revisão/validação final e CI → merge sempre por squash. Autorizações e ações do ciclo da PR ficam no checklist da PR, sem tarefas circulares na change. Entregas reais permanecem em tasks.md até sua conclusão comprovada.
+
+Somente restrição concreta que exija implementação em main/develop antes de concluir a change permite inverter integração e archive. Registrar evidência, tarefas dependentes, destino, sequência e aprovação da exceção. Na exceção, concluir todas as tarefas após a integração e arquivar em PR de acompanhamento; todo merge continua por squash. Políticas canônicas em AGENTS.md. Esta decisão define o processo; não executa nem autoriza automaticamente archive/merge da PR #52.
+
+## Conclusão autorizada da preparação — 26/10/2026
+
+O mantenedor aprovou a PR #52 e autorizou explicitamente archive antes do squash. Change setup-ai-development arquivada em openspec/changes/archive/2026-10-26-setup-ai-development com 18/18 tarefas concluídas; quatro requisitos sincronizados na spec ai-development-workflow. Aplicado o fluxo padrão, sem exceção de integração prévia. A autorização abrange o squash após validação e CI do commit final. Nenhuma das 41 tarefas GC foi implementada ou encerrada.

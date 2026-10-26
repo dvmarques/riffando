@@ -12,6 +12,18 @@ Riffando é um projeto de aplicativo para aprender e praticar guitarra, criado c
 
 > Para continuar com outro assistente: “Leia o repositório `dvmarques/riffando`, começando por `docs/PROJECT_CONTEXT.md`, `docs/DECISIONS.md` e as issues abertas. Confirme o estado atual antes de propor ou executar alterações.”
 
+## Desenvolvimento com IA
+
+Leia [AGENTS.md](AGENTS.md) e o [guia de desenvolvimento com IA](docs/development/AI_WORKFLOW.md). OpenSpec 1.15.0 possui integrações oficiais para Codex e Claude Code. GitHub guarda propostas, tarefas, decisões e validações.
+
+```bash
+npm ci --ignore-scripts
+npm run ai:setup
+npm run validate
+```
+
+Requer Node.js 24. Estes comandos preparam e verificam ferramentas; não iniciam o aplicativo. Veja [evidências e limitações](docs/development/VALIDATION.md) e [políticas GitHub](docs/development/GITHUB.md). Fluxo padrão: concluir todas as tarefas, arquivar/sincronizar a change na PR e então fazer merge por squash, respeitando as autorizações. Exceções por restrição concreta estão em AGENTS.md.
+
 ## Visão do produto
 
 Uma experiência integrada para guitarristas iniciantes e intermediários, com:

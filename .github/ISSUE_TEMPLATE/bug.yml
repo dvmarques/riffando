@@ -1,0 +1,24 @@
+name: Bug
+description: Relatar comportamento incorreto com evidências.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema e resultado esperado
+      description: Informe passos, resultado observado e esperado, sem dados privados.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Ambiente e evidências
+      description: Versão/commit, aparelho, Android/iOS, microfone/USB, permissões, logs sem segredos; se áudio, latência e condições de medição.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Referências e critérios de aceite
+      description: Issue/GC, spec/change existente e cenários de regressão.

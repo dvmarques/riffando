@@ -11,13 +11,19 @@ Obrigado pelo interesse em melhorar o Riffando! Este projeto é desenvolvido com
 
 ## Fluxo de contribuição
 
-1. Abra ou escolha uma issue e discuta a abordagem.
-2. Crie uma branch com nome descritivo, como `feat/metronomo` ou `fix/afinador`.
-3. Faça alterações pequenas e focadas, com testes quando aplicável.
-4. Abra um pull request descrevendo problema, solução, validação e possíveis impactos em Android, iOS e acessibilidade.
-5. Aguarde revisão; aprovação e merge são decisões dos mantenedores.
+Siga as políticas de [AGENTS.md](AGENTS.md) e as regras de artefatos em `openspec/config.yaml`. O [guia rápido de IA](docs/development/AI_WORKFLOW.md) apresenta instalação e comandos. Resumo do fluxo:
 
-O projeto ainda está em planejamento, portanto comandos de instalação, testes e CI serão documentados quando a base de código existir.
+1. Issue e escopo pequeno → Explore somente leitura → Propose OpenSpec.
+2. Revisão da proposta e aprovação de decisões arquiteturais antes de Apply.
+3. Implementação autorizada → testes/Verify → revisão do diff e código.
+4. PR para `main` → CI verde → code review.
+5. Concluir todas as tarefas da change → archive/sync autorizado na branch da PR → revisar e validar o diff final/CI → merge autorizado sempre por squash. Exceção apenas por restrição concreta de integração prévia, documentada e aprovada conforme AGENTS.md.
+
+Registre mudanças relevantes no [CHANGELOG](CHANGELOG.md), na versão em andamento, sob `Added`, `Changed` ou `Fixed`, identificando a change OpenSpec ou issue e seu efeito. A convenção de versões e datas está em AGENTS.md.
+
+Use branches `feat/<issue>-<descricao>`, `fix/...`, `chore/...` ou `docs/...` e Conventional Commits. Os templates GitHub orientam evidências e limites. `Refs #N` para escopo parcial; `Closes #N` somente para entrega integral.
+
+Node.js 24: `npm ci --ignore-scripts`, `npm run ai:setup` e `npm run validate`. Não há ainda código ou comandos de teste/lint/typecheck/build mobile; adicioná-los junto à fundação aprovada, sem workflows dependentes de scripts inexistentes.
 
 ## Idioma e qualidade
 

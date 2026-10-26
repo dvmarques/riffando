@@ -1,0 +1,29 @@
+{
+  "devDependencies": {
+    "@fission-ai/openspec": "1.15.0",
+    "markdownlint-cli2": "0.24.0"
+  },
+  "name": "riffando-development",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Ferramentas de desenvolvimento do Riffando; aplicativo ainda não implementado",
+  "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "scripts": {
+    "ai:setup": "node scripts/setup-openspec.mjs",
+    "ai:update": "node scripts/setup-openspec.mjs --update",
+    "ai:check": "node scripts/check-ai.mjs",
+    "lint:docs": "markdownlint-cli2",
+    "check:links": "node scripts/check-links.mjs",
+    "test:tooling": "node scripts/smoke-openspec.mjs",
+    "validate:openspec": "node scripts/validate-openspec.mjs",
+    "validate": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec"
+  },
+  "overrides": {
+    "micromark-extension-math": {
+      "katex": "0.18.2"
+    }
+  }
+}
