@@ -4,7 +4,7 @@
 
 Riffando é um projeto de aplicativo para aprender e praticar guitarra, criado com foco em **português brasileiro**, experiência acessível e acompanhamento da evolução musical.
 
-> **Estado:** planejamento. Ainda não há aplicativo implementado ou versão disponível para instalação.
+> **Estado:** fundação Expo em implementação/validação na PR #53. Há um shell de navegação; recursos musicais ainda não estão implementados e não há release publicada.
 
 ## Retomar o projeto em outra conversa ou agente
 
@@ -78,3 +78,7 @@ Contribuições não comerciais e propostas de melhorias são bem-vindas. Antes 
 ## Aviso
 
 O projeto está em fase inicial. Informações de compatibilidade de dispositivos, precisão de análise musical e datas de lançamento só serão confirmadas após testes.
+
+## Executar a fundação
+
+Consulte [guia mobile](docs/development/MOBILE.md) para versões, instalação, testes, development build e APK interno Android, e [dependências/riscos](docs/development/DEPENDENCIES.md). Fundação em validação; sem release publicada.

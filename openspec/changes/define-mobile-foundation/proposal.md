@@ -46,3 +46,7 @@ Nenhuma. `ai-development-workflow` permanece vigente; sua validação documental
 Agora: quatro artefatos OpenSpec refinados, ADR com decisão arquitetural registrada, contexto/decisões/arquitetura/AGENTS/config/changelog alinhados e issue #11 atualizada. Nenhum manifest, lock, workflow ou código mobile é alterado.
 
 Somente após nova solicitação Apply: manifest existente evolui sem perder tooling/override; arquivos de app, configuração TS/lint/Jest, CI e guia de execução. Riscos centrais: acoplamento entre camadas, compatibilidade do SDK com Node 24/toolchain Android e falsa confiança de mocks para código nativo. EAS não é requisito; áudio não validado.
+
+## Estado do Apply
+
+O mantenedor aprovou o plano e autorizou separadamente o Apply nesta conversa em 26/10/2026. A restrição original de planejamento descreve a etapa anterior; shell e gates estão em implementação/validação. Seguir tasks.md para evidência real e pendências, sem expandir escopo, declarar aceite integral ou executar archive/merge antecipados.

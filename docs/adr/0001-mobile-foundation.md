@@ -24,3 +24,7 @@ Reavaliar monorepo apenas com segundo consumidor concreto de domínio (outro app
 ## Consequências e validação
 
 Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Aprovação arquitetural não comprova instalação, testes ou build mobile. Todas as tarefas permanecem abertas; a PR #53 segue em revisão documental sem implementação.
+
+## Estado do Apply — 26/10/2026
+
+Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](../development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.

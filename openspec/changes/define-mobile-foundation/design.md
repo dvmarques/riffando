@@ -170,3 +170,7 @@ Somente detalhes não estruturais ficam para Apply: patch exato da matriz suport
 - [Sintaxe Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax) e [expressões de status](https://docs.github.com/en/actions/reference/workflows-and-actions/expressions): condições, dependências e resultados exigem avaliação explícita. A política fail closed acima é decisão do projeto.
 
 App único é decisão do mantenedor para esta proposta; gates e adiamento de bibliotecas são planejamento para o estágio observado, não imposições dessas fontes. Versões e compatibilidade devem ser revalidadas no Apply.
+
+## Estado do Apply
+
+O mantenedor aprovou o plano e autorizou separadamente o Apply nesta conversa em 26/10/2026. A restrição original de planejamento descreve a etapa anterior; shell e gates estão em implementação/validação. Seguir tasks.md para evidência real e pendências, sem expandir escopo, declarar aceite integral ou executar archive/merge antecipados.

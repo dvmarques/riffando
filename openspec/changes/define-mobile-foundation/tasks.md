@@ -24,7 +24,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 ## 4. Testes e comandos JS (CA-03, CA-05)
 
 - [x] 4.1 Configurar jest-expo/RNTL e scripts lint/typecheck/test/test:ci/check:expo/export:android reais; verificar suite não vazia, relatórios e exportação Android, documentando limites dos mocks.
-- [ ] 4.2 Agregar checks JS ao validate preservando todos os checks atuais; provar falha por erro TS, lint e teste de comportamento temporariamente quebrado, reverter regressões e registrar resultados.
+- [x] 4.2 Agregar checks JS ao validate preservando todos os checks atuais; provar falha por erro TS, lint e teste de comportamento temporariamente quebrado, reverter regressões e registrar resultados.
 
 ## 5. Android e smoke (CA-04, CA-05)
 
@@ -52,3 +52,5 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - 4.1: scripts reais, testes não vazios, cobertura informativa, Expo doctor 20/20 e exportação Android concluída.
 - 65 casos tooling aprovados. Windows/Linux nos testes de ambiente são fixtures, não builds reais.
 - Pendente: nativo/CI, smoke/acessibilidade, inventário/licenças e transitivas conforme docs/development/DEPENDENCIES.md. Sem archive/merge.
+
+- 4.2: validate completo aprovado. Regressão TS (string atribuída a number) rejeitada com exit 2; ação de navegação inexistente rejeitada pelo Jest com exit 1. Alterações temporárias revertidas; testes voltaram a passar.

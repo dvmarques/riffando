@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { checkEnvironment, matrix } from '../../scripts/environment.mjs';
 const env = { JAVA_HOME: '/jdk', ANDROID_HOME: '/sdk' };
-const good = (file, args) => ({ status: 0, output: file.includes('sdkmanager') ? args.includes('--list') ? 'Installed packages:\nplatform-tools\nplatforms;android-' + matrix.compileSdk + '\nbuild-tools;' + matrix.buildTools + '\nAvailable Packages:' : '20.0' : file.includes('adb') ? 'Android Debug Bridge version 1.0.41' : file.includes('javac') ? 'javac 17.0.1' : file.includes('java') ? 'openjdk version "17.0.1"' : file.includes('npm') ? matrix.npm : 'v' + matrix.node });
+const good = (file, args) => ({ status: 0, output: file.includes('sdkmanager') ? args.includes('--list') ? 'Installed packages:\nplatform-tools\n' + matrix.platformPackage + '\nbuild-tools;' + matrix.buildTools + '\nAvailable Packages:' : '20.0' : file.includes('adb') ? 'Android Debug Bridge version 1.0.41' : file.includes('javac') ? 'javac 17.0.1' : file.includes('java') ? 'openjdk version "17.0.1"' : file.includes('npm') ? matrix.npm : 'v' + matrix.node });
 for (const platform of ['win32', 'linux']) {
   test(platform + ': ambiente válido produz diagnóstico completo', () => assert.ok(checkEnvironment({ native: true, platform, runner: good, env, exists: () => true }).some(l => l.startsWith('ADB:'))));
   test(platform + ': Node ausente é diferente de saída inválida', () => {

@@ -4,7 +4,7 @@
 
 Oferecer uma base Android reproduzível, offline e acessível para o desenvolvimento incremental do Riffando, com evidências distintas para qualidade JavaScript e execução nativa.
 
-Escopo, exclusões e CA-01…CA-06 canônicos em [proposal.md](../../proposal.md), reproduzidos na issue #11. Arquitetura aprovada para planejamento em 26/10/2026; cenários abaixo definem comportamento futuro, sem autorização de implementação.
+Escopo, exclusões e CA-01…CA-06 canônicos em [proposal.md](../../proposal.md), reproduzidos na issue #11. Arquitetura aprovada para planejamento em 26/10/2026; Apply autorizado separadamente; cenários abaixo definem o contrato, cuja entrega deve ser verificada em tasks.md.
 
 ## ADDED Requirements
 

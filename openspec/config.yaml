@@ -9,9 +9,9 @@ context: |
   e docs/architecture/DATA_MODEL.md.
   React Native + Expo + TypeScript; Android primeiro, possibilidade de iOS.
   Offline-first, dados locais, sem backend/login/IA generativa obrigatórios.
-  App não implementado; ferramentas não autorizam as 41 tarefas GC.
+  GC-001 em Apply autorizado: shell e tooling em validação na PR #53; demais tarefas GC não autorizadas.
   GC-001/#11: app único na raiz aprovado para planejamento, sem packages/workspaces desnecessários.
-  Aprovação arquitetural não autoriza Apply; monorepo futuro exige necessidade comprovada e novo ADR.
+  Apply de GC-001 autorizado separadamente pelo mantenedor; monorepo futuro exige necessidade comprovada e novo ADR.
   Motor C++ permanece proposta sujeita a spike, não decisão de implementação.
   PolyForm Noncommercial 1.0.0; preservar licença, marca e direitos de terceiros.
   Artefatos em pt-BR; marcadores estruturais e MUST/SHALL em inglês.

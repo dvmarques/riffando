@@ -103,9 +103,9 @@ jobs:
           java-version: '17'
       - uses: android-actions/setup-android@v3
         with:
-          cmdline-tools-version: 12266719
+          cmdline-tools-version: 16111833
           packages: platform-tools
-      - run: sdkmanager 'platforms;android-37' 'build-tools;37.0.0' 'ndk;27.1.12297006'
+      - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0' 'ndk;27.1.12297006'
       - uses: gradle/actions/setup-gradle@v5
       - run: npm ci --ignore-scripts
       - run: npm run build:android

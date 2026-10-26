@@ -6,11 +6,11 @@ Apply autorizado pelo mantenedor após a proposta da PR #53. Shell em implementa
 
 ## Versões e pré-requisitos
 
-Node 24.21.0, npm 12.2.1, Expo 58.0.19, React/React DOM 19.3.0, RN 0.88.0, TS 6.0.3. Java 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006, conferidos nos catálogos nativos instalados e CNG. config/toolchain.json é a matriz executável. Command-line tools 16.0 (arquivo 12266719) confirmado no log de setup CI.
+Node 24.21.0, npm 12.2.1, Expo 58.0.19, React/React DOM 19.3.0, RN 0.88.0, TS 6.0.3. Java 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006, conferidos nos catálogos nativos instalados e CNG. config/toolchain.json é a matriz executável. Command-line tools 23.0 (arquivo 16111833) e pacote platforms;android-37.0 conferidos no repositório XML oficial; compileSdk continua 37.
 
 Fontes: [Expo 58](https://expo.dev/changelog/sdk-58), [matriz Expo](https://docs.expo.dev/versions/v58.0.0/), [JDK Android](https://developer.android.com/build/jdks), [SDK Manager](https://developer.android.com/tools/sdkmanager) e catálogos das versões fixadas no lock. React DOM alinha peer do Router; não há app web. Nenhum JDK global foi alterado.
 
-Windows PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Confira node --version/npm --version antes dos scripts Node. Instale JDK 17/Android SDK pelos canais oficiais; alinhe JAVA_HOME, ANDROID_HOME, PATH e Gradle JDK do Android Studio. Command-line tools 16.0 em cmdline-tools/16.0, platform-tools, plataforma/build-tools/NDK da matriz; leia/aceite licenças aplicáveis. Não altere ferramentas de outros projetos.
+Windows PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Confira node --version/npm --version antes dos scripts Node. Instale JDK 17/Android SDK pelos canais oficiais; alinhe JAVA_HOME, ANDROID_HOME, PATH e Gradle JDK do Android Studio. Command-line tools 23.0 em cmdline-tools/23.0, platform-tools, plataforma/build-tools/NDK da matriz; leia/aceite licenças aplicáveis. Não altere ferramentas de outros projetos.
 
 ## Comandos na raiz do worktree
 

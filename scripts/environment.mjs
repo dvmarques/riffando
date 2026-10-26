@@ -38,7 +38,7 @@ export function checkEnvironment({ native = false, runner = run, env = process.e
   const manager = path.join(sdk, 'cmdline-tools', matrix.commandLineTools, 'bin', platform === 'win32' ? 'sdkmanager.bat' : 'sdkmanager');
   check(manager, ['--version'], 'Android command-line tools');
   const installed = check(manager, ['--list'], 'Android SDK').split('Available Packages:')[0];
-  for (const pkg of ['platform-tools', 'platforms;android-' + matrix.compileSdk, 'build-tools;' + matrix.buildTools]) {
+  for (const pkg of ['platform-tools', matrix.platformPackage, 'build-tools;' + matrix.buildTools]) {
     if (!installed.includes(pkg)) throw new EnvironmentError('Pré-requisito ausente', pkg, 'pacote instalado', 'ausente', manager + ' --list', 'Instale o pacote pelo Android SDK Manager');
   }
   check(path.join(sdk, 'platform-tools', platform === 'win32' ? 'adb.exe' : 'adb'), ['version'], 'ADB');

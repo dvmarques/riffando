@@ -83,3 +83,7 @@ Testes de domínio, migrações, fluxos de sessão, perda de áudio, desconexão
 ## Refinamento de GC-001/#11 — especificação em revisão
 
 A change [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md) e a issue #11 descrevem os mesmos escopo/exclusões e CA-01…CA-06 para app único. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha fronteiras, dependências mínimas/adiadas, diagnóstico Windows/Linux, CNG/development build, testes e gates. A arquitetura está aprovada para esta proposta; o plano operacional segue em revisão na PR #53 e todas as tarefas de implementação estão abertas. Sem código, build ou comprovação de áudio/desempenho.
+
+## Estado do Apply — 26/10/2026
+
+Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](../development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.
