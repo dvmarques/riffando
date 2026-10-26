@@ -80,3 +80,7 @@ Configuração da [PR #52](https://github.com/dvmarques/riffando/pull/52), aprov
 - A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
 - Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash.
 - Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. Nesta preparação, o archive já foi autorizado e executado antes do squash.
+
+## Proposta de fundação mobile — 26/10/2026
+
+A change [define-mobile-foundation](../openspec/changes/define-mobile-foundation/proposal.md) refina [GC-001/#11](https://github.com/dvmarques/riffando/issues/11), comparando app único e monorepo. Recomenda app único na raiz, com fronteiras de domínio e critérios de extração, conforme [ADR 0001 proposto](adr/0001-mobile-foundation.md). Está aguardando aprovação; não altera decisões aprovadas nem implementa o app. Tarefas de implementação abertas, sem archive/sync ou encerramento da issue. Consultar a PR vinculada à issue para aprovação e estado de CI.

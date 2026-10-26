@@ -13,6 +13,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 - `issue-54-adaptive-ai-workflow` (issue #54) - Fluxo adaptativo Fast/Standard/Critical, mapa de contexto, política de modelos e qualidade, revisores consultivos e validação de skills próprias entre Codex e Claude, sem app implementado.
 
+- `define-mobile-foundation` (Refs #11/GC-001) - Proposta OpenSpec da fundação React Native + Expo + TypeScript, com comparação app único/monorepo, ADR proposto, fronteiras, dependências, testes, CI e critérios de aceite; sem implementação mobile.
+
 - `setup-ai-development` (PR #52; Refs #1, #14) - Preparação do fluxo de desenvolvimento com OpenSpec 1.15.0, instruções comuns para Codex e Claude Code, integrações oficiais, templates GitHub e CI de documentação/ferramentas em Linux e Windows. Sem implementação do aplicativo.
 
 #### Changed

@@ -83,3 +83,7 @@ Esses números são hipóteses de engenharia, não resultados garantidos.
 ## Qualidade
 
 Testes de domínio, migrações, fluxos de sessão, perda de áudio, desconexão USB, permissões e acessibilidade. Matriz de aparelhos reais e logs locais de diagnóstico sem gravações sensíveis.
+
+## Refinamento de GC-001/#11 — proposta pendente
+
+A árvore monorepo acima não está aprovada para implementação. A change [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md) compara as opções e recomenda app único na raiz com extração por necessidade comprovada. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha fronteiras UI/domínio/persistência/áudio, dependências, estratégia CNG/development build, testes e CI. Ver [ADR 0001 proposto](../adr/0001-mobile-foundation.md). Esta seção registra a alternativa em revisão; não promove a recomendação a decisão nem comprova áudio ou desempenho.

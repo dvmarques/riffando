@@ -58,3 +58,7 @@ Somente restrição concreta que exija implementação em main/develop antes de 
 ## Conclusão autorizada da preparação — 26/10/2026
 
 O mantenedor aprovou a PR #52 e autorizou explicitamente archive antes do squash. Change setup-ai-development arquivada em openspec/changes/archive/2026-10-26-setup-ai-development com 18/18 tarefas concluídas; quatro requisitos sincronizados na spec ai-development-workflow. Aplicado o fluxo padrão, sem exceção de integração prévia. A autorização abrange o squash após validação e CI do commit final. Nenhuma das 41 tarefas GC foi implementada ou encerrada.
+
+## Fundação mobile em revisão — 26/10/2026
+
+**Proposta, não decisão aprovada:** [ADR 0001](adr/0001-mobile-foundation.md) e change [define-mobile-foundation](../openspec/changes/define-mobile-foundation/proposal.md), Refs #11/GC-001. Recomenda-se app único na raiz em lugar de apps/mobile + packages inicialmente. Comparação, consequências, dependências mínimas, testes, CI e critérios de extração estão no design. O mantenedor precisa aprovar explicitamente a divergência antes de uma nova solicitação Apply. A estrutura da issue e da arquitetura permanece histórica/proposta até essa decisão. Nenhum app, pacote, build ou teste mobile entregue.
