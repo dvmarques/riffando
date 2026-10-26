@@ -5,5 +5,5 @@
 
 ## Verificação
 
-- [ ] 2.1 Confirmar que a PR Draft desta change tem o check skipped e que, ao marcá-la Ready, Linux e Windows executam e passam no commit corrente.
-- [ ] 2.2 Executar `npm run validate` e `openspec validate --all --strict` localmente.
+- [x] 2.1 Confirmar que a PR Draft desta change tem o check skipped e que, ao marcá-la Ready, Linux e Windows executam e passam no commit corrente.
+- [x] 2.2 Executar `npm run validate` e `openspec validate --all --strict` localmente.
