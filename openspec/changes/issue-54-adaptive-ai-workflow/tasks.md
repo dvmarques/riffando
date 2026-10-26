@@ -8,5 +8,5 @@
 ## Verificação
 
 - [x] 2.1 Executar checagens locais de integridade, links, Markdown, sincronia e OpenSpec.
-- [ ] 2.2 Executar `npm run validate` e conferir CI Linux/Windows no SHA final.
+- [x] 2.2 Executar `npm run validate` e conferir CI Linux/Windows no SHA final.
 - [ ] 2.3 Revisar criticamente diff e reportar resultados; concluir tasks e archive/sync quando todos os gates forem atendidos.
