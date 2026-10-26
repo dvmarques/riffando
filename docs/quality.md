@@ -15,6 +15,7 @@ O Riffando ainda não tem app Expo. Valide **o que existe**, sem simular cobertu
 - TypeScript estrito, lint compatível React Native, testes unitários de domínio e persistência/migrações, UI mobile e builds Android reproduzíveis.
 - Testes E2E em journeys reais, acessibilidade com leitor de tela e dispositivos, responsividade/tamanho de texto, estados vazios e falhas.
 - Áudio: dispositivos/OS/entrada (microfone ou USB), condições, latência, interrupções, revogação de permissões e limites. Expo Go não valida módulos nativos.
+- Revisor especializado de áudio/latência: ativação futura, somente quando houver captura, DSP ou agendamento implementados; hoje não há código a revisar e ele não é obrigatório em PRs de documentação ou tooling.
 - Avaliar hooks para formatação/proteção de gerados; CI por impacto com verificação integral antes do merge; métricas de execução/flakiness; release e distribuição beta.
 - Abrir escopo futuro e aprovar antes de instalar ferramentas. Não criar jobs que chamem scripts inexistentes.
 
