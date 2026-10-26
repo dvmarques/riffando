@@ -8,7 +8,7 @@ TS 6.0.3, tipos React 19.3.0, ESLint 9.39.4/config-expo 58.0.4/import 2.32.0, Je
 
 ## Licenças e inventário
 
-Pacotes diretos novos declaram MIT; conferir LICENSE/NOTICE das versões instaladas e preservar avisos/autoria. Transitivas no lock incluem MIT, ISC, Apache, BSD, BlueOak, Python/PSF, CC0/CC-BY. node-forge oferece BSD-3-Clause OR GPL-2.0; alternativa permissiva exige preservar seus avisos. lightningcss/binários têm MPL-2.0 (transformação CSS do Metro/CLI); dados caniuse-lite têm CC-BY-4.0. A classificação não equivale a licença integralmente revisada: inventário final/notices do APK e obrigações de redistribuição ainda estão pendentes. Manter PolyForm Noncommercial e direitos de terceiros; sem autorização de publicação ou relicenciamento.
+Runtime novo declara MIT; TypeScript usa Apache-2.0 e cross-spawn (portabilidade Windows) MIT. Conferir LICENSE/NOTICE das versões instaladas e preservar avisos/autoria. Transitivas no lock incluem MIT, ISC, Apache, BSD, BlueOak, Python/PSF, CC0/CC-BY. node-forge oferece BSD-3-Clause OR GPL-2.0; alternativa permissiva exige preservar seus avisos. lightningcss/binários têm MPL-2.0 (transformação CSS do Metro/CLI); dados caniuse-lite têm CC-BY-4.0. A classificação não equivale a licença integralmente revisada: inventário final/notices do APK e obrigações de redistribuição ainda estão pendentes. Manter PolyForm Noncommercial e direitos de terceiros; sem autorização de publicação ou relicenciamento.
 
 ## Risco identificado em 26/10/2026
 

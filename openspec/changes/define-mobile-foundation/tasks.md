@@ -5,7 +5,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 ## 1. Matriz e instalação (CA-01)
 
 - [ ] 1.1 Selecionar SDK estável suportado e matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK; registrar versões e licenças diretas/transitivas relevantes em guia de dependências, verificando fontes das versões e peers antes da adição.
-- [ ] 1.2 Ampliar manifest existente para app único e gerar lock sem perder tooling/override; verificar instalação limpa em Windows e Linux, diagnóstico Expo e ausência de React/RN nativos duplicados; documentar pré-requisitos e resolução de incompatibilidades.
+- [x] 1.2 Ampliar manifest existente para app único e gerar lock sem perder tooling/override; verificar instalação limpa em Windows e Linux, diagnóstico Expo e ausência de React/RN nativos duplicados; documentar pré-requisitos e resolução de incompatibilidades.
 
 - [ ] 1.3 Criar check:env/check:env:android conforme design 3.1, com comandos Node/npm/JDK/sdkmanager/adb/Gradle/Expo e matriz validada; verificar código não zero e mensagens pt-BR para ausência, incompatibilidade, diagnóstico inconclusivo, instalação e compilação, sem aceitar licenças ou alterar toolchain automaticamente.
 - [ ] 1.4 Validar diagnósticos em Windows/Linux com logs reais positivos e casos controlados de executável/pacote ausente, versões inválidas, JAVA_HOME/SDK divergentes e erro do comando; documentar esperado/observado/fontes/correção e comprovar que não iniciam build em falha de pré-requisito.
@@ -54,3 +54,5 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - Pendente: nativo/CI, smoke/acessibilidade, inventário/licenças e transitivas conforme docs/development/DEPENDENCIES.md. Sem archive/merge.
 
 - 4.2: validate completo aprovado. Regressão TS (string atribuída a number) rejeitada com exit 2; ação de navegação inexistente rejeitada pelo Jest com exit 1. Alterações temporárias revertidas; testes voltaram a passar.
+
+- 1.2: npm ci --ignore-scripts limpo em Windows, Node/npm fixados e check:env aprovados; instalação/qualidade/exportação Linux aprovadas no CI ee753f9 (run 40411290983). npm ls confirmou uma versão de React e uma de RN, sem duplicatas nativas.
