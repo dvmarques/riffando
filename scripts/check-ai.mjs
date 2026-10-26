@@ -9,10 +9,14 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const temp = mkdtempSync(join(tmpdir(), 'riffando-generation-'));
 // Git may check out text as CRLF on Windows; compare canonical LF content.
 const text = path => readFileSync(path, 'utf8').replace(/\r\n/g, '\n');
+// Skills próprias não são geradas pelo OpenSpec; ficam fora da comparação e são verificadas por check:agent-skills.
+const customSkills = ['adaptive-ai-workflow'];
+const skillRoots = ['.agents/skills', '.claude/skills'];
 const skills = ['explore', 'propose', 'apply-change', 'verify-change', 'update-change', 'sync-specs', 'archive-change'];
 try {
   for (const base of ['.agents/skills', '.claude/skills']) {
     for (const skill of skills) assert(existsSync(join(root, base, `openspec-${skill}`, 'SKILL.md')));
+    for (const skill of customSkills) assert(existsSync(join(root, base, skill, 'SKILL.md')), `Skill própria ausente: ${base}/${skill}`);
   }
   assert(!existsSync(join(root, '.codex/skills')), 'Não duplicar skills Codex');
   const claude = text(join(root, 'CLAUDE.md'));
@@ -37,7 +41,8 @@ try {
   function compare(relative) {
     const expected = join(temp, relative);
     const actual = join(root, relative);
-    assert.deepEqual(readdirSync(actual).sort(), readdirSync(expected).sort(), relative);
+    const generated = name => !(skillRoots.includes(relative.replaceAll('\\', '/')) && customSkills.includes(name));
+    assert.deepEqual(readdirSync(actual).filter(generated).sort(), readdirSync(expected).sort(), relative);
     for (const entry of readdirSync(expected, { withFileTypes: true })) {
       const path = join(relative, entry.name);
       if (entry.isDirectory()) compare(path);

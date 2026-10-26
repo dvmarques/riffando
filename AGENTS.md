@@ -4,7 +4,9 @@
 
 Riffando é um aplicativo de aprendizado e prática de guitarra para iniciantes e intermediários, com pt-BR como idioma principal. GitHub é a fonte da verdade: código, documentos, issues, PRs e histórico. Não dependa de conversas ou memória externa.
 
-Antes de modificar arquivos, leia [README](README.md), [contexto mestre](docs/PROJECT_CONTEXT.md), [decisões](docs/DECISIONS.md), [PRD](docs/product/PRD.md), [arquitetura](docs/architecture/ARCHITECTURE.md), [modelo de dados](docs/architecture/DATA_MODEL.md), [roadmap](docs/product/ROADMAP.md), a issue e as specs/changes pertinentes. Leia também `openspec/config.yaml`, que centraliza contexto e regras dos artefatos/operações OpenSpec. O [guia rápido](docs/development/AI_WORKFLOW.md) contém somente instalação, comandos e retomada.
+Após estas regras, use [o mapa de contexto](docs/agent-context-map.md) para leitura seletiva e a skill própria `adaptive-ai-workflow` para classificar o risco (Fast/Standard/Critical). Os guias [modelos](docs/models.md) e [qualidade](docs/quality.md) complementam as políticas sem dispensar validações.
+
+Antes de modificar arquivos, leia `README.md`, `openspec/config.yaml`, a issue e a change pertinente. Consulte `docs/PROJECT_CONTEXT.md`, `docs/DECISIONS.md`, PRD, arquitetura, modelo de dados e roadmap conforme o mapa de contexto e o impacto da tarefa. Em mudanças transversais ou críticas, amplie a leitura das fontes relevantes; nenhuma otimização dispensa regras e gates obrigatórios. O guia rápido `docs/development/AI_WORKFLOW.md` contém instalação, comandos e retomada.
 
 O aplicativo permanece não implementado. A preparação de ferramentas não autoriza iniciar as 41 tarefas GC-001…GC-041. Preserve a distinção entre decisões aprovadas e hipóteses; solicite aprovação antes de mudanças arquiteturais relevantes.
 
@@ -60,6 +62,6 @@ O aplicativo permanece não implementado. A preparação de ferramentas não aut
 
 ## Agentes e dependências
 
-`AGENTS.md` é a fonte operacional comum. `CLAUDE.md` só referencia este arquivo. Skills/comandos OpenSpec são gerados pelo CLI: não editar manualmente. `npm run ai:setup` instala as integrações; `npm run ai:update` as regenera com perfil reproduzível. Codex usa `.agents/skills`; Claude usa `.claude/skills` e `.claude/commands/opsx`. Não duplicar skills em `.codex` nem adicionar permissões irrestritas, hooks ou MCPs desnecessários.
+`AGENTS.md` é a fonte operacional comum. `CLAUDE.md` só referencia este arquivo. Skills/comandos OpenSpec são gerados pelo CLI: não editar manualmente. `npm run ai:setup` instala as integrações; `npm run ai:update` as regenera com perfil reproduzível. Codex usa `.agents/skills`; Claude usa `.claude/skills` e `.claude/commands/opsx`. Skills próprias (hoje `adaptive-ai-workflow`) têm fonte em `.agents/skills`; após alterá-la, rode `npm run sync:agent-skills` para copiá-la a `.claude/skills` (cópia, não symlink, por causa do Windows) e `npm run check:agent-skills` valida a sincronia; `ai:check` as ignora ao comparar com as integrações oficiais. Revisores consultivos do Claude ficam em `.claude/agents`. Não duplicar skills em `.codex` nem adicionar permissões irrestritas, hooks ou MCPs desnecessários.
 
 Dependências devem ter necessidade, versão/lockfile e licença avaliados. Preserve [PolyForm Noncommercial 1.0.0](LICENSE), [TRADEMARKS](TRADEMARKS.md) e condições de contribuição: source-available, não open source OSI; contribuições não concedem automaticamente direito de relicenciamento comercial. Não alterar licença, segurança, proteção de branches ou publicar releases sem aprovação apropriada.
