@@ -14,7 +14,7 @@
 
 - [x] 3.1 Executar npm run validate, smoke de lifecycle e conferir geração oficial.
 - [x] 3.2 Revisar diff, consistência documental e limitações de execução dos agentes.
-- [ ] 3.3 Abrir um único PR, acompanhar CI e corrigir falhas para revisão humana.
+- [x] 3.3 Abrir um único PR, acompanhar CI e corrigir falhas para revisão humana.
 
 ## 4. Após autorização futura
 

@@ -8,7 +8,7 @@ Lidos README, CONTRIBUTING, LICENSE, TRADEMARKS, contexto, decisões, PRD, roadm
 
 ## Verificações
 
-- `npm run validate`: passou; Markdown sem erros, caminhos de links locais existentes, integrações oficiais reproduzidas byte a byte, smoke e OpenSpec estrito (1 change aprovada pelo validador de formato).
+- `npm run validate`: passou; Markdown sem erros, caminhos de links locais existentes, integrações oficiais reproduzidas byte a byte, smoke e OpenSpec estrito (1 change validada quanto ao formato).
 - `node scripts/setup-openspec.mjs --check`: plano vazio, sem mudanças, notas ou falhas.
 - Smoke em diretório temporário: criação da change; templates de proposal/specs/design/tasks; status completo dos artefatos; leitura de tarefa concluída por instructions apply; validação; leitura dos inputs de archive; archive com sincronização e nova validação estrita. Nenhuma change real arquivada.
 - CLAUDE.md conferido como referência/importação de AGENTS; sem regras concorrentes.
@@ -16,6 +16,12 @@ Lidos README, CONTRIBUTING, LICENSE, TRADEMARKS, contexto, decisões, PRD, roadm
 - Telemetria desativada explicitamente nos wrappers e CI. Uma execução anterior foi bloqueada pela revisão automática por permitir contato com telemetria; o caminho de validação foi corrigido antes da repetição bem-sucedida.
 
 Esses resultados validam ferramentas e artefatos, não execução autenticada dos agentes nem comportamento do aplicativo. Consulte também os checks do commit mais recente.
+
+## Pull Request e CI
+
+- [PR #52](https://github.com/dvmarques/riffando/pull/52), branch `chore/ai-development-setup`, para `main`.
+- [CI inicial](https://github.com/dvmarques/riffando/actions/runs/40357593349) passou no commit `9d55745`: checkout, Node 24, npm ci e npm run validate.
+- Commits posteriores devem manter o CI verde; consultar os checks atuais do PR. Aprovação humana, merge e archive continuam pendentes.
 
 ## Limitações
 
