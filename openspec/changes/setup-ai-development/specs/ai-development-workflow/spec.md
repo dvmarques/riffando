@@ -20,7 +20,7 @@ O projeto MUST fixar OpenSpec e gerar suas integrações oficiais para Codex e C
 #### Scenario: Instalação em checkout limpo
 
 - **WHEN** o desenvolvedor executa npm ci e npm run ai:setup
-- **THEN** são disponibilizadas skills Codex e skills/comandos Claude com explore, propose, apply, verify e archive
+- **THEN** são disponibilizadas skills Codex e skills/comandos Claude com explore, propose, apply, verify, update, sync e archive
 
 ### Requirement: Gates de desenvolvimento
 

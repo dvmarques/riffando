@@ -12,12 +12,12 @@ npm run ai:setup
 npm run validate
 ```
 
-As integrações já estão versionadas. `ai:setup` executa a inicialização oficial para `codex,claude`, com perfil custom e delivery both em configuração XDG temporária, sem alterar preferências globais. Telemetria fica desativada nos wrappers e CI. Para CLI avulso: `OPENSPEC_TELEMETRY=0` (PowerShell: `$env:OPENSPEC_TELEMETRY='0'`).
+As integrações já estão versionadas. `ai:setup` executa a inicialização oficial para `codex,claude`, com perfil custom e delivery both em diretórios temporários de configuração/dados (`XDG_CONFIG_HOME`, `XDG_DATA_HOME`) e `CODEX_HOME`, sem alterar preferências globais nem remover prompts Codex pessoais em `~/.codex/prompts`. Telemetria fica desativada nos wrappers e CI. Para CLI avulso: `OPENSPEC_TELEMETRY=0` (PowerShell: `$env:OPENSPEC_TELEMETRY='0'`).
 
 Para atualizar a versão aprovada:
 
 ```bash
-npm install --save-dev --save-exact @fission-ai/openspec@<versao-aprovada>
+npm install --save-dev --save-exact --ignore-scripts @fission-ai/openspec@<versao-aprovada>
 npm run ai:update
 npm run validate
 ```

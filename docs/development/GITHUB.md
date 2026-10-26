@@ -18,12 +18,12 @@ GC-037…041 são transversais: atribuir milestone pela entrega concreta, sem du
 
 ## Proteção recomendada de main
 
-Preparar ruleset com PR obrigatório, uma aprovação independente quando disponível, resolução de conversas, status obrigatório `Documentação e OpenSpec` e bloqueio de force push/exclusão. Descartar aprovações antigas após alterações relevantes e limitar bypass. Confirmar o nome exato do check após primeira execução.
+Preparar ruleset com PR obrigatório, uma aprovação independente quando disponível, resolução de conversas, status obrigatórios da matriz `Documentação e OpenSpec (ubuntu-latest)` e `Documentação e OpenSpec (windows-latest)` e bloqueio de force push/exclusão. Descartar aprovações antigas após alterações relevantes e limitar bypass. Confirmar os nomes exatos dos checks após a primeira execução da matriz.
 
 Esta é recomendação, não configuração aplicada. Verificar permissões administrativas, plano GitHub, colaboradores capazes de revisar e impactos antes de ativar: exigir aprovador independente pode bloquear mantenedor único. Não usar aprovação automática por IA nem auto-merge como substituto.
 
 ## Evolução do CI mobile
 
-O workflow inicial executa `npm ci --ignore-scripts` e `npm run validate`, sem credenciais nem permissões de escrita. Não possui scripts fictícios de Expo/TypeScript.
+O workflow inicial executa `npm ci --ignore-scripts` e `npm run validate` em Linux e Windows, sem credenciais nem permissões de escrita. Não possui scripts fictícios de Expo/TypeScript.
 
 Em #11/#14, após escopo aprovado, adicionar TypeScript estrito, lint React Native, testes de domínio/UI/migração e build Android reproduzível. Avaliar SDK/JDK, development builds e cache conforme o Expo escolhido. Maestro e demais propostas exigem validação. Não colocar segredos EAS/loja em PRs de forks; publicar exige fluxo e autorização próprios.

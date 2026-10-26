@@ -10,7 +10,7 @@ const cli = fileURLToPath(new URL('../node_modules/@fission-ai/openspec/bin/open
 const temp = mkdtempSync(join(tmpdir(), 'riffando-smoke-'));
 function run(args) {
   const result = spawnSync(process.execPath, [cli, ...args], {
-    cwd: temp, env: { ...process.env, XDG_CONFIG_HOME: join(temp, 'config'), XDG_DATA_HOME: join(temp, 'data'), OPENSPEC_TELEMETRY: '0' }, encoding: 'utf8',
+    cwd: temp, env: { ...process.env, XDG_CONFIG_HOME: join(temp, 'config'), XDG_DATA_HOME: join(temp, 'data'), CODEX_HOME: join(temp, 'codex'), OPENSPEC_TELEMETRY: '0', OPENSPEC_NO_UPDATE_CHECK: '1' }, encoding: 'utf8',
   });
   assert.equal(result.status, 0, `${args.join(' ')}\n${result.stdout}\n${result.stderr}`);
   return result.stdout;
