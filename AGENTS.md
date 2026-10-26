@@ -15,7 +15,7 @@ O aplicativo permanece não implementado. A preparação de ferramentas não aut
 - Aprovado: React Native + Expo + TypeScript, Android primeiro e possibilidade de iOS, offline-first e sem servidor/login obrigatório. Expo Router e SQLite são a direção documentada.
 - Zustand, Drizzle, Zod, Reanimated, Maestro, DSP C++ e adaptadores Kotlin/Swift são propostas; não trate sua instalação como aprovada automaticamente.
 - Hoje há documentação e ferramentas Node de desenvolvimento. Não crie pastas vazias ou um app apenas para reproduzir uma árvore.
-- Na fundação futura, avalie app único (`app/`, `src/`, `modules/`) versus `apps/mobile` e `packages`. A issue #11 ainda pede monorepo; resolva essa divergência por proposta antes de implementá-la. Extraia pacotes somente quando houver fronteira e benefício verificáveis.
+- Para GC-001/#11, a arquitetura aprovada para o planejamento é app único na raiz (`app/`, `src/` e `modules/` somente quando necessário), React Native + Expo + TypeScript estrito e Expo Router, com separação UI/domínio/infraestrutura. Não criar packages/workspaces sem necessidade real. Monorepo exige consumidor concreto ou API/versionamento independente comprovado e novo ADR; ver ADR 0001. Essa aprovação e o alinhamento da issue não autorizam implementação, que exige nova solicitação Apply.
 - Separe UI/features, domínio puro, persistência e áudio. Reutilize soluções existentes; não adicione padrões web/backend, serviços ou abstrações sem necessidade.
 - TypeScript estrito quando criado; evite `any` sem justificativa. Componentes/tipos em PascalCase, funções/variáveis em camelCase, hooks `use*`, diretórios de features e changes em kebab-case; arquivos de rotas seguem Expo Router. Preserve convenções locais predominantes.
 

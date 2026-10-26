@@ -1,11 +1,14 @@
 # Tasks
 
-Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** Iniciar somente após aprovação registrada da topologia e nova solicitação Apply. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
+Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** Topologia app único aprovada para planejamento em 26/10/2026; iniciar somente após nova solicitação Apply. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
 
 ## 1. Matriz e instalação (CA-01)
 
 - [ ] 1.1 Selecionar SDK estável suportado e matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK; registrar versões e licenças diretas/transitivas relevantes em guia de dependências, verificando fontes das versões e peers antes da adição.
 - [ ] 1.2 Ampliar manifest existente para app único e gerar lock sem perder tooling/override; verificar instalação limpa em Windows e Linux, diagnóstico Expo e ausência de React/RN nativos duplicados; documentar pré-requisitos e resolução de incompatibilidades.
+
+- [ ] 1.3 Criar check:env/check:env:android conforme design 3.1, com comandos Node/npm/JDK/sdkmanager/adb/Gradle/Expo e matriz validada; verificar código não zero e mensagens pt-BR para ausência, incompatibilidade, diagnóstico inconclusivo, instalação e compilação, sem aceitar licenças ou alterar toolchain automaticamente.
+- [ ] 1.4 Validar diagnósticos em Windows/Linux com logs reais positivos e casos controlados de executável/pacote ausente, versões inválidas, JAVA_HOME/SDK divergentes e erro do comando; documentar esperado/observado/fontes/correção e comprovar que não iniciam build em falha de pré-requisito.
 
 ## 2. Tipagem e fronteiras (CA-01, CA-03)
 
@@ -15,7 +18,7 @@ Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** I
 ## 3. Shell e comportamento (CA-02, CA-04)
 
 - [ ] 3.1 Criar rotas início/informações com Expo Router e recursos pt-BR, retorno Android e indicação de recursos em preparação; incluir testes RNTL/Jest de ida/volta e indisponibilidade, verificando ações por nome/papel acessível.
-- [ ] 3.2 Adicionar recuperação de erro e carregamento somente quando necessário; testar falha injetada/recuperação sem publicar controle de debug, sem stack trace sensível, e documentar estados do shell.
+- [ ] 3.2 Adicionar recuperação de erro e testar shell imediato sem loading/delay artificial, indisponibilidade pt-BR e falha injetada/recuperação sem stack trace sensível ou debug publicado; apenas se houver operação assíncrona necessária, testar promessa controlada pendente → sucesso/erro e retirada do loader; documentar aplicabilidade sem criar operação fictícia.
 - [ ] 3.3 Verificar manifest/configuração sem microfone, USB, telemetria ou upload solicitados pelo shell; documentar distinção entre transporte de desenvolvimento e funcionamento offline do APK embarcado.
 
 ## 4. Testes e comandos JS (CA-03, CA-05)
@@ -33,9 +36,11 @@ Implementação futura de GC-001/#11. **0 tarefas executadas nesta proposta.** I
 
 - [ ] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação e smoke Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
 - [ ] 6.2 Adicionar compilação Android Linux com JDK/SDK documentados, cache/timeout e upload do APK por 7 dias; verificar CI do SHA com logs distintos para bundle e compilação nativa, incluindo falha controlada revertida do build.
-- [ ] 6.3 Definir gate agregado e nomes estáveis dos checks, validar falha/cancelamento dos jobs obrigatórios e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
+- [ ] 6.3 Definir gate agregado e nomes estáveis dos checks, validar success/failure/cancelled/skipped/ausência e artefato ausente dos jobs obrigatórios no mesmo SHA/evento e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
+
+- [ ] 6.4 Verificar tabela de resultados do gate para falhas de instalação/lint/TS/testes/exportação/build, cancelamento global e gate ausente, mantendo todos os jobs exigidos na primeira implementação; documentar contrato/testes de dispensa futura por filtros e rejeição de classificação inválida/incompleta sem ativar filtros antecipadamente.
 
 ## 7. Integração, documentação e revisão (CA-06)
 
-- [ ] 7.1 Consolidar README/guia de execução com comandos realmente executados em Windows/Linux, troubleshooting, versões/licenças e evidências Android; atualizar ADR/contexto/decisões/arquitetura conforme aprovação efetiva e CHANGELOG na versão em andamento com define-mobile-foundation/#11.
-- [ ] 7.2 Conferir cada cenário da spec e CA-01…CA-06 contra evidência, executar npm run validate, lint, tipos, testes, exportação e APK; revisar diff/código e registrar resultados, riscos restantes e CI verde sem declarar features fora do escopo como entregues.
+- [ ] 7.1 Consolidar README/guia de execução com comandos realmente executados em Windows/Linux, troubleshooting, versões/licenças e evidências Android; preservar a arquitetura aprovada no ADR/contexto/decisões/arquitetura e registrar apenas entregas efetivamente verificadas no CHANGELOG na versão em andamento com define-mobile-foundation/#11.
+- [ ] 7.2 Conferir igualdade de escopo/exclusões/CA-01…CA-06 entre issue/proposal, cobertura integral pela spec e cada cenário contra tarefa/evidência, executar npm run validate, lint, tipos, testes, exportação e APK; revisar diff/código e registrar resultados, riscos restantes e CI verde sem declarar features fora do escopo como entregues.

@@ -2,19 +2,19 @@
 
 ## Why
 
-A [issue #11 — GC-001](https://github.com/dvmarques/riffando/issues/11) pede uma fundação Expo/TypeScript em monorepo, mas existe apenas documentação e tooling Node. Precisamos resolver a organização antes de criar o aplicativo e definir evidências de qualidade que não confundam validação documental com execução mobile.
+A [issue #11 — GC-001](https://github.com/dvmarques/riffando/issues/11) define a fundação Expo/TypeScript, enquanto existe apenas documentação e tooling Node. A arquitetura de app único foi aprovada pelo mantenedor para este planejamento em 26/10/2026; precisamos detalhar evidências de qualidade sem confundir especificação com aplicativo entregue.
 
 ## What Changes
 
-- Recomendar **app único na raiz**, com Expo Router, TypeScript estrito e domínio desacoplado; comparar monorepo e definir gatilhos de extração no design e no ADR proposto.
-- Planejar um shell Android mínimo com navegação, textos e acessibilidade pt-BR, inicialização offline e erro recuperável; sem funcionalidades musicais.
-- Definir dependências mínimas, instalação reproduzível, development build, testes de comportamento, scripts reais e CI sem serviço pago obrigatório.
-- Preservar fronteiras de UI, domínio, persistência e áudio, sem antecipar banco, DSP ou pacotes vazios.
-- Manter esta PR exclusivamente de planejamento. Todas as tarefas de implementação ficam abertas. A recomendação não modifica o título/escopo da issue no GitHub nem aprova arquitetura automaticamente.
+### Escopo
+
+Aplicativo único na raiz com React Native + Expo + TypeScript estrito e Expo Router; separação UI/features, domínio puro e infraestrutura; sem packages/workspaces desnecessários. Shell Android mínimo com início/informações, navegação e retorno Android, textos e acessibilidade pt-BR, estados honestos, recuperação e funcionamento offline. Instalação/diagnóstico Windows e Linux, versões/licenças verificadas, testes de comportamento, scripts reais, exportação JS, APK embarcado e gates de CI preservando checks documentais. Migração futura para monorepo somente com consumidor concreto ou API/versionamento independente comprovadamente necessário, documentados em novo ADR.
 
 ### Estado e aprovação
 
-Já aprovados: React Native + Expo + TypeScript, Android primeiro, possibilidade de iOS, offline-first e ausência de backend/login obrigatório. Expo Router e SQLite são direções documentadas. **Sujeitos à aprovação:** app único em lugar do monorepo de #11, seleção mínima de bibliotecas e gates descritos aqui. A aprovação deve registrar explicitamente essa divergência; Apply exige nova solicitação do mantenedor.
+Decisão arquitetural aprovada para esta proposta: app único na raiz, React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura. A autorização inclui atualizar título, descrição, escopo e critérios da issue #11. Justificativa e gatilhos de extração no ADR 0001 e design. Android primeiro, possibilidade de iOS, offline-first e ausência de backend/login obrigatório permanecem; SQLite é direção futura.
+
+Esta revisão altera somente especificação/documentação e a issue. Todas as tarefas de implementação permanecem abertas. **A aprovação arquitetural não autoriza Apply, instalação de dependências mobile, archive/sync ou merge.** Seleção exata de SDK/toolchain, bibliotecas e validação de sua compatibilidade/licenças permanecem para implementação autorizada; o restante do plano segue em revisão na PR #53.
 
 ### Fora do escopo
 
@@ -22,14 +22,14 @@ Afinador, metrônomo, teoria musical, exercícios, sessões, design system compl
 
 ### Critérios de aceite da implementação futura
 
-- CA-01: instalação limpa com Node/npm fixados e lock único; app único sem workspaces/pacotes vazios; versões Expo/React/RN compatíveis e registradas.
-- CA-02: shell Router com início e informações/configurações da fundação, ida/volta e retorno Android; texto, rótulos e erro recuperável em pt-BR; nenhum recurso musical apresentado como disponível.
-- CA-03: TypeScript estrito, dependências entre camadas verificadas por lint e testes que falham em regressões reais.
-- CA-04: shell em APK autônomo inicia em modo avião sem Metro, login, upload ou permissão de microfone; indisponibilidade e erro exibem estado honesto com ação de recuperação.
-- CA-05: scripts de lint, tipos, testes, exportação JS e APK Android executam trabalho real; checks existentes permanecem; CI bloqueia regressões e registra artefato Android.
-- CA-06: README reproduz instalação, execução, testes, build e troubleshooting em Windows/Linux; licenças e versões avaliadas; evidências de acessibilidade e execução Android anexadas.
+- CA-01: instalação limpa Windows/Linux com Node/npm fixados e lock único; app único sem workspaces/pacotes vazios; matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK documentada com fontes oficiais e diagnóstico que falha para pré-requisito ausente/incompatível antes do build.
+- CA-02: shell Router com início e informações da fundação, ida/volta e retorno Android; texto, rótulos e erro recuperável em pt-BR; nenhum recurso musical apresentado como disponível.
+- CA-03: TypeScript estrito, dependências entre UI, domínio e infraestrutura verificadas por lint, inclusive imports relativos e aliases, e testes de comportamento que falham em regressões reais.
+- CA-04: shell em APK autônomo inicia em modo avião sem Metro, login, upload ou permissão de microfone; funcionalidades futuras mostram indisponibilidade; erro oferece recuperação verificável; loading apenas durante operação assíncrona real, sem delay artificial.
+- CA-05: instalação, lint, tipos, testes, exportação JS e APK Android executam trabalho real; checks documentais Linux/Windows preservados; gate agregado aprova somente jobs obrigatórios executados com sucesso, rejeita falha/cancelamento/ausência/skip indevido e identifica dispensa válida por filtro sem chamá-la de execução; artefato Android registrado quando build exigido.
+- CA-06: README reproduz instalação, diagnóstico, execução, testes, build e troubleshooting em Windows/Linux; licenças e versões avaliadas; evidências de acessibilidade e execução Android anexadas, com rastreabilidade CA → cenário → tarefa → comando/resultado/SHA.
 
-Os cenários da [spec](specs/mobile-foundation/spec.md) e a rastreabilidade no [design](design.md) detalham esses critérios. Esta PR satisfaz a entrega de proposta, não esses critérios de implementação nem o encerramento de #11.
+Os mesmos escopo, exclusões e CA-01…CA-06 constam na issue e na [spec](specs/mobile-foundation/spec.md); os cenários e a rastreabilidade no [design](design.md) os detalham. Esta PR entrega planejamento, não esses critérios de implementação nem o encerramento de #11.
 
 ## Capabilities
 
@@ -43,6 +43,6 @@ Nenhuma. `ai-development-workflow` permanece vigente; sua validação documental
 
 ## Impact
 
-Agora: quatro artefatos OpenSpec, ADR com status proposto, referências no contexto/decisões/arquitetura e changelog. Nenhum manifest, lock, workflow ou código mobile é alterado.
+Agora: quatro artefatos OpenSpec refinados, ADR com decisão arquitetural registrada, contexto/decisões/arquitetura/AGENTS/config/changelog alinhados e issue #11 atualizada. Nenhum manifest, lock, workflow ou código mobile é alterado.
 
-Após aprovação e Apply: manifest existente evolui sem perder tooling/override; novos arquivos de app, configuração TS/lint/Jest, CI e guia de execução. A árvore monorepo da arquitetura será substituída somente quando a decisão for aprovada. Riscos centrais: acoplamento indevido entre camadas, compatibilidade do SDK com Node 24 e toolchain Android e falsa confiança de mocks para código nativo. EAS não é requisito; áudio não validado.
+Somente após nova solicitação Apply: manifest existente evolui sem perder tooling/override; arquivos de app, configuração TS/lint/Jest, CI e guia de execução. Riscos centrais: acoplamento entre camadas, compatibilidade do SDK com Node 24/toolchain Android e falsa confiança de mocks para código nativo. EAS não é requisito; áudio não validado.

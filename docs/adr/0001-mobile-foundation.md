@@ -1,24 +1,26 @@
 # ADR 0001 — Organização da fundação mobile
 
 - Data: 26/10/2026.
-- Status: **Proposto, aguardando aprovação do mantenedor**.
-- Referência: [GC-001/#11](https://github.com/dvmarques/riffando/issues/11).
+- Status: **Arquitetura aprovada para esta proposta pelo mantenedor; implementação não autorizada**.
+- Referências: [GC-001/#11](https://github.com/dvmarques/riffando/issues/11), [PR #53](https://github.com/dvmarques/riffando/pull/53).
 - Change: [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md).
 
 ## Contexto
 
-Existe um produto mobile, documentação e tooling Node; nenhum aplicativo foi implementado. A issue e a árvore original sugerem apps/mobile e packages, enquanto AGENTS.md exige avaliar app único antes de criar estruturas.
+Existe um produto mobile, documentação e tooling Node; nenhum aplicativo implementado. A issue originalmente exigia monorepo. Após a comparação das alternativas, o mantenedor autorizou app único para esta proposta e a atualização da issue (título, descrição, escopo e critérios) em 26/10/2026. Essa autorização não inicia Apply, instalação de dependências mobile, archive/sync ou merge.
 
-## Alternativas
+## Alternativas e justificativa
 
-App único: um manifest/lock, app e src na raiz, módulos Expo locais quando necessários; menos configuração, isolamento via imports/lint. Monorepo npm workspaces: apps/mobile e pacotes privados com fronteiras explícitas e reuso entre consumidores; exige resolução, testes por workspace e cuidado com duplicação de módulos nativos. Expo suporta as duas opções.
+App único: um manifest/lock, app e src na raiz, módulos Expo locais apenas quando necessários. Um consumidor e menor custo de configuração de Metro/Jest/TS favorecem esta opção; fronteiras exigem lint/imports e extração futura move arquivos. Monorepo npm workspaces: apps/mobile e pacotes privados com APIs/reuso entre consumidores, ao custo de resolução, testes por workspace e cuidado com duplicação nativa. Expo suporta as duas opções; Android/iOS do mesmo app não são dois consumidores.
 
-## Recomendação sujeita a aprovação
+## Decisão arquitetural
 
-Começar com app único na raiz, Expo Router e TypeScript estrito. Ampliar manifest de tooling existente, preservar scripts/lock e separar UI, domínio puro e adaptadores. Não criar workspaces ou pacotes vazios. Extrair pacote quando houver segundo consumidor concreto ou API/versionamento independente comprovadamente necessário. Android/iOS do mesmo app não bastam para justificar monorepo.
+Adotar app único na raiz, React Native + Expo + TypeScript estrito e Expo Router, com separação UI/features, domínio puro e infraestrutura. Ampliar o manifest de tooling existente preservando scripts/lock. Não criar packages/workspaces ou diretórios vazios sem necessidade real. A escolha está consolidada, não pendente; seleção exata de SDK/toolchain e bibliotecas/licenças continua sujeita às verificações do plano na implementação separadamente autorizada.
+
+## Critérios de migração futura
+
+Reavaliar monorepo apenas com segundo consumidor concreto de domínio (outro app/CLI) ou necessidade comprovada de API/versionamento independente com testes de contrato. Registrar consumidor, benefício e custo em novo ADR; extrair domínio puro primeiro, declarar exports/dependências, mover app para apps/mobile se necessário e atualizar resolução, autolinking, TS, Jest, scripts e CI. Os mesmos testes devem preservar comportamento; tamanho do código isoladamente não justifica migração.
 
 ## Consequências e validação
 
-Menos custo inicial de tooling; exige bloqueio de dependências entre camadas e futura movimentação de arquivos se houver extração. A aprovação precisa resolver explicitamente a divergência com #11. Critérios, plano de extração, dependências, licenças, testes e CI estão no [design](../../openspec/changes/define-mobile-foundation/design.md); não há medição ou implementação neste ADR.
-
-Este status só muda mediante aprovação registrada. Nenhuma alteração da issue, stack adicional, Apply, archive ou merge é autorizada pela escrita do ADR.
+Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Aprovação arquitetural não comprova instalação, testes ou build mobile. Todas as tarefas permanecem abertas; a PR #53 segue em revisão documental sem implementação.

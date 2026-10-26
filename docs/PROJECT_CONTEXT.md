@@ -77,10 +77,12 @@ Configuração da [PR #52](https://github.com/dvmarques/riffando/pull/52), aprov
 - OpenSpec 1.15.0 fixado no manifest/lock; sete workflows oficiais, incluindo verify.
 - [Validação](development/VALIDATION.md) registra evidências e limites; [GitHub](development/GITHUB.md) documenta templates, taxonomia e proteção recomendada.
 - CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.
-- A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
+- A preparação deixou a topologia para #11. No refinamento de 26/10/2026, o mantenedor aprovou app único na raiz para o planejamento, sem packages/workspaces desnecessários; ver ADR 0001. Implementação continua sem autorização.
 - Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash.
 - Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. Nesta preparação, o archive já foi autorizado e executado antes do squash.
 
-## Proposta de fundação mobile — 26/10/2026
+## Fundação mobile — planejamento refinado em 26/10/2026
 
-A change [define-mobile-foundation](../openspec/changes/define-mobile-foundation/proposal.md) refina [GC-001/#11](https://github.com/dvmarques/riffando/issues/11), comparando app único e monorepo. Recomenda app único na raiz, com fronteiras de domínio e critérios de extração, conforme [ADR 0001 proposto](adr/0001-mobile-foundation.md). Está aguardando aprovação; não altera decisões aprovadas nem implementa o app. Tarefas de implementação abertas, sem archive/sync ou encerramento da issue. Consultar a PR vinculada à issue para aprovação e estado de CI.
+O mantenedor aprovou app único na raiz com React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura e autorizou alinhar a issue #11. A change [define-mobile-foundation](../openspec/changes/define-mobile-foundation/proposal.md), o [ADR 0001](adr/0001-mobile-foundation.md) e a [issue #11](https://github.com/dvmarques/riffando/issues/11) compartilham escopo/exclusões e CA-01…CA-06. Monorepo futuro depende de consumidor concreto ou API/versionamento independente comprovado e novo ADR.
+
+A [PR #53](https://github.com/dvmarques/riffando/pull/53) permanece aberta para revisão da especificação: diagnóstico Windows/Linux, gates de CI e estados de loading foram detalhados. Seleção exata de SDK/toolchain e dependências/licenças fica para implementação autorizada. Nenhuma tarefa de implementação concluída, dependência mobile instalada, código, workflow ou branch protection alterado nesta revisão. Aprovação arquitetural não autoriza Apply, archive/sync ou merge.
