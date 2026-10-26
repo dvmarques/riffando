@@ -19,7 +19,9 @@
     "check:links": "node scripts/check-links.mjs",
     "test:tooling": "node scripts/smoke-openspec.mjs",
     "validate:openspec": "node scripts/validate-openspec.mjs",
-    "validate": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec"
+    "validate": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills",
+    "sync:agent-skills": "node scripts/sync-agent-skills.mjs",
+    "check:agent-skills": "node scripts/sync-agent-skills.mjs --check"
   },
   "overrides": {
     "micromark-extension-math": {
