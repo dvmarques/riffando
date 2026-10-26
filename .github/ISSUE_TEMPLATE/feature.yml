@@ -1,0 +1,25 @@
+name: Funcionalidade
+description: Propor uma melhoria dentro do roadmap.
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Problema, público e resultado
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Escopo e critérios verificáveis
+      description: Incluir fora do escopo, pt-BR, offline, acessibilidade e privacidade.
+    validations:
+      required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Roadmap, épico, GC e OpenSpec
+      description: Consultar existentes antes de criar duplicatas. Proposta não autoriza implementação.
+    validations:
+      required: true

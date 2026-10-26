@@ -1,0 +1,40 @@
+schema: spec-driven
+
+context: |
+  Riffando: aprendizado e prática de guitarra em pt-BR. GitHub é a fonte da verdade.
+  Instruções operacionais: AGENTS.md. Processo: docs/development/AI_WORKFLOW.md.
+  Ler docs/PROJECT_CONTEXT.md, docs/DECISIONS.md, docs/product/PRD.md,
+  docs/product/ROADMAP.md, docs/architecture/ARCHITECTURE.md e DATA_MODEL.md.
+  React Native + Expo + TypeScript; Android primeiro, possibilidade de iOS.
+  Offline-first, dados locais, sem backend/login/IA generativa obrigatórios.
+  App não implementado; ferramentas não autorizam as 41 tarefas GC.
+  Monorepo e motor C++ são propostas, não decisões de implementação.
+  PolyForm Noncommercial 1.0.0; preservar licença, marca e direitos de terceiros.
+  Artefatos em pt-BR; marcadores estruturais e MUST/SHALL em inglês.
+  Explore somente leitura. Aprovação antes de arquitetura relevante.
+  Não fazer merge, squash ou archive sem autorização explícita.
+
+rules:
+  proposal:
+    - Referenciar issue GitHub e GC quando aplicável; declarar motivação, escopo, fora do escopo e critérios de aceite.
+    - Separar decisões aprovadas de hipóteses; registrar aprovação necessária e impactos em docs existentes.
+  specs:
+    - Descrever comportamento observável, com Requirement, MUST ou SHALL e ao menos um Scenario com WHEN e THEN.
+    - Incluir offline, privacidade, pt-BR, acessibilidade e erros quando afetados; não inventar capacidades já entregues.
+  design:
+    - Explicar alternativas e fronteiras UI, domínio, persistência e áudio; justificar dependências e licenças.
+    - Para áudio, registrar aparelho, entrada microfone/USB, timestamps, latência e validação nativa necessária.
+  tasks:
+    - Criar incrementos pequenos e verificáveis com testes, revisão de código, documentação e CI.
+    - Executar npm run validate; adicionar lint, tipos, testes e build mobile reais quando houver código.
+    - Separar implementação de merge e archive, que exigem autorização após revisão.
+
+operations:
+  apply:
+    guidance:
+      - Ler AGENTS.md e a issue; confirmar aprovação e implementar somente o escopo autorizado.
+      - Atualizar tarefas com evidências; não iniciar backlog funcional durante preparação de ferramentas.
+  archive:
+    guidance:
+      - Exigir autorização explícita e merge aprovado; conferir tarefas, CI e revisão antes de arquivar.
+      - Sincronizar deltas com specs permanentes, atualizar issue e documentos por branch e PR autorizado.

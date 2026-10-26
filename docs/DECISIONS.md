@@ -42,3 +42,9 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 ## Como registrar uma nova decisão
 
 Documentar: data, contexto, alternativas, decisão, consequências, evidências de teste, issue/PR associado. Criar ADR em `docs/adr/` para mudanças estruturais de arquitetura.
+
+## Preparação operacional de IA — 26/10/2026
+
+Escopo solicitado: OpenSpec, Codex, Claude Code, documentação, templates e CI, entregue por PR sem merge. A change `setup-ai-development` registra a preparação e aguarda aprovação humana no GitHub. OpenSpec 1.15.0 fixado; AGENTS central; CLAUDE somente referência/importação. Ver [guia](development/AI_WORKFLOW.md).
+
+Nenhuma proposta de stack do aplicativo foi promovida a decisão aprovada. A estrutura monorepo de #11 e da arquitetura deve ser comparada com app único antes de implementar; não criar workspaces nesta etapa. Merge, squash e archive exigem autorização explícita.

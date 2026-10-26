@@ -11,13 +11,17 @@ Obrigado pelo interesse em melhorar o Riffando! Este projeto é desenvolvido com
 
 ## Fluxo de contribuição
 
-1. Abra ou escolha uma issue e discuta a abordagem.
-2. Crie uma branch com nome descritivo, como `feat/metronomo` ou `fix/afinador`.
-3. Faça alterações pequenas e focadas, com testes quando aplicável.
-4. Abra um pull request descrevendo problema, solução, validação e possíveis impactos em Android, iOS e acessibilidade.
-5. Aguarde revisão; aprovação e merge são decisões dos mantenedores.
+Siga [AGENTS.md](AGENTS.md) e o [guia de IA](docs/development/AI_WORKFLOW.md):
 
-O projeto ainda está em planejamento, portanto comandos de instalação, testes e CI serão documentados quando a base de código existir.
+1. Issue e escopo pequeno → Explore somente leitura → Propose OpenSpec.
+2. Revisão da proposta e aprovação de decisões arquiteturais antes de Apply.
+3. Implementação autorizada → testes/Verify → revisão do diff e código.
+4. PR para `main` → CI verde → code review.
+5. Merge/squash somente com autorização; após merge, atualizar issue e archive/sync em PR de acompanhamento autorizado.
+
+Use branches `feat/<issue>-<descricao>`, `fix/...`, `chore/...` ou `docs/...` e Conventional Commits. Os templates GitHub orientam evidências e limites. `Refs #N` para escopo parcial; `Closes #N` somente para entrega integral.
+
+Node.js 24: `npm ci --ignore-scripts`, `npm run ai:setup` e `npm run validate`. Não há ainda código ou comandos de teste/lint/typecheck/build mobile; adicioná-los junto à fundação aprovada, sem workflows dependentes de scripts inexistentes.
 
 ## Idioma e qualidade
 

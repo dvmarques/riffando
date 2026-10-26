@@ -27,14 +27,14 @@
 
 ## Situação verificada em 26/10/2026
 
-- Repositório público: https://github.com/dvmarques/riffando
+- Repositório público: [dvmarques/riffando](https://github.com/dvmarques/riffando)
 - Branch padrão: `main`.
 - Licença vigente no arquivo `LICENSE`: **PolyForm Noncommercial 1.0.0**, com uso não comercial; é **source-available**, não open source OSI.
 - Antes havia MIT no histórico; a troca não revoga permissões já concedidas sobre versões anteriores.
 - `README.md`, `CONTRIBUTING.md` e `TRADEMARKS.md` criados.
 - Documentos de produto, arquitetura, dados e roadmap criados.
 - **10 épicos** GitHub (#1–#10) e **41 issues técnicas** (#11–#51) criados; nenhuma funcionalidade implementada.
-- **Não há ainda** GitHub Project visual, milestones, labels personalizados, código React Native, builds ou CI. Não tratar planejamento como entrega.
+- **Não há ainda** GitHub Project visual, milestones confirmados, labels personalizados, código React Native ou builds. A preparação de IA adiciona CI de documentação e ferramentas; não tratar planejamento como entrega.
 
 ## Referências obrigatórias para retomada
 
@@ -67,3 +67,16 @@
 ## Próxima decisão técnica mais importante
 
 Escolher um spike de áudio Android que valide: microfone, interface USB (em dispositivos compatíveis), sincronização de timestamps, estabilidade de pitch monofônico e latência de clique. Seus resultados podem alterar a arquitetura C++/Expo Modules proposta.
+
+## Preparação de desenvolvimento com IA — 26/10/2026
+
+Configuração proposta na branch `chore/ai-development-setup`, change `setup-ai-development`; aprovação e merge devem ser confirmados no GitHub. Nenhuma das 41 tarefas funcionais foi implementada ou encerrada.
+
+- [AGENTS.md](../AGENTS.md) é a instrução operacional comum; CLAUDE apenas referencia/importa esse arquivo.
+- [AI_WORKFLOW](development/AI_WORKFLOW.md) contém instalação, comandos Codex/Claude, gates e retomada.
+- OpenSpec 1.15.0 fixado no manifest/lock; sete workflows oficiais, incluindo verify.
+- [Validação](development/VALIDATION.md) registra evidências e limites; [GitHub](development/GITHUB.md) documenta templates, taxonomia e proteção recomendada.
+- CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.
+- A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
+- Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → merge autorizado → archive/sync autorizado em PR de acompanhamento.
+- Não fazer merge, squash ou archive sem autorização explícita; a change de preparação permanece ativa até lá.

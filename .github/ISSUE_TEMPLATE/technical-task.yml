@@ -1,0 +1,24 @@
+name: Tarefa técnica
+description: Preparação, manutenção, qualidade ou spike.
+title: "[Tech] "
+body:
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto e motivação
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Escopo, exclusões e critérios de aceite
+      description: Identificar issue/épico, change, riscos, dependências/licenças e aprovações necessárias.
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Plano de validação
+      description: Comandos reais, evidência esperada e aparelhos/entradas quando aplicável.
+    validations:
+      required: true

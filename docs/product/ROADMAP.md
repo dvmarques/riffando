@@ -42,9 +42,9 @@ Os códigos GC são **identificadores de planejamento**, não números de issues
 - Persistência/migração e privacidade avaliadas.
 - PR revisado, CI validado e documentação atualizada.
 
-## Fluxo sugerido
+## Fluxo de desenvolvimento
 
-Issue → definição/revisão técnica → implementação em branch → testes → PR → revisão → merge → atualização da issue. O projeto **não está autorizado a implementar automaticamente** por esta documentação.
+Issue → Explore somente leitura → Propose OpenSpec → revisão da proposta → Apply autorizado em branch → testes/Verify → revisão do código → PR → CI → code review → merge autorizado → atualização da issue e archive/sync autorizado. Consulte [AI_WORKFLOW](../development/AI_WORKFLOW.md). O projeto **não está autorizado a implementar automaticamente** por esta documentação.
 
 ## Licenciamento
 
