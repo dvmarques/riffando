@@ -11,7 +11,7 @@ Obrigado pelo interesse em melhorar o Riffando! Este projeto é desenvolvido com
 
 ## Fluxo de contribuição
 
-Siga [AGENTS.md](AGENTS.md) e o [guia de IA](docs/development/AI_WORKFLOW.md):
+Siga as políticas de [AGENTS.md](AGENTS.md) e as regras de artefatos em `openspec/config.yaml`. O [guia rápido de IA](docs/development/AI_WORKFLOW.md) apresenta instalação e comandos. Resumo do fluxo:
 
 1. Issue e escopo pequeno → Explore somente leitura → Propose OpenSpec.
 2. Revisão da proposta e aprovação de decisões arquiteturais antes de Apply.

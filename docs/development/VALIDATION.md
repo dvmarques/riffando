@@ -17,6 +17,12 @@ Lidos README, CONTRIBUTING, LICENSE, TRADEMARKS, contexto, decisões, PRD, roadm
 
 Esses resultados validam ferramentas e artefatos, não execução autenticada dos agentes nem comportamento do aplicativo. Consulte também os checks do commit mais recente.
 
+## Ajuste de organização documental
+
+Em 26/10/2026, o mantenedor aprovou concentrar as políticas em AGENTS.md e as regras OpenSpec em config.yaml. AI_WORKFLOW foi reduzido a tutorial de instalação, comandos e retomada. `npm run validate` e `git diff --check` passaram após o ajuste. A explicação da restrição local de Explore e as regras de sincronização ficaram em AGENTS; a opção skip_specs ficou nas regras da proposta em config.yaml.
+
+Inspeção de referência preservada: admin-design-system develop em `5a7cef16`; não havia template de PR na raiz .github consultada. Os templates do Riffando são próprios.
+
 ## Pull Request e CI
 
 - [PR #52](https://github.com/dvmarques/riffando/pull/52), branch `chore/ai-development-setup`, para `main`.

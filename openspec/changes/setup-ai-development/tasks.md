@@ -16,6 +16,8 @@
 - [x] 3.2 Revisar diff, consistência documental e limitações de execução dos agentes.
 - [x] 3.3 Abrir um único PR, acompanhar CI e corrigir falhas para revisão humana.
 
+- [x] 3.4 Ajustar a separação documental aprovada: políticas em AGENTS, regras OpenSpec em config.yaml e tutorial enxuto sem duplicação normativa.
+
 ## 4. Após autorização futura
 
 - [ ] 4.1 Obter aprovação e autorização explícita para merge.

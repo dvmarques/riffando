@@ -2,22 +2,24 @@ schema: spec-driven
 
 context: |
   Riffando: aprendizado e prática de guitarra em pt-BR. GitHub é a fonte da verdade.
-  Instruções operacionais: AGENTS.md. Processo: docs/development/AI_WORKFLOW.md.
+  Políticas de trabalho e gates de aprovação: AGENTS.md.
+  Tutorial de comandos, sem políticas adicionais: docs/development/AI_WORKFLOW.md.
   Ler docs/PROJECT_CONTEXT.md, docs/DECISIONS.md, docs/product/PRD.md,
-  docs/product/ROADMAP.md, docs/architecture/ARCHITECTURE.md e DATA_MODEL.md.
+  docs/product/ROADMAP.md, docs/architecture/ARCHITECTURE.md
+  e docs/architecture/DATA_MODEL.md.
   React Native + Expo + TypeScript; Android primeiro, possibilidade de iOS.
   Offline-first, dados locais, sem backend/login/IA generativa obrigatórios.
   App não implementado; ferramentas não autorizam as 41 tarefas GC.
   Monorepo e motor C++ são propostas, não decisões de implementação.
   PolyForm Noncommercial 1.0.0; preservar licença, marca e direitos de terceiros.
   Artefatos em pt-BR; marcadores estruturais e MUST/SHALL em inglês.
-  Explore somente leitura. Aprovação antes de arquitetura relevante.
-  Não fazer merge, squash ou archive sem autorização explícita.
+  Restrições de Explore, arquitetura, merge, squash e archive: seguir AGENTS.md.
 
 rules:
   proposal:
     - Referenciar issue GitHub e GC quando aplicável; declarar motivação, escopo, fora do escopo e critérios de aceite.
     - Separar decisões aprovadas de hipóteses; registrar aprovação necessária e impactos em docs existentes.
+    - Manutenção sem alteração de capacidade pode declarar skip_specs nos metadados como true com justificativa; não criar deltas funcionais fictícios.
   specs:
     - Descrever comportamento observável, com Requirement, MUST ou SHALL e ao menos um Scenario com WHEN e THEN.
     - Incluir offline, privacidade, pt-BR, acessibilidade e erros quando afetados; não inventar capacidades já entregues.

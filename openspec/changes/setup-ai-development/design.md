@@ -8,6 +8,7 @@ Reprodução por npm ci e scripts versionados; docs, skills e validação em CI.
 
 ## Decisions
 
+- AGENTS concentra políticas comuns; config.yaml concentra contexto e regras OpenSpec. AI_WORKFLOW é somente tutorial, sem política paralela.
 - OpenSpec 1.15.0 estável, schema oficial spec-driven e templates da dependência fixada. Regras específicas em config.yaml evitam fork prematuro de schema.
 - Perfil custom: explore, propose, apply, verify, update, sync e archive. Gerar com CLI oficial usando configuração XDG temporária, preservando preferências pessoais.
 - Codex skills em .agents; Claude skills e comandos próprios. Preservar ambos os formatos gerados oficialmente em vez de symlinks que prejudicam Windows. AGENTS contém a política comum; CLAUDE só referencia/importa AGENTS.

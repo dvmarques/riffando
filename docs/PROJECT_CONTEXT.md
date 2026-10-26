@@ -73,7 +73,7 @@ Escolher um spike de áudio Android que valide: microfone, interface USB (em dis
 Configuração proposta na branch `chore/ai-development-setup`, change `setup-ai-development`; aprovação e merge devem ser confirmados no GitHub. Nenhuma das 41 tarefas funcionais foi implementada ou encerrada.
 
 - [AGENTS.md](../AGENTS.md) é a instrução operacional comum; CLAUDE apenas referencia/importa esse arquivo.
-- [AI_WORKFLOW](development/AI_WORKFLOW.md) contém instalação, comandos Codex/Claude, gates e retomada.
+- [AI_WORKFLOW](development/AI_WORKFLOW.md) contém instalação, comandos Codex/Claude e retomada; políticas e gates ficam em AGENTS.md, e regras OpenSpec em config.yaml.
 - OpenSpec 1.15.0 fixado no manifest/lock; sete workflows oficiais, incluindo verify.
 - [Validação](development/VALIDATION.md) registra evidências e limites; [GitHub](development/GITHUB.md) documenta templates, taxonomia e proteção recomendada.
 - CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.

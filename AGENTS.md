@@ -4,7 +4,7 @@
 
 Riffando é um aplicativo de aprendizado e prática de guitarra para iniciantes e intermediários, com pt-BR como idioma principal. GitHub é a fonte da verdade: código, documentos, issues, PRs e histórico. Não dependa de conversas ou memória externa.
 
-Antes de modificar arquivos, leia [README](README.md), [contexto mestre](docs/PROJECT_CONTEXT.md), [decisões](docs/DECISIONS.md), [PRD](docs/product/PRD.md), [arquitetura](docs/architecture/ARCHITECTURE.md), [modelo de dados](docs/architecture/DATA_MODEL.md), [roadmap](docs/product/ROADMAP.md), a issue e as specs/changes pertinentes. Consulte [AI_WORKFLOW](docs/development/AI_WORKFLOW.md) e `openspec/config.yaml` para execução.
+Antes de modificar arquivos, leia [README](README.md), [contexto mestre](docs/PROJECT_CONTEXT.md), [decisões](docs/DECISIONS.md), [PRD](docs/product/PRD.md), [arquitetura](docs/architecture/ARCHITECTURE.md), [modelo de dados](docs/architecture/DATA_MODEL.md), [roadmap](docs/product/ROADMAP.md), a issue e as specs/changes pertinentes. Leia também `openspec/config.yaml`, que centraliza contexto e regras dos artefatos/operações OpenSpec. O [guia rápido](docs/development/AI_WORKFLOW.md) contém somente instalação, comandos e retomada.
 
 O aplicativo permanece não implementado. A preparação de ferramentas não autoriza iniciar as 41 tarefas GC-001…GC-041. Preserve a distinção entre decisões aprovadas e hipóteses; solicite aprovação antes de mudanças arquiteturais relevantes.
 
@@ -30,13 +30,13 @@ O aplicativo permanece não implementado. A preparação de ferramentas não aut
 ## Processo obrigatório
 
 1. Consultar issue, specs permanentes e `npm exec -- openspec list --json`; preservar mudanças locais. Trabalhar em branch ou worktree isolada.
-2. **Explore é somente leitura**: não editar arquivos, instalar, gerar artefatos ou executar comandos que alterem estado. Saia de Explore antes de Propose.
-3. Propose: criar change pequena com proposta, design, deltas e tarefas verificáveis antes da implementação. Referenciar issue GitHub e identificador GC quando houver. Usar templates oficiais e regras centrais; texto pt-BR e marcadores `Requirement`, `Scenario`, `WHEN`, `THEN`, `MUST`/`SHALL` em inglês.
+2. **Explore é somente leitura**: não editar arquivos, instalar, gerar artefatos ou executar comandos que alterem estado. Saia de Explore antes de Propose. A skill oficial admite captura de artefatos mediante confirmação; esta restrição local é mais rigorosa e também proíbe essa captura durante Explore.
+3. Propose: criar change pequena com proposta, design, deltas e tarefas verificáveis antes da implementação. Seguir os templates oficiais e as regras de artefatos centralizadas em `openspec/config.yaml`.
 4. Revisar escopo, critérios, riscos e alternativas. Mudanças arquiteturais exigem aprovação explícita registrada. Não interpretar a geração de proposta como aprovação.
 5. Apply somente do escopo autorizado. Atualizar tarefas com evidências e manter artefatos coerentes.
 6. Verify: validar contra proposta/specs/tasks, executar `npm run validate` e verificações do app quando existirem. Revisar diff e código antes do PR. Validação sintática OpenSpec não prova comportamento nem aprovação.
 7. Abrir PR para `main`, acompanhar CI e corrigir falhas antes de solicitar code review. Relatar limitações reais; nunca afirmar testes não executados.
-8. Aguardar aprovação. **Não fazer merge, squash ou archive sem autorização explícita.** Após merge autorizado, atualizar issue, arquivar e sincronizar specs em branch/PR de acompanhamento autorizado; nunca gravar direto em `main`.
+8. Aguardar aprovação. **Não fazer merge, squash ou archive sem autorização explícita.** Após merge autorizado, atualizar issue, arquivar e sincronizar specs em branch/PR de acompanhamento autorizado; nunca gravar direto em `main`. O CLI archive sincroniza deltas por padrão: não usar `--skip-specs` quando houver deltas nem promover propostas não aprovadas ao baseline.
 
 ## Git, CI e conclusão
 
