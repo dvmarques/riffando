@@ -16,7 +16,7 @@ try {
   checkGradleJvm(runtime.output);
   // The generated release variant uses a debug signing key for internal validation only.
   stage = 'Gradle assembleRelease';
-  execute(gradle, ['assembleRelease', '--no-daemon', '-PreactNativeArchitectures=x86_64,arm64-v8a', ...(process.platform === 'win32' ? ['-Pandroid.cmakeVersion=' + matrix.windowsCmake] : [])], { cwd: 'android' });
+  execute(gradle, ['assembleRelease', '--no-daemon', ...(process.env.CI ? ['--build-cache'] : []), '-PreactNativeArchitectures=x86_64,arm64-v8a', ...(process.platform === 'win32' ? ['-Pandroid.cmakeVersion=' + matrix.windowsCmake] : [])], { cwd: 'android' });
   fs.mkdirSync('artifacts', { recursive: true });
   fs.copyFileSync(path.join('android', 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk'), 'artifacts/riffando-validation.apk');
   console.log('APK interno gerado: artifacts/riffando-validation.apk. Não publicar na loja.');
