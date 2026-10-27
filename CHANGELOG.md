@@ -23,7 +23,6 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 - `optimize-ci-agent-efficiency` (issue #57) - Guia de agentes com leitura incremental, checkpoints e revisões direcionadas para reduzir consumo de contexto sem dispensar os gates obrigatórios. Proposta de otimização do CI em avaliação; jobs existentes preservados.
 
-
 - `define-mobile-foundation` (Refs #11; PR #53) - Change concluída arquivada com sync da spec mobile-foundation; referências e contexto atualizados.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Arquivo de licença renomeado para LICENSE.md e referências locais atualizadas, preservando integralmente seu conteúdo.
