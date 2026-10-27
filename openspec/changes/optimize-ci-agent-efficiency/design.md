@@ -21,3 +21,17 @@
 
 ## Decisões pendentes
 Aprovação da política de CI, matriz mínima obrigatória por tipo de alteração e estratégia de rollout.
+
+## Decisão para rollout seguro
+
+**Fase 1 (autorizada para Apply sem mudança de política):** manter os mesmos jobs, disparos, gates e testes; otimizar apenas execução redundante e documentação. Remover a instalação global repetida de npm **somente após** verificar a versão disponível nos runners e a compatibilidade com o lockfile; preservar as verificações Windows de compatibilidade, que não são necessariamente equivalentes às de Linux. Validar o ganho em PR não Draft.
+
+**Fase 2 (dependente de aprovação específica):** avaliar CI rápido com jobs nativos condicionais e gate completo em integração. Não aplicar filtros por paths ou alterar frequência dos builds nesta fase sem decisão explícita. O job agregador deve rejeitar falha, cancelamento e ausência de qualquer job obrigatório; `skipped` só será aceito com política aprovada, condições verificáveis e testes automatizados do agregador.
+
+### Matriz atual preservada na fase 1
+
+| Alteração | Docs Linux/Windows | JS Linux | Windows + APK | Android Linux | Emulador | Gate |
+| --- | --- | --- | --- | --- | --- | --- |
+| Documentação, JS, nativa, scripts, dependências ou CI | Obrigatório | Obrigatório | Obrigatório | Obrigatório | Obrigatório | Obrigatório |
+
+Drafts continuam sem executar os jobs conforme política existente. A fase 1 não altera proteção de branch. A fase 2 exige confirmação dos checks obrigatórios configurados no GitHub e aprovação do mantenedor.
