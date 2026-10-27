@@ -21,7 +21,7 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
-- `optimize-ci-agent-efficiency` (issue #57) - Guia de agentes com leitura incremental, checkpoints e revisões direcionadas para reduzir consumo de contexto sem dispensar os gates obrigatórios. Proposta de otimização do CI em avaliação; jobs existentes preservados.
+- `optimize-ci-agent-efficiency` (issue #57; PR #58) - Cache de build Gradle somente no CI (`--build-cache`, prova negativa de compilação sem cache), npm sem auditoria/funding no CI, invariantes do workflow testadas, guia de agentes com leitura incremental, arquivos gerados fora do contexto padrão e consulta direcionada de logs. Jobs, checks, gate e cobertura preservados; mudanças de frequência de build e proteção de branch apenas propostas.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Change concluída arquivada com sync da spec mobile-foundation; referências e contexto atualizados.
 

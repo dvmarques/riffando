@@ -49,7 +49,9 @@ Exemplo para iniciar: “Leia AGENTS.md e a issue #N. Explore o escopo e apresen
 3. Em uma retomada, consulte o estado da branch, diff, change/tasks e último resultado do CI; não reenvie todo o histórico da conversa. Mantenha um checkpoint curto com objetivo, arquivos alterados, decisões aprovadas, testes e próximo passo, preferencialmente na issue/PR.
 4. Durante Apply, examine primeiro o diff e execute verificações direcionadas ao trecho alterado para feedback rápido. **Antes da PR e nos gates finais**, execute `npm run validate` e todas as verificações exigidas para o escopo.
 5. Evite rodar Claude e Codex para a mesma revisão sem objetivo distinto. Quando a segunda revisão for necessária, forneça o diff, critérios de aceite e achados da primeira, em vez de pedir nova exploração integral.
-6. Para medir economia, registre tokens de entrada/saída e número de chamadas quando a ferramenta os disponibilizar. Separe essas métricas de tempo de CI e minutos de runner; não apresente estimativas como medições.
+6. Não leia por padrão arquivos gerados ou volumosos: as skills `openspec-*` (`.agents/skills`, `.claude/skills`; ≈ 118 KB e ≈ 117 KB), `.claude/commands/opsx` (≈ 114 KB), `package-lock.json` (≈ 886 KB) e `openspec/changes/archive`. São geradas por integrações oficiais ou duplicam outra fonte; leia somente quando a tarefa as alterar, e regenere com `npm run ai:update` em vez de editar à mão. A lista está no [mapa de contexto](../agent-context-map.md).
+7. Para falhas de CI, não carregue o log inteiro (o log do job Windows do run #36 tem ≈ 24 MB). Comece por `gh run view <id> --json status,conclusion,jobs` e `gh run view <id> --log-failed`, filtrando o trecho do step que falhou; durações por job/step saem de `gh api repos/<dono>/<repo>/actions/runs/<id>/jobs`. Registre no checkpoint o run, o SHA e o step.
+8. Para medir economia, registre tokens de entrada/saída e número de chamadas quando a ferramenta os disponibilizar. Separe essas métricas de tempo de CI e minutos de runner; não apresente estimativas como medições.
 
 ## Consultar e validar uma change
 

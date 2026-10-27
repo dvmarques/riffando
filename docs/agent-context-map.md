@@ -14,6 +14,18 @@ Leia primeiro [AGENTS.md](../AGENTS.md) e a issue. Este índice é uma rota de l
 | GitHub e CI | [guia GitHub](development/GITHUB.md), [validações](development/VALIDATION.md) | jobs efetivamente executados, SHA final |
 | Modelos e skills | [modelos](models.md), [workflow](development/AI_WORKFLOW.md) | consistência das skills; não editar geradas |
 
+## Não carregar por padrão
+
+Fontes geradas, copiadas ou volumosas só entram no contexto quando a tarefa as altera. Não edite à mão arquivos gerados por integrações oficiais; use `npm run ai:update`.
+
+| Caminho | Motivo | Tamanho aproximado |
+| --- | --- | --- |
+| `.agents/skills/openspec-*`, `.claude/skills/openspec-*` | Geradas pelo OpenSpec; idênticas em conteúdo entre agentes | 118 KB e 117 KB |
+| `.claude/commands/opsx` | Geradas pelo OpenSpec | 114 KB |
+| `package-lock.json` | Resolução de dependências; consulte `package.json` e [DEPENDENCIES.md](development/DEPENDENCIES.md) | 886 KB |
+| `openspec/changes/archive` | Histórico; leia só a change citada | 80 KB |
+| Logs completos de CI | Use `gh run view --json jobs` e `--log-failed` filtrado | até ≈ 24 MB por job |
+
 ## Leitura incremental
 
 1. Identifique issue, arquivos e change; leia as políticas de AGENTS.md e a configuração OpenSpec.

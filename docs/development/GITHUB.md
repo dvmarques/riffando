@@ -24,7 +24,11 @@ Esta é recomendação, não configuração aplicada. Verificar permissões admi
 
 ## CI e PRs Draft
 
-Enquanto a PR estiver em **Draft**, o job de validação do CI fica skipped. Ao marcar **Ready for review**, o evento `ready_for_review` executa a validação completa (Linux e Windows) sobre o commit corrente. `push` na `main` e execução manual continuam rodando normalmente. Em Draft, rode `npm run validate` localmente; a integração exige CI verde no commit final, portanto a PR precisa estar Ready.
+Enquanto a PR estiver em **Draft**, o job de validação do CI fica skipped. Ao marcar **Ready for review**, o evento `ready_for_review` executa a validação completa (Linux e Windows) sobre o commit corrente. `push` na `main` e execução manual (`workflow_dispatch`) continuam rodando normalmente; para medir ou diagnosticar o CI completo de uma branch Draft sem marcar Ready, use `gh workflow run ci.yml --ref <branch>`. A execução manual não substitui o CI do PR exigido para integração. Em Draft, rode `npm run validate` localmente; a integração exige CI verde no commit final, portanto a PR precisa estar Ready.
+
+## Cache de build e custo do CI
+
+No CI (`CI` definido) `npm run build:android` passa `--build-cache` ao Gradle; localmente o cache de build não é usado. `gradle/actions/setup-gradle` persiste o cache entre execuções. Um PR lê somente caches da própria referência e da `main`; a primeira execução após uma mudança de entradas compila tudo (cache *miss*) e as seguintes reaproveitam as tarefas inalteradas. A prova negativa de compilação Kotlin não usa cache de build. O tempo de parede do CI é o do job `windows`; durações por job e step saem de `gh api repos/dvmarques/riffando/actions/runs/<id>/jobs`. O repositório é público e a `main` não tem proteção de branch nem rulesets (verificado em 27/10/2026); exigir o check `Fundação — gate agregado` e qualquer mudança de frequência dos builds seguem como proposta em [design da change](../../openspec/changes/optimize-ci-agent-efficiency/design.md), não aplicada.
 
 ## Evolução do CI mobile
 
