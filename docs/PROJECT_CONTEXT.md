@@ -29,8 +29,7 @@
 
 - Repositório público: [dvmarques/riffando](https://github.com/dvmarques/riffando)
 - Branch padrão: `main`.
-- Licença vigente no arquivo `LICENSE`: **PolyForm Noncommercial 1.0.0**, com uso não comercial; é **source-available**, não open source OSI.
-- Antes havia MIT no histórico; a troca não revoga permissões já concedidas sobre versões anteriores.
+- Licença vigente no arquivo `LICENSE.md`: **PolyForm Noncommercial 1.0.0**, com uso não comercial; é **source-available**, não open source OSI.
 - `README.md`, `CONTRIBUTING.md` e `TRADEMARKS.md` criados.
 - Documentos de produto, arquitetura, dados e roadmap criados.
 - **10 épicos** GitHub (#1–#10) e **41 issues técnicas** (#11–#51) criados; nenhuma funcionalidade implementada.
@@ -44,7 +43,7 @@
 - [Modelo de dados](architecture/DATA_MODEL.md) — SQLite e regras.
 - [Decisões e pendências](DECISIONS.md) — confirmado versus proposto.
 - [Issues](https://github.com/dvmarques/riffando/issues) — execução e acompanhamento.
-- [Licença](../LICENSE), [contribuições](../CONTRIBUTING.md) e [marca](../TRADEMARKS.md).
+- [Licença](../LICENSE.md), [contribuições](../CONTRIBUTING.md) e [marca](../TRADEMARKS.md).
 
 ## Sequência recomendada para continuar
 

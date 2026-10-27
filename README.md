@@ -65,7 +65,7 @@ O roadmap e as estimativas serão refinados antes do início da implementação.
 
 ## Licenciamento
 
-O código deste projeto está disponível sob a **[PolyForm Noncommercial License 1.0.0](LICENSE)**. Isso significa que o código é público e pode ser utilizado nos termos da licença, **mas não é software open source segundo a definição da OSI**, pois há restrições ao uso comercial.
+O código deste projeto está disponível sob a **[PolyForm Noncommercial License 1.0.0](LICENSE.md)**. Isso significa que o código é público e pode ser utilizado nos termos da licença, **mas não é software open source segundo a definição da OSI**, pois há restrições ao uso comercial.
 
 O licenciamento comercial exige autorização separada dos titulares dos direitos aplicáveis. O nome e os elementos de identidade visual seguem a política descrita em [TRADEMARKS.md](TRADEMARKS.md).
 
