@@ -1,12 +1,23 @@
 {
   "devDependencies": {
     "@fission-ai/openspec": "1.15.0",
-    "markdownlint-cli2": "0.24.0"
+    "@testing-library/react-native": "14.1.0",
+    "@types/jest": "30.0.0",
+    "@types/react": "19.3.0",
+    "cross-spawn": "7.0.6",
+    "eslint": "9.39.4",
+    "eslint-config-expo": "58.0.4",
+    "eslint-plugin-import": "2.32.0",
+    "expo-doctor": "1.21.5",
+    "jest": "30.5.2",
+    "jest-expo": "58.0.12",
+    "markdownlint-cli2": "0.24.0",
+    "typescript": "6.0.3"
   },
   "name": "riffando-development",
   "version": "0.0.0",
   "private": true,
-  "description": "Ferramentas de desenvolvimento do Riffando; aplicativo ainda não implementado",
+  "description": "Fundação mobile offline do Riffando",
   "type": "module",
   "engines": {
     "node": ">=24 <25"
@@ -19,14 +30,44 @@
     "check:links": "node scripts/check-links.mjs",
     "test:tooling": "node scripts/smoke-openspec.mjs",
     "validate:openspec": "node scripts/validate-openspec.mjs",
-    "validate": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills && npm run test:agent-skills",
+    "validate": "npm run validate:docs && npm run lint && npm run typecheck && npm run test:foundation-tooling && npm run test:ci",
+    "validate:docs": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills && npm run test:agent-skills",
+    "start": "expo start --dev-client --localhost",
+    "android": "expo run:android",
+    "lint": "eslint app src tests/mobile",
+    "typecheck": "tsc --noEmit",
+    "test": "jest --watch",
+    "test:ci": "jest --ci --runInBand --coverage",
+    "test:foundation-tooling": "node --test tests/tooling/*.test.mjs",
+    "check:expo": "expo install --check && expo-doctor",
+    "export:android": "expo export --platform android --output-dir dist/android",
+    "check:env": "node scripts/check-environment.mjs",
+    "check:env:android": "node scripts/check-environment.mjs --android",
+    "build:android": "node scripts/build-android.mjs",
     "sync:agent-skills": "node scripts/sync-agent-skills.mjs",
     "check:agent-skills": "node scripts/sync-agent-skills.mjs --check",
-    "test:agent-skills": "node --test scripts/sync-agent-skills.test.mjs"
+    "test:agent-skills": "node --test scripts/sync-agent-skills.test.mjs",
+    "check:env:gradle": "node scripts/check-gradle-environment.mjs"
   },
   "overrides": {
     "micromark-extension-math": {
       "katex": "0.18.2"
     }
-  }
+  },
+  "dependencies": {
+    "@expo/log-box": "58.0.13",
+    "@expo/metro-runtime": "58.0.15",
+    "expo": "58.0.20",
+    "expo-constants": "58.0.13",
+    "expo-dev-client": "58.0.16",
+    "expo-linking": "58.0.14",
+    "expo-router": "58.0.27",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-native": "0.88.0",
+    "react-native-safe-area-context": "5.10.1",
+    "react-native-screens": "4.30.0"
+  },
+  "main": "expo-router/entry",
+  "packageManager": "npm@12.2.1"
 }

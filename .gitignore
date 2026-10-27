@@ -7,3 +7,8 @@ dist/
 coverage/
 *.log
 .claude/settings.local.json
+
+android/
+ios/
+artifacts/
+.tools/

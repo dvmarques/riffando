@@ -1,16 +1,16 @@
 # Política progressiva de qualidade
 
-O Riffando ainda não tem app Expo. Valide **o que existe**, sem simular cobertura mobile.
+O Riffando tem shell Expo implementado e verificado em GC-001/#11. Valide **o que existe** e registre pendências nativas/acessibilidade sem simular entrega.
 
-## Agora: fundação documental
+## Fundação documental preservada
 
 - `npm ci --ignore-scripts` com Node 24, `npm run validate` e `git diff --check` quando disponível.
-- O script validate reúne lint Markdown, links locais, check de integrações OpenSpec, smoke e validação estrita. Preservar execução Linux/Windows.
+- O script validate reúne lint Markdown, links, integrações OpenSpec, smoke/validação estrita, lint JS, tipos e testes de tooling/UI. Preservar execução Linux/Windows.
 - Revisar PR, artefatos OpenSpec e evidências de CI no commit final; skipped não significa aprovado.
 - Skills próprias verificadas por `npm run check:agent-skills` quando presentes. Não modificar artefatos OpenSpec gerados manualmente.
 - Sem gravações/credenciais, novas dependências runtime ou mudanças globais de agente.
 
-## Quando houver app autorizado
+## Fundação mobile implementada e evolução futura
 
 - TypeScript estrito, lint compatível React Native, testes unitários de domínio e persistência/migrações, UI mobile e builds Android reproduzíveis.
 - Testes E2E em journeys reais, acessibilidade com leitor de tela e dispositivos, responsividade/tamanho de texto, estados vazios e falhas.

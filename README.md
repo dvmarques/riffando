@@ -4,7 +4,7 @@
 
 Riffando é um projeto de aplicativo para aprender e praticar guitarra, criado com foco em **português brasileiro**, experiência acessível e acompanhamento da evolução musical.
 
-> **Estado:** planejamento. Ainda não há aplicativo implementado ou versão disponível para instalação.
+> **Estado:** fundação Expo implementada e validada na PR #53. Há um shell de navegação; recursos musicais ainda não estão implementados e não há release publicada.
 
 ## Retomar o projeto em outra conversa ou agente
 
@@ -65,11 +65,9 @@ O roadmap e as estimativas serão refinados antes do início da implementação.
 
 ## Licenciamento
 
-O código deste projeto está disponível sob a **[PolyForm Noncommercial License 1.0.0](LICENSE)**. Isso significa que o código é público e pode ser utilizado nos termos da licença, **mas não é software open source segundo a definição da OSI**, pois há restrições ao uso comercial.
+O código deste projeto está disponível sob a **[PolyForm Noncommercial License 1.0.0](LICENSE.md)**. Isso significa que o código é público e pode ser utilizado nos termos da licença, **mas não é software open source segundo a definição da OSI**, pois há restrições ao uso comercial.
 
 O licenciamento comercial exige autorização separada dos titulares dos direitos aplicáveis. O nome e os elementos de identidade visual seguem a política descrita em [TRADEMARKS.md](TRADEMARKS.md).
-
-> A licença anterior MIT, se aplicada a versões já publicadas, não tem suas permissões retroativamente revogadas.
 
 ## Contribuições
 
@@ -78,3 +76,7 @@ Contribuições não comerciais e propostas de melhorias são bem-vindas. Antes 
 ## Aviso
 
 O projeto está em fase inicial. Informações de compatibilidade de dispositivos, precisão de análise musical e datas de lançamento só serão confirmadas após testes.
+
+## Executar a fundação
+
+Consulte [guia mobile](docs/development/MOBILE.md) para versões, instalação, testes, development build e APK interno Android, e [dependências/riscos](docs/development/DEPENDENCIES.md). Builds Windows/Linux e smoke Android validados; testes/evidências no guia. Sem release publicada.

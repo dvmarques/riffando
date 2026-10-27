@@ -4,7 +4,7 @@ Obrigado pelo interesse em melhorar o Riffando! Este projeto é desenvolvido com
 
 ## Antes de começar
 
-- Leia o [README](README.md) e a [licença](LICENSE).
+- Leia o [README](README.md) e a [licença](LICENSE.md).
 - O projeto usa **PolyForm Noncommercial 1.0.0**, uma licença de código público com restrição comercial; não é uma licença open source aprovada pela OSI.
 - Consulte as issues e discussões existentes antes de abrir propostas duplicadas.
 - Para mudanças relevantes, abra uma issue explicando motivação, escopo e critérios de aceite antes de implementar.

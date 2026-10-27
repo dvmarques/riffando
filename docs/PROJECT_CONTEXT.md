@@ -29,12 +29,11 @@
 
 - Repositório público: [dvmarques/riffando](https://github.com/dvmarques/riffando)
 - Branch padrão: `main`.
-- Licença vigente no arquivo `LICENSE`: **PolyForm Noncommercial 1.0.0**, com uso não comercial; é **source-available**, não open source OSI.
-- Antes havia MIT no histórico; a troca não revoga permissões já concedidas sobre versões anteriores.
+- Licença vigente no arquivo `LICENSE.md`: **PolyForm Noncommercial 1.0.0**, com uso não comercial; é **source-available**, não open source OSI.
 - `README.md`, `CONTRIBUTING.md` e `TRADEMARKS.md` criados.
 - Documentos de produto, arquitetura, dados e roadmap criados.
 - **10 épicos** GitHub (#1–#10) e **41 issues técnicas** (#11–#51) criados; nenhuma funcionalidade implementada.
-- **Não há ainda** GitHub Project visual, milestones confirmados, labels personalizados, código React Native ou builds. A preparação de IA adiciona CI de documentação e ferramentas; não tratar planejamento como entrega.
+- GitHub Project visual, milestones e labels personalizados seguem independentes desta entrega. A fundação React Native e os builds Windows/Linux já existem na PR #53, com CI mobile e documental.
 
 ## Referências obrigatórias para retomada
 
@@ -44,7 +43,7 @@
 - [Modelo de dados](architecture/DATA_MODEL.md) — SQLite e regras.
 - [Decisões e pendências](DECISIONS.md) — confirmado versus proposto.
 - [Issues](https://github.com/dvmarques/riffando/issues) — execução e acompanhamento.
-- [Licença](../LICENSE), [contribuições](../CONTRIBUTING.md) e [marca](../TRADEMARKS.md).
+- [Licença](../LICENSE.md), [contribuições](../CONTRIBUTING.md) e [marca](../TRADEMARKS.md).
 
 ## Sequência recomendada para continuar
 
@@ -76,7 +75,17 @@ Configuração da [PR #52](https://github.com/dvmarques/riffando/pull/52), aprov
 - [AI_WORKFLOW](development/AI_WORKFLOW.md) contém instalação, comandos Codex/Claude e retomada; políticas e gates ficam em AGENTS.md, e regras OpenSpec em config.yaml.
 - OpenSpec 1.15.0 fixado no manifest/lock; sete workflows oficiais, incluindo verify.
 - [Validação](development/VALIDATION.md) registra evidências e limites; [GitHub](development/GITHUB.md) documenta templates, taxonomia e proteção recomendada.
-- CI valida documentação e ferramentas. Sem código mobile, lint/typecheck/test/build do app continuam pendentes de #11/#14.
-- A organização `apps/mobile` + `packages` permanece proposta. Avaliar app único versus monorepo no refinamento da issue #11 antes de criar a base.
+- CI valida documentação, lint, tipos, testes, exportação, builds Windows/Linux e smoke Android da fundação; não entrega o escopo funcional restante de #14.
+- A preparação deixou a topologia para #11. No refinamento de 26/10/2026, o mantenedor aprovou app único na raiz para o planejamento, sem packages/workspaces desnecessários; ver ADR 0001. Apply foi autorizado separadamente e a fundação foi implementada.
 - Fluxo: Issue → Explore somente leitura → Propose → revisão → Apply → Verify → revisão de código → PR → CI → code review → todas as tarefas concluídas → archive/sync autorizado na PR → revisão/validação final e CI → merge autorizado por squash.
 - Archive e merge dependem de autorização aplicável; somente restrição concreta de integração prévia permite alterar a ordem, conforme AGENTS.md. Nesta preparação, o archive já foi autorizado e executado antes do squash.
+
+## Fundação mobile — planejamento refinado em 26/10/2026
+
+O mantenedor aprovou app único na raiz com React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura e autorizou alinhar a issue #11. A change [define-mobile-foundation](../openspec/changes/archive/2026-10-27-define-mobile-foundation/proposal.md), o [ADR 0001](adr/0001-mobile-foundation.md) e a [issue #11](https://github.com/dvmarques/riffando/issues/11) compartilham escopo/exclusões e CA-01…CA-06. Monorepo futuro depende de consumidor concreto ou API/versionamento independente comprovado e novo ADR.
+
+Histórico do planejamento em 26/10/2026, antes da autorização separada de Apply: a PR #53 detalhou diagnóstico Windows/Linux, gates de CI e estados de loading foram detalhados. Seleção exata de SDK/toolchain e dependências/licenças fica para implementação autorizada. Naquela etapa não houve implementação; o estado atual implementado está na seção seguinte. Branch protection permanece inalterada. Aprovação arquitetural não autoriza Apply, archive/sync ou merge.
+
+## Estado da fundação
+
+GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.

@@ -1,6 +1,7 @@
 {
   "globs": ["*.md", "docs/**/*.md", "openspec/**/*.md", ".github/**/*.md"],
-  "ignores": ["node_modules/**"],
+  // Preservar o texto da licença, inclusive URLs originais sem formatação adicional.
+  "ignores": ["node_modules/**", "LICENSE.md"],
   "config": {
     "default": true,
     "MD013": false,
