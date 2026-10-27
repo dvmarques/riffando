@@ -82,13 +82,14 @@ Aprovação da política de CI da fase 2 (matriz mínima obrigatória por tipo d
 
 ## Resultados medidos da fase 1
 
-Medições feitas por `workflow_dispatch` na branch da PR (a PR Draft não executa jobs). A: [run 40578545686](https://github.com/dvmarques/riffando/actions/runs/40578545686), SHA `f59c78b`, sem entradas de cache de build na branch (o Linux restaurou apenas o `gradle-home` da `main`). B: [run 40583313744](https://github.com/dvmarques/riffando/actions/runs/40583313744), SHA `0d790aa`, com timeout do Windows em 45 min; Linux com cache gravado por A, Windows ainda sem cache (primeira gravação). O run C (Windows com cache quente, [run 40587833695](https://github.com/dvmarques/riffando/actions/runs/40587833695)) foi disparado depois e seu resultado é registrado na PR (pendente neste documento).
+Medições feitas por `workflow_dispatch` na branch da PR (a PR Draft não executa jobs). A: [run 40578545686](https://github.com/dvmarques/riffando/actions/runs/40578545686), SHA `f59c78b`, sem entradas de cache de build na branch (o Linux restaurou apenas o `gradle-home` da `main`). B: [run 40583313744](https://github.com/dvmarques/riffando/actions/runs/40583313744), SHA `0d790aa`, com timeout do Windows em 45 min; Linux com cache gravado por A, Windows ainda sem cache (primeira gravação). C: [run 40587833695](https://github.com/dvmarques/riffando/actions/runs/40587833695), mesmo SHA `0d790aa` de B, com cache quente em Linux e Windows (restaurou as entradas gravadas por B).
 
 | Run | Parede | Resultado | `windows` | `android` + `emulator` | Soma Linux | Soma Windows | Soma total |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Baseline #31 / #34 / #36 | 17m40s / 25m55s / 29m24s (média 24m20s) | success | 17m22s / 24m49s / 28m02s | 13m08s + 3m13s / 12m43s + 3m53s / 16m42s + 3m17s | 18m42s / 18m54s / 22m25s | 19m22s / 26m02s / 29m57s | 38m04s / 44m56s / 52m22s |
 | A (`f59c78b`, cache vazio) | 30m21s | cancelled (timeout de 30 min do Windows; gate falhou como esperado) | 30m07s (cancelado) | 10m46s + 3m26s | 16m02s | 32m02s | 48m04s |
 | B (`0d790aa`, Linux quente, Windows frio) | 31m10s | success | 30m57s | 12m11s + 3m23s | 17m16s | 32m44s | 50m00s |
+| C (`0d790aa`, Linux e Windows quentes) | 22m32s | success | 22m19s | 11m12s + 4m07s | 17m12s | 24m10s | 41m22s |
 
 Runner-minutos observáveis = soma das durações dos jobs; o repositório é público, portanto sem custo faturado.
 
@@ -100,16 +101,18 @@ Cache de build do Gradle (contagens do próprio Gradle nos logs):
 | Linux, A | `gradle-home` da `main` (miss das entradas de build) | 737 executadas, 114 do cache | 8m25s | 511 s |
 | Linux, B | `gradle-home` gravado por A (54 MiB; hit) | 535 executadas, 316 do cache | 8m40s | 529 s |
 | Windows, B | "Gradle User Home cache not found" (miss) | 738 executadas, 113 do cache | 25m26s | 1534 s |
+| Linux, C | `gradle-home` gravado por B (hit) | 535 executadas, 316 do cache | 8m30s | 516 s |
+| Windows, C | `gradle-home` gravado por B (hit) | 535 executadas, 316 do cache | 17m21s | 1050 s |
 
-Em Linux, as tarefas de compilação Kotlin/Java foram de 38 executadas (A) para 0 executadas e 37 vindas do cache (B). As 49–50 tarefas `buildCMake*`/`Cxx` (compilação nativa C++) foram executadas em A e B e **nunca** vieram do cache (o AGP não as torna cacheáveis). Elas dominam o tempo restante; por isso o cache de build funciona (hit comprovado) mas **não reduziu o tempo de parede de forma demonstrável**: 8m25s (A) contra 8m40s (B) no Linux, e a variação entre execuções equivalentes do Windows no baseline (17–28 min) e em A/B (≥ 30 min) é maior do que qualquer efeito do cache. As linhas `Build cache is disabled` ao final do log Windows pertencem a invocações auxiliares posteriores (`BUILD SUCCESSFUL in 13s`), não ao `assembleRelease`.
+Em Linux, as tarefas de compilação Kotlin/Java foram de 38 executadas (A) para 0 executadas e 37 vindas do cache (B). As 49–50 tarefas `buildCMake*`/`Cxx` (compilação nativa C++) foram executadas em A e B e **nunca** vieram do cache (o AGP não as torna cacheáveis). Elas dominam o tempo restante; por isso o cache de build funciona (hit comprovado) mas **não reduziu o tempo de parede de forma demonstrável**: 8m25s (A) contra 8m40s (B) no Linux, No Windows, o par equivalente B (frio) e C (quente), mesmo SHA, mostra Gradle de 25m26s para 17m21s, passo `build:android` de 1534 s para 1050 s, job de 30m57s para 22m19s e parede de 31m10s para 22m32s; é uma única comparação, e o passo de 1050 s fica dentro da faixa do baseline sem cache (785–1250 s). A variação entre execuções equivalentes do Windows no baseline (17–28 min) e em A/B (≥ 30 min) é do mesmo tamanho que esse efeito. As linhas `Build cache is disabled` ao final do log Windows pertencem a invocações auxiliares posteriores (`BUILD SUCCESSFUL in 13s`), não ao `assembleRelease`.
 
 Conclusões e limites:
 
-- **Economia de tempo da fase 1: pendente / não comprovada.** Nenhuma porcentagem é afirmada. Parede de A e B (30–31 min) ficou acima do baseline (média 24m20s), dentro da variação observada dos runners Windows; não há comparação equivalente que prove ganho nem perda causada pela mudança.
+- **Economia de tempo da fase 1: indicativa, não comprovada.** Nenhuma porcentagem é afirmada. A parede de A e B (30–31 min, caches vazios) ficou acima do baseline (média 24m20s) e a de C (22m32s, caches quentes) abaixo, tudo dentro da variação observada dos runners Windows; falta uma série de execuções quentes e frias para separar efeito do cache de variação de runner.
 - Ganhos comprovados: confiabilidade (com 45 min, B concluiu em 31 min com sucesso; com 30 min, A e o run #37 foram cancelados) e menos tarefas Kotlin/Java executadas (38 para 0 no Linux em hit).
 - Cobertura de testes inalterada: mesmos jobs, mesmos comandos de teste; `test:ci` 3 testes com 100% de cobertura; tooling com as invariantes novas.
 - Tokens: nenhuma métrica disponível; nada estimado. Para agentes foram registrados somente tamanhos de arquivos (mapa de contexto).
-- Decisão pendente: manter ou reverter `--build-cache` (uma linha em `scripts/build-android.mjs`). Mantido porque não altera resultados, já cacheia compilação Kotlin/Java e custa ≈ 54 MiB de cache no Linux; sem ganho de parede medido. O próximo candidato real é cache de saída nativa (ccache/CMake), não medido.
+- Decisão pendente: manter ou reverter `--build-cache` (uma linha em `scripts/build-android.mjs`). Mantido porque não altera resultados, cacheia compilação Kotlin/Java e outras 316 tarefas, e C foi a execução mais rápida do Windows com cache (um único dado); custa ≈ 54 MiB de cache no Linux e o ganho de parede não está estabelecido. Além disso, um PR só lê caches da própria referência e da `main`: o benefício em PRs depende de gravar o cache na `main`. O próximo candidato real é cache de saída nativa (ccache/CMake), não medido.
 
 ## Baseline de três execuções bem-sucedidas
 
