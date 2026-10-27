@@ -57,3 +57,7 @@ O job Windows prepara JDK/SDK da matriz, regenera CNG e executa check:env:gradle
 Run [40412254969](https://github.com/dvmarques/riffando/actions/runs/40412254969), head dbdb777 e checkout de teste d0bbfe2: APK compilado e instalado em sdk_gphone64_x86_64, Android 16/API 36; modo avião/Metro desligado, início frio, navegação/retorno por ação e Back Android, reabertura e fontes 100%/200% aprovados. Capturas e XML revisados sem sobreposição visível; evidência não comprova TalkBack. Os [artefatos](https://github.com/dvmarques/riffando/actions/runs/40412254969/artifacts/12694691449) são retidos por 7 dias.
 
 A política de #56 foi preservada: jobs não executam em PR Draft; ready_for_review dispara a validação integral, e main/manual continuam. Draft/skipped não comprova aprovação. O gate em Ready exige todos os jobs com success no SHA corrente.
+
+## Gates nativos complementares
+
+Windows executa check:env:gradle e build:android com APK próprio android-validation-windows. Linux, após build válido, injeta erro Kotlin somente no MainActivity.kt gerado, exige falha de compilação localizada, restaura os bytes originais em finally e recompila APK válido antes do upload. Log da prova fica no artefato; nenhuma regressão é commitada ou enviada ao usuário no APK. Cache Gradle usa o escopo isolado da PR. Confirmar resultados do SHA final antes de marcar essas tarefas.

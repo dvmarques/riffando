@@ -73,7 +73,7 @@ jobs:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: Instalação e scripts Windows
     runs-on: windows-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -97,8 +97,17 @@ jobs:
           packages: platform-tools
       - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0' 'ndk;27.1.12297006'
       - uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: false
       - run: npm exec -- expo prebuild --platform android --no-install
       - run: npm run check:env:gradle
+      - run: npm run build:android
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-validation-windows
+          path: artifacts/riffando-validation.apk
+          if-no-files-found: error
+          retention-days: 7
 
   android:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
@@ -122,12 +131,17 @@ jobs:
           packages: platform-tools
       - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0' 'ndk;27.1.12297006'
       - uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: false
       - run: npm ci --ignore-scripts
       - run: npm run build:android
+      - run: node scripts/probe-android-compilation.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: android-validation
-          path: artifacts/riffando-validation.apk
+          path: |
+            artifacts/riffando-validation.apk
+            artifacts/compilation-probe.log
           if-no-files-found: error
           retention-days: 7
 
