@@ -66,7 +66,7 @@ GC-001/#11: **Apply autorizado e 20 tarefas verificadas.** Topologia app único 
 - 6.3/6.4: gate real aprovou conjunto completo do mesmo run; tabela de estados failure/cancelled/skipped/queued/ausência e artefato ausente tem testes. Primeira implementação não permite filtro; contrato/testes de filtros futuros permanece documentado no design, sem bypass de skip. Branch protection preservada.
 - Risco transitivo do tooling aceito temporariamente pelo mantenedor, conforme DEPENDENCIES.md, sem dispensar demais verificações.
 
-- 1.1: matriz exata/peers conferidos no lock e catálogos, frameworks MIT upstream e 42 pacotes do JS avaliados; obrigações e limites de redistribuição em DEPENDENCIES.md. Não equivale a inventário nativo integral ou autorização de publicação.
+- 1.1: matriz exata/peers conferidos no lock e catálogos, frameworks MIT upstream e 42 pacotes do JS identificados no inventário inicial; o inventário atualizado identifica 44. Obrigações e limites de redistribuição em DEPENDENCIES.md. Não equivale a inventário nativo integral ou autorização de publicação.
 
 ## Evidências complementares — 27/10/2026
 
@@ -87,3 +87,7 @@ GC-001/#11: **Apply autorizado e 20 tarefas verificadas.** Topologia app único 
 Claude Code 2.1.304, modelo configurado claude-sonnet-5-5, revisão estática do head ca8f661: bloqueador documental B1 corrigido nos próprios textos de estado. M1 Unicode de Properties.store, M2 entrada real do gate e M5 descrição de TalkBack corrigidos com regressões. M3 versões exatas e M4 limites AVD/ABIs explicitados no guia. Suite atual: 57 testes tooling, incluindo os cinco jobs reais e 21 invocações negativas/positiva do CLI, em vez de nomes fictícios; a contagem histórica de 71 pertence ao conjunto anterior. Nenhum teste/build foi atribuído ao Claude. Sugestões de backup/dados e ícone/splash ficam para demandas próprias; shell não persiste dados nem é publicação de loja. Tags de Actions/cache existentes não foram alteradas para expandir escopo; sem pull_request_target ou secrets e cache isolado por PR. Escopo integral de #11 verificado; fechamento após squash autorizado.
 
 A reavaliação estática do Claude após as correções B1/M1…M5 confirmou ausência de bloqueadores para archive/sync e squash, condicionada aos checks. Contagens do run a556c82 acima são históricas; a suite revisada também confere a lista de jobs contra o próprio workflow.
+
+## Revalidação dos patches Expo — 27/10/2026
+
+Após archive, o catálogo online passou a recomendar expo 58.0.20, expo-dev-client 58.0.16 e expo-router 58.0.27. Patches atualizados e peers/versões conferidos; Expo doctor 20/20 e exportação JS com 1.130 fontes/44 pacotes mapeados. Inventário e licenças em docs/development/DEPENDENCIES.md; em particular, standard-navigation declara MIT no manifesto e não inclui LICENSE no tarball/upstream da revisão. npm audit aponta três entradas high propagadas de Zod 3, abrangidas pelo aceite temporário de tooling; node-forge 1.4.2 saiu do audit. O teste manual TalkBack anterior permanece identificado pelo seu APK original. CI e revisão do patch devem ser concluídos antes do merge final.

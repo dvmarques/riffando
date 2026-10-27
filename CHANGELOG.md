@@ -38,6 +38,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Fixed
 
+- `define-mobile-foundation` (Refs #11; PR #53) - Patches Expo, dev-client e Router atualizados conforme catálogo SDK 58; checagem compatível preservada e inventário/licenças reavaliados. Auditoria passou a três avisos high de tooling em Zod, já aceitos temporariamente.
+
 - `define-mobile-foundation` (Refs #11; PR #53) - Revisão Claude corrigiu estados documentais contraditórios, suporte a Unicode em propriedades Android, teste do gate com jobs/formato reais e identificação da evidência manual de TalkBack.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Build Windows seleciona CMake 3.31.6/Ninja 1.12.1 e diagnóstico exige caminhos longos para corrigir causa observada no CI sem alterar toolchain global do colaborador.

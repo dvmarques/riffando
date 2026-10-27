@@ -1,9 +1,18 @@
 {
   "scope": "Somente JavaScript Android de produção; não inclui inventário nativo do APK",
-  "date": "2026-10-26",
-  "expo": "58.0.19",
+  "date": "2026-10-27",
+  "expo": "58.0.20",
   "sourceMapSources": 1130,
   "packages": [
+    {
+      "name": "@expo/cli",
+      "version": "58.1.16",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE",
+        "LICENSE-third-party"
+      ]
+    },
     {
       "name": "@expo/log-box-utils",
       "version": "58.0.2",
@@ -56,25 +65,29 @@
       "name": "@react-native/asset-utils",
       "version": "0.88.0",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
     },
     {
       "name": "@react-native/js-polyfills",
       "version": "0.88.0",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
     },
     {
       "name": "@react-native/normalize-colors",
       "version": "0.88.0",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
     },
     {
       "name": "@react-native/virtualized-lists",
       "version": "0.88.0",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
     },
     {
       "name": "@ungap/structured-clone",
@@ -102,7 +115,15 @@
     },
     {
       "name": "expo",
-      "version": "58.0.19",
+      "version": "58.0.20",
+      "license": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "name": "expo-asset",
+      "version": "58.0.18",
       "license": "MIT",
       "licenseFiles": [
         "LICENSE"
@@ -134,7 +155,7 @@
     },
     {
       "name": "expo-modules-core",
-      "version": "58.0.26",
+      "version": "58.0.27",
       "license": "MIT",
       "licenseFiles": [
         "LICENSE"
@@ -142,9 +163,10 @@
     },
     {
       "name": "expo-router",
-      "version": "58.0.26",
+      "version": "58.0.27",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/expo/expo/blob/sdk-58/LICENSE"
     },
     {
       "name": "expo-status-bar",
@@ -182,7 +204,8 @@
       "name": "metro-runtime",
       "version": "0.87.1",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react/metro/blob/c7597f88c3e5b2a0d5e5915dfed2413aadcdfcce/LICENSE"
     },
     {
       "name": "nanoid",
@@ -206,7 +229,8 @@
       "license": "MIT",
       "licenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "mappedSourceExample": "/node_modules/pretty-format/build/index.js"
     },
     {
       "name": "promise",
@@ -242,11 +266,12 @@
     },
     {
       "name": "react-is",
-      "version": "19.3.1",
+      "version": "18.3.1",
       "license": "MIT",
       "licenseFiles": [
         "LICENSE"
-      ]
+      ],
+      "mappedSourceExample": "/node_modules/pretty-format/node_modules/react-is/cjs/react-is.production.min.js"
     },
     {
       "name": "react-native",
@@ -300,7 +325,9 @@
       "name": "standard-navigation",
       "version": "0.0.5",
       "license": "MIT",
-      "licenseFiles": []
+      "licenseFiles": [],
+      "licenseSource": "https://github.com/react-navigation/standard-navigation/blob/0016fae7800b9f27bab91326697b740a6d2266dc/package.json",
+      "licenseNote": "MIT e autor declarados no manifesto; sem arquivo LICENSE no tarball nem na raiz upstream dessa revisão. Consolidar avisos antes de redistribuição."
     },
     {
       "name": "warn-once",

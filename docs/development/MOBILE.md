@@ -6,7 +6,7 @@ GC-001/#11 implementado em app único, com 20 tarefas verificadas na PR #53. Rev
 
 ## Matriz e instalação
 
-config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.19, React/DOM 19.3.0, RN 0.88.0, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
+config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.20, React/DOM 19.3.0, RN 0.88.0, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
 
 O engines aceita Node 24 como família, mas check:env exige as versões **exatas** Node/npm acima. Um patch diferente pode instalar e ser corretamente rejeitado pelo diagnóstico. Se o Node vier com outro npm, instalar conscientemente a versão fixada (npm install --global npm@12.2.1), ou usar runtime isolado; os scripts não fazem essa alteração por conta própria.
 
@@ -73,3 +73,9 @@ Dez requisitos adicionados e 23 cenários revisados, sem remoções/renomes. Ras
 Claude Code 2.1.304 / modelo configurado claude-sonnet-5-5 revisou estaticamente o head ca8f661, sem executar testes nem inspecionar lock completo. B1: estados contraditórios corrigidos nos próprios cabeçalhos, consolidando este guia. M1: Unicode/escapes Properties.store com testes; M2: jobs reais/lista compartilhada e entrada CLI do gate; M3: versões exatas explicitadas; M4: AVD/ABIs/32 bits explicitados; M5: TalkBack automatizado separado do relato manual. Suite após correções: 57 testes tooling, incluindo invocações reais do CLI, e três cenários UI. Contagens históricas anteriores não descrevem esse conjunto revisado. Revisão e testes do commit de correção, CI antes de archive e CI após archive continuam gates independentes.
 
 O [run 40529243530](https://github.com/dvmarques/riffando/actions/runs/40529243530) aprovou os sete checks no head 6a8b62d, após as correções revisadas pelo Claude. Archive/sync foi efetuado na branch da PR após esse resultado; o commit de archive exige validação e CI próprios antes do squash.
+
+## Atualização de patches Expo — 27/10/2026
+
+O run 40562313720 rejeitou expo 58.0.19, dev-client 58.0.15 e router 58.0.26 após o catálogo online passar a recomendar 58.0.20, 58.0.16 e 58.0.27. Os três patches foram atualizados com versões exatas, mantendo SDK 58, peers e lock. Expo install --check e Expo doctor 20/20 passaram; exportação Android real e source map foram regenerados. A checagem permanece online e obrigatória. Não confundir recomendações novas com quebra comprovada do APK anterior.
+
+O inventário JS atualizado cobre 44 pacotes/versões e 1.130 fontes; licenças declaradas MIT/ISC e fontes de avisos ausentes em DEPENDENCIES.md. Auditoria atual: três avisos high propagados de Zod 3 no tooling, dentro do aceite temporário anterior; node-forge atualizado para 1.4.2 deixou de constar no audit. O teste manual TalkBack documentado acima usou o APK anterior aos patches; componentes da interface não foram alterados, e as verificações automatizadas/build do novo head precisam passar. Esse registro não atribui novo teste manual ao APK atualizado.
