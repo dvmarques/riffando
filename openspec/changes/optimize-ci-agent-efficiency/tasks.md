@@ -20,5 +20,5 @@
 
 ## Verificação
 
-- [ ] Comparar baseline e resultado, registrar limitações e evidências na PR.
+- [x] Comparar baseline e resultado, registrar limitações e evidências na PR: runs A e B em `design.md`; economia de tempo pendente/não comprovada; run C (Windows com cache quente) registrado na PR.
 - [ ] Revisar diff, validar compatibilidade Claude/Codex e CI do commit final.
