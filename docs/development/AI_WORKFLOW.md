@@ -42,7 +42,6 @@ No aplicativo desktop Codex, as skills também podem ser selecionadas pelo paine
 
 Exemplo para iniciar: “Leia AGENTS.md e a issue #N. Explore o escopo e apresente os riscos. Depois, proponha a change nome-da-change seguindo os gates do repositório.”
 
-
 ## Economizar contexto e tokens sem reduzir qualidade
 
 1. Inicie pela issue, `AGENTS.md`, `openspec/config.yaml` e pelo [mapa de contexto](../agent-context-map.md). Consulte somente as fontes do domínio afetado; não carregue todos os documentos do projeto por padrão.
