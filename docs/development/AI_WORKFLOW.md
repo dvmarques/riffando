@@ -42,6 +42,16 @@ No aplicativo desktop Codex, as skills também podem ser selecionadas pelo paine
 
 Exemplo para iniciar: “Leia AGENTS.md e a issue #N. Explore o escopo e apresente os riscos. Depois, proponha a change nome-da-change seguindo os gates do repositório.”
 
+
+## Economizar contexto e tokens sem reduzir qualidade
+
+1. Inicie pela issue, `AGENTS.md`, `openspec/config.yaml` e pelo [mapa de contexto](../agent-context-map.md). Consulte somente as fontes do domínio afetado; não carregue todos os documentos do projeto por padrão.
+2. Use `adaptive-ai-workflow` para classificar Fast/Standard/Critical. A classificação orienta **a profundidade da exploração e a frequência de revisões intermediárias**, não dispensa proposta, aprovação, testes ou os gates obrigatórios.
+3. Em uma retomada, consulte o estado da branch, diff, change/tasks e último resultado do CI; não reenvie todo o histórico da conversa. Mantenha um checkpoint curto com objetivo, arquivos alterados, decisões aprovadas, testes e próximo passo, preferencialmente na issue/PR.
+4. Durante Apply, examine primeiro o diff e execute verificações direcionadas ao trecho alterado para feedback rápido. **Antes da PR e nos gates finais**, execute `npm run validate` e todas as verificações exigidas para o escopo.
+5. Evite rodar Claude e Codex para a mesma revisão sem objetivo distinto. Quando a segunda revisão for necessária, forneça o diff, critérios de aceite e achados da primeira, em vez de pedir nova exploração integral.
+6. Para medir economia, registre tokens de entrada/saída e número de chamadas quando a ferramenta os disponibilizar. Separe essas métricas de tempo de CI e minutos de runner; não apresente estimativas como medições.
+
 ## Consultar e validar uma change
 
 Os exemplos abaixo são comandos de terminal. O fluxo e os gates de revisão, implementação, PR, CI e conclusão estão na seção **Processo obrigatório** de AGENTS.md; o [template de PR](../../.github/pull_request_template.md) orienta a entrega para revisão.
