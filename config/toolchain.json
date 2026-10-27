@@ -13,7 +13,8 @@
     "https://expo.dev/changelog/sdk-58",
     "https://docs.expo.dev/versions/v58.0.0/",
     "https://developer.android.com/build/jdks",
-    "https://dl.google.com/android/repository/repository2-3.xml"
+    "https://dl.google.com/android/repository/repository2-3.xml",
+    "https://docs.expo.dev/troubleshooting/windows-long-paths/"
   ],
   "gradle": "9.4.1",
   "androidGradlePlugin": "9.2.1",
@@ -22,5 +23,7 @@
   "platformPackage": "platforms;android-37.0",
   "commandLineToolsDirectory": "16111833",
   "javaValidatedVersion": "17.0.20.1+1",
-  "javaValidatedRun": 40412254969
+  "javaValidatedRun": 40412254969,
+  "windowsCmake": "3.31.6",
+  "windowsNinja": "1.12.1"
 }

@@ -105,6 +105,13 @@ export function checkEnvironment({ native = false, runner = run, env = process.e
     const paths = installed.split('\n').map(line => line.trim().split(/\s+/)[0]);
     if (!paths.includes(pkg) && !paths.includes(pkg.replaceAll(';', '/'))) throw new EnvironmentError('Pré-requisito ausente', pkg, 'pacote instalado', 'ausente', manager + ' sdk list', 'Instale o pacote pelo Android SDK Manager');
   }
+  if (platform === 'win32') {
+    const cmakeBin = path.join(sdk, 'cmake', matrix.windowsCmake, 'bin');
+    version(path.join(cmakeBin, 'cmake.exe'), ['--version'], 'CMake Windows', matrix.windowsCmake);
+    version(path.join(cmakeBin, 'ninja.exe'), ['--version'], 'Ninja Windows', matrix.windowsNinja);
+    const policy = check('reg.exe', ['query', 'HKLM\\SYSTEM\\CurrentControlSet\\Control\\FileSystem', '/v', 'LongPathsEnabled'], 'Caminhos longos Windows');
+    if (!/LongPathsEnabled\s+REG_DWORD\s+0x1\b/i.test(policy)) throw new EnvironmentError('Pré-requisito incompatível', 'Caminhos longos Windows', 'LongPathsEnabled=1', policy.trim(), 'reg query LongPathsEnabled', 'Habilite caminhos longos conforme guia Expo e reinicie o Windows; o diagnóstico não altera o registro');
+  }
   check(path.join(sdk, 'platform-tools', platform === 'win32' ? 'adb.exe' : 'adb'), ['version'], 'ADB');
   if (!exists(path.join(sdk, 'licenses', 'android-sdk-license'))) throw new EnvironmentError('Pré-requisito ausente', 'Licenças Android', 'licenças aceitas pelo desenvolvedor', 'não identificadas', 'sdkmanager --licenses', 'Leia e aceite as licenças aplicáveis manualmente');
   return logs;

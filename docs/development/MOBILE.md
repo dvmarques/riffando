@@ -64,8 +64,16 @@ Windows executa check:env:gradle e build:android com APK próprio android-valida
 
 ## Revisão visual e contraste parcial
 
-Capturas reais do smoke em 100% e 200% conferidas: conteúdo rolável, sem corte/colisão nas regiões capturadas e ações alcançadas pelo smoke. Contraste calculado das cores de produção: texto 10.71:1; texto raiz 12.03:1; título 16.65:1; ação 10.91:1; destaque 10.91:1. Action.tsx mantém mínimo de 52 dp e texto escalável. TalkBack/foco/anúncios permanece pendente: o mantenedor informou que validará no emulador; isso ainda não é confirmação de aprovação.
+Capturas reais do smoke em 100% e 200% conferidas: conteúdo rolável, sem corte/colisão nas regiões capturadas e ações alcançadas pelo smoke. Contraste calculado das cores de produção: texto 10.71:1; texto raiz 12.03:1; título 16.65:1; ação 10.91:1; destaque 10.91:1. Action.tsx mantém mínimo de 52 dp e texto escalável. TalkBack/foco/anúncios confirmado manualmente pelo mantenedor, conforme registro abaixo.
 
 ## Correção da instalação Windows
 
 O run 40442508770 rejeitou corretamente NDK ausente no Windows. O shim sdkmanager.bat da revisão 23.0 fragmentou identificadores com ponto e vírgula (log: Package ndk not found), apesar de retornar sucesso na instalação. O job passa a chamar android.exe diretamente, com raiz explícita e caminhos com barras, conforme [android sdk install](https://developer.android.com/tools/agents/android-cli/commands/sdk_install). O diagnóstico continua obrigatório e não foi relaxado; resultado positivo depende da nova execução.
+
+## Acessibilidade manual confirmada
+
+Em 27/10/2026, o mantenedor instalou o [APK do run 40443150983](https://github.com/dvmarques/riffando/actions/runs/40443150983/artifacts/12707632804) em Pixel 7 AVD Android 16/API 36 x86_64 Google Play no Windows. Confirmou início → informações → voltar com TalkBack, leitura dos controles e fonte 200% com ações alcançáveis. Capturas na conversa mostram foco verde; leitura audível/usabilidade são relato do mantenedor, sem gravação de áudio. O volume de acessibilidade precisou ser ajustado no emulador antes do teste. Complementa rótulos, contraste e smoke; não comprova áudio musical.
+
+## CMake/Ninja no Windows
+
+O run passou nos diagnósticos Windows, mas o build falhou em Ninja com Filename longer than 260 characters. Instalar CMake 3.31.6 (inclui Ninja 1.12.1) pelo SDK Manager e habilitar caminhos longos no Windows, conforme [guia Expo](https://docs.expo.dev/troubleshooting/windows-long-paths/). build:android passa android.cmakeVersion=3.31.6 somente no Windows. O diagnóstico verifica versões/política, sem instalar ferramentas nem alterar registro. O CI configura somente o runner descartável; nenhuma configuração global desta máquina foi alterada. Linux preserva sua configuração. Instalação, prebuild e diagnóstico Windows passaram; build corrigido aguarda nova evidência.

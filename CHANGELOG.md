@@ -23,7 +23,7 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 - `ci-skip-draft-prs` - O CI de Pull Request deixa de executar em PRs Draft e passa a rodar ao marcar Ready for review; push na `main` e execução manual não mudam.
 
-- `define-mobile-foundation` (Refs #11; PR #53) - Aceite temporário do risco de tooling registrado; smoke Android offline/fontes 100% e 200% comprovado por artefatos. Correções de SDK/JVM revisadas e política de Draft preservada; TalkBack continua pendente.
+- `define-mobile-foundation` (Refs #11; PR #53) - Aceite temporário do risco de tooling registrado; smoke Android offline/fontes 100% e 200% comprovado por artefatos. Correções de SDK/JVM revisadas e política de Draft preservada; TalkBack e fonte 200% confirmados manualmente pelo mantenedor em Pixel 7 API 36.
 
 - `define-mobile-foundation` (Refs #11/GC-001; PR #53) - Arquitetura de app único aprovada para planejamento e alinhada à issue/ADR/instruções; diagnóstico Windows/Linux, gates success/failure/cancelled/skipped/ausência e loading condicional refinados com cenários, tarefas abertas e critérios de aceite compartilhados. Sem Apply, código mobile ou alteração de workflows.
 
@@ -31,6 +31,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 - `setup-ai-development` (PR #52) - Changelog organizado por versão em andamento e categorias Added, Changed e Fixed, com identificação da change/issue e efeito objetivo; convenção de fechamento com data em português brasileiro e abertura da próxima versão em andamento.
 
 #### Fixed
+
+- `define-mobile-foundation` (Refs #11; PR #53) - Build Windows seleciona CMake 3.31.6/Ninja 1.12.1 e diagnóstico exige caminhos longos para corrigir causa observada no CI sem alterar toolchain global do colaborador.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Diagnóstico compara SDK efetivo e JVM launcher/daemon, rejeita properties ambíguos e usa SDK explícito; comandos Windows usam escaping próprio e a instalação chama a CLI Android diretamente para preservar os identificadores de pacotes. Governança de #54 preservada na atualização da branch.
 

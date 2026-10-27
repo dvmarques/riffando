@@ -96,11 +96,13 @@ jobs:
           cmdline-tools-version: 16111833
           packages: platform-tools
       - name: Instalar SDK pela CLI Android fixada
-        run: '& "$env:ANDROID_HOME/cmdline-tools/16111833/bin/android.exe" "--sdk=$env:ANDROID_HOME" sdk install platforms/android-37.0 build-tools/37.0.0 ndk/27.1.12297006'
+        run: '& "$env:ANDROID_HOME/cmdline-tools/16111833/bin/android.exe" "--sdk=$env:ANDROID_HOME" sdk install platforms/android-37.0 build-tools/37.0.0 ndk/27.1.12297006 cmake/3.31.6'
       - uses: gradle/actions/setup-gradle@v5
         with:
           cache-read-only: false
       - run: npm exec -- expo prebuild --platform android --no-install
+      - name: Habilitar caminhos longos no runner Windows
+        run: New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
       - run: npm run check:env:gradle
       - run: npm run build:android
       - uses: actions/upload-artifact@v4

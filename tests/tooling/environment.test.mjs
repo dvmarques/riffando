@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { checkEnvironment, matrix, checkSdkConfiguration, checkGradleJvm, readSdkProperty } from '../../scripts/environment.mjs';
 const env = { JAVA_HOME: '/jdk', ANDROID_HOME: '/sdk' };
-const good = (file, args) => ({ status: 0, output: file.includes('cmdline-tools') ? (args.includes('--list') || args.includes('list')) ? 'Installed packages:\nplatform-tools\n' + matrix.platformPackage + '\nbuild-tools;' + matrix.buildTools + '\nndk;' + matrix.ndk + '\nAvailable Packages:' : '20.0' : file.includes('adb') ? 'Android Debug Bridge version 1.0.41' : file.includes('javac') ? 'javac 17.0.1' : file.includes('java') ? 'openjdk version "17.0.1"' : file.includes('npm') ? matrix.npm : 'v' + matrix.node });
+const good = (file, args) => ({ status: 0, output: file === 'reg.exe' ? 'LongPathsEnabled    REG_DWORD    0x1' : file.endsWith('cmake.exe') ? 'cmake version ' + matrix.windowsCmake : file.endsWith('ninja.exe') ? matrix.windowsNinja : file.includes('cmdline-tools') ? (args.includes('--list') || args.includes('list')) ? 'Installed packages:\nplatform-tools\n' + matrix.platformPackage + '\nbuild-tools;' + matrix.buildTools + '\nndk;' + matrix.ndk + '\nAvailable Packages:' : '20.0' : file.includes('adb') ? 'Android Debug Bridge version 1.0.41' : file.includes('javac') ? 'javac 17.0.1' : file.includes('java') ? 'openjdk version "17.0.1"' : file.includes('npm') ? matrix.npm : 'v' + matrix.node });
 for (const platform of ['win32', 'linux']) {
   test(platform + ': ambiente válido produz diagnóstico completo', () => assert.ok(checkEnvironment({ native: true, platform, runner: good, env, exists: () => true, read: p => p.endsWith('source.properties') ? 'Pkg.Revision = 23.0' : 'sdk.dir=/sdk' }).some(l => l.startsWith('ADB:'))));
   test(platform + ': Node ausente é diferente de saída inválida', () => {
@@ -41,4 +41,16 @@ test('local.properties não ignora espaços nem permite duplicidade de SDK', () 
   assert.throws(() => readSdkProperty('sdk.dir=/sdk\nsdk.dir=/outro'), /duplicado/);
   assert.throws(() => checkSdkConfiguration({env,exists:()=>true,read:()=> '  sdk.dir=/outro'}), /SDK efetivo Gradle/);
   assert.throws(() => readSdkProperty('sdk\\.dir=/outro'), /chave escapada/);
+});
+
+test('Windows rejeita Ninja antigo e caminhos longos desativados antes do build', () => {
+  const options = {native:true,platform:'win32',env,exists:()=>true,read:p=>p.endsWith('source.properties') ? 'Pkg.Revision = 23.0' : 'sdk.dir=/sdk'};
+  assert.throws(()=>checkEnvironment({...options,runner:(file,args)=>file.endsWith('ninja.exe') ? {status:0,output:'1.10.2'} : good(file,args)}), /Pré-requisito incompatível: Ninja Windows/);
+  assert.throws(()=>checkEnvironment({...options,runner:(file,args)=>file==='reg.exe' ? {status:0,output:'LongPathsEnabled REG_DWORD 0x0'} : good(file,args)}), /Pré-requisito incompatível: Caminhos longos Windows/);
+});
+
+test('Windows consulta a chave de registro exata sem duplicar separadores', () => {
+  let key;
+  checkEnvironment({native:true,platform:'win32',env,exists:()=>true,read:p=>p.endsWith('source.properties') ? 'Pkg.Revision = 23.0' : 'sdk.dir=/sdk',runner:(file,args)=>{if(file==='reg.exe') key=args[1]; return good(file,args);}});
+  assert.equal(key, String.raw`HKLM\SYSTEM\CurrentControlSet\Control\FileSystem`);
 });

@@ -30,12 +30,12 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 - [ ] 5.1 Configurar CNG e development build, comandos start/android/build:android portáveis; verificar prebuild limpo e APK de validação com JS embarcado e assinatura interna de debug sem credenciais de loja, documentando execução Windows/Linux e rollback.
 - [x] 5.2 Executar smoke do APK instalado: modo avião, Metro desligado, início a frio, navegação/voltar e reabertura; anexar SHA, artefato, aparelho/AVD e OS/API, passos/resultados e limitações sem alegar validação de áudio.
-- [ ] 5.3 Verificar TalkBack, fonte Android 200%, alvos de toque e contraste conforme design; corrigir bloqueios e registrar evidência por tela e ambiente, complementando testes de rótulos/ações.
+- [x] 5.3 Verificar TalkBack, fonte Android 200%, alvos de toque e contraste conforme design; corrigir bloqueios e registrar evidência por tela e ambiente, complementando testes de rótulos/ações.
 
 ## 6. CI reproduzível (CA-05)
 
 - [x] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação e smoke Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
-- [ ] 6.2 Adicionar compilação Android Linux com JDK/SDK documentados, cache/timeout e upload do APK por 7 dias; verificar CI do SHA com logs distintos para bundle e compilação nativa, incluindo falha controlada revertida do build.
+- [x] 6.2 Adicionar compilação Android Linux com JDK/SDK documentados, cache/timeout e upload do APK por 7 dias; verificar CI do SHA com logs distintos para bundle e compilação nativa, incluindo falha controlada revertida do build.
 - [x] 6.3 Definir gate agregado e nomes estáveis dos checks, validar success/failure/cancelled/skipped/ausência e artefato ausente dos jobs obrigatórios no mesmo SHA/evento e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
 
 - [x] 6.4 Verificar tabela de resultados do gate para falhas de instalação/lint/TS/testes/exportação/build, cancelamento global e gate ausente, mantendo todos os jobs exigidos na primeira implementação; documentar contrato/testes de dispensa futura por filtros e rejeição de classificação inválida/incompleta sem ativar filtros antecipadamente.
@@ -67,3 +67,8 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - Risco transitivo do tooling aceito temporariamente pelo mantenedor, conforme DEPENDENCIES.md, sem dispensar demais verificações.
 
 - 1.1: matriz exata/peers conferidos no lock e catálogos, frameworks MIT upstream e 42 pacotes do JS avaliados; obrigações e limites de redistribuição em DEPENDENCIES.md. Não equivale a inventário nativo integral ou autorização de publicação.
+
+## Evidências complementares — 27/10/2026
+
+- 5.3: mantenedor confirmou leitura/anúncios e percurso início → informações → voltar com TalkBack, seguido da confirmação com fonte 200%. Ambiente: Pixel 7 AVD Android 16/API 36 x86_64 Google Play no Windows, APK do run 40443150983 (head 0e4cb81). Capturas mostram shell e foco; leitura e navegação são relato manual do mantenedor, sem gravação de áudio. Contraste/alvos/fontes complementados por MOBILE.md.
+- 6.2: job APK Android nativo aprovado no run 40443150983, head 0e4cb81: bundle e compilação Linux reais; erro Kotlin em MainActivity.kt rejeitado, bytes restaurados e APK recompilado. Logs: Prova negativa / Fonte restaurada. APK 12707632804 e smoke 12708355461 retidos por 7 dias. Gate global falhou pelo build Windows (Ninja/caminho >260), não pela prova Linux.
