@@ -35,3 +35,13 @@ Aprovação da política de CI, matriz mínima obrigatória por tipo de alteraç
 | Documentação, JS, nativa, scripts, dependências ou CI | Obrigatório | Obrigatório | Obrigatório | Obrigatório | Obrigatório | Obrigatório |
 
 Drafts continuam sem executar os jobs conforme política existente. A fase 1 não altera proteção de branch. A fase 2 exige confirmação dos checks obrigatórios configurados no GitHub e aprovação do mantenedor.
+
+## Baseline preliminar de três execuções bem-sucedidas
+
+| Run | Duração de parede (created → updated) | Resultado | Observação |
+| --- | --- | --- | --- |
+| [#31](https://github.com/dvmarques/riffando/actions/runs/40522664541) | 17min40s | success | 7 jobs |
+| [#34](https://github.com/dvmarques/riffando/actions/runs/40529243530) | 25min55s | success | 7 jobs |
+| [#36](https://github.com/dvmarques/riffando/actions/runs/40563957799) | 29min24s | success | 7 jobs |
+
+Média de parede: **24min20s**; mediana: **25min55s**. Os tempos incluem agendamento e não representam soma de minutos faturáveis. A API consultada nesta revisão forneceu nomes/conclusões dos jobs, mas não seus horários individuais; a medição detalhada de runner-minutes, cache e a comparação por SHA/configuração ainda estão pendentes. Runs cancelados e drafts skipped não entram na média.
