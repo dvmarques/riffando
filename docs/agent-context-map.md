@@ -21,4 +21,4 @@ Leia primeiro [AGENTS.md](../AGENTS.md) e a issue. Este índice é uma rota de l
 3. Amplie o contexto em alterações críticas, dependências entre domínios ou duas tentativas sem progresso.
 4. Registre decisões e evidências no GitHub; não converta hipóteses em aprovações.
 
-Não existem ainda diretórios de app, testes mobile, módulos nativos ou código Expo. Os itens futuros da tabela são **cenários de aplicação** do mapa, não caminhos atuais.
+A fundação de GC-001/#11 está em Apply autorizado: app/, src/ e tests/ existem e estão em validação na PR #53. Áudio/persistência continuam futuros. Consulte docs/development/MOBILE.md e tasks da change para evidências reais, sem presumir implementação do restante do produto.

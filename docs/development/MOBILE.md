@@ -45,3 +45,15 @@ CI preserva documentação Linux/Windows, adiciona qualidade/exportação Linux,
 Gate exige documentation (ambas as células), javascript, windows, android e emulator com success, sem filtros/continue-on-error. Failure/cancelled/skipped/ausência bloqueiam aprovação. Upload obrigatório falha sem APK. Gate/workflow ausente ou cancelado não equivale a sucesso. Branch protection não alterada; exigir o gate no SHA final é recomendação.
 
 CA-01 → matriz/diagnóstico/instalação; CA-02 → navegação/smoke; CA-03 → lint/tipos/architecture.test.mjs; CA-04 → recovery.test.tsx e APK offline; CA-05 → gate.test.mjs e jobs/artefatos do SHA; CA-06 → guia/licenças e revisão de acessibilidade. Pendências e evidências reais em tasks.md/PR, sem afirmar áudio/USB/desempenho validados.
+
+## Revisão independente de diagnóstico
+
+O diagnóstico compara ANDROID_HOME/ANDROID_SDK_ROOT com sdk.dir em android/local.properties, antes e depois do prebuild. O CLI recebe --sdk explícito para listar o mesmo SDK do Gradle. Properties aceita espaços antes de chaves canônicas e rejeita duplicidade, continuação e escapes ambíguos com mensagem de correção; não assume silenciosamente a primeira chave. Gradle --version deve comprovar launcher e daemon compatíveis; critérios de daemon divergentes/inconclusivos são rejeitados. Casos negativos cobrem launcher 17/daemon 25 e SDK divergente. Revisão independente foi estática e não substitui build real.
+
+O job Windows prepara JDK/SDK da matriz, regenera CNG e executa check:env:gradle para evidência real de SDK e JVM launcher/daemon. A compilação/execução do APK é validada pelo job Linux/AVD; não alegar compilação Windows ainda não executada.
+
+## Smoke aprovado
+
+Run [40412254969](https://github.com/dvmarques/riffando/actions/runs/40412254969), head dbdb777 e checkout de teste d0bbfe2: APK compilado e instalado em sdk_gphone64_x86_64, Android 16/API 36; modo avião/Metro desligado, início frio, navegação/retorno por ação e Back Android, reabertura e fontes 100%/200% aprovados. Capturas e XML revisados sem sobreposição visível; evidência não comprova TalkBack. Os [artefatos](https://github.com/dvmarques/riffando/actions/runs/40412254969/artifacts/12694691449) são retidos por 7 dias.
+
+A política de #56 foi preservada: jobs não executam em PR Draft; ready_for_review dispara a validação integral, e main/manual continuam. Draft/skipped não comprova aprovação. O gate em Ready exige todos os jobs com success no SHA corrente.

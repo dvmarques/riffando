@@ -20,5 +20,7 @@
   "ndk": "27.1.12297006",
   "commandLineToolsArchive": "16111833",
   "platformPackage": "platforms;android-37.0",
-  "commandLineToolsDirectory": "16111833"
+  "commandLineToolsDirectory": "16111833",
+  "javaValidatedVersion": "17.0.20.1+1",
+  "javaValidatedRun": 40412254969
 }

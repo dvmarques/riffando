@@ -32,7 +32,7 @@
     "validate:openspec": "node scripts/validate-openspec.mjs",
     "validate": "npm run validate:docs && npm run lint && npm run typecheck && npm run test:foundation-tooling && npm run test:ci",
     "validate:docs": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills && npm run test:agent-skills",
-    "start": "expo start --dev-client",
+    "start": "expo start --dev-client --localhost",
     "android": "expo run:android",
     "lint": "eslint app src tests/mobile",
     "typecheck": "tsc --noEmit",
@@ -46,7 +46,8 @@
     "build:android": "node scripts/build-android.mjs",
     "sync:agent-skills": "node scripts/sync-agent-skills.mjs",
     "check:agent-skills": "node scripts/sync-agent-skills.mjs --check",
-    "test:agent-skills": "node --test scripts/sync-agent-skills.test.mjs"
+    "test:agent-skills": "node --test scripts/sync-agent-skills.test.mjs",
+    "check:env:gradle": "node scripts/check-gradle-environment.mjs"
   },
   "overrides": {
     "micromark-extension-math": {

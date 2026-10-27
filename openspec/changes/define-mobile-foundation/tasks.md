@@ -19,7 +19,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 - [x] 3.1 Criar rotas início/informações com Expo Router e recursos pt-BR, retorno Android e indicação de recursos em preparação; incluir testes RNTL/Jest de ida/volta e indisponibilidade, verificando ações por nome/papel acessível.
 - [x] 3.2 Adicionar recuperação de erro e testar shell imediato sem loading/delay artificial, indisponibilidade pt-BR e falha injetada/recuperação sem stack trace sensível ou debug publicado; apenas se houver operação assíncrona necessária, testar promessa controlada pendente → sucesso/erro e retirada do loader; documentar aplicabilidade sem criar operação fictícia.
-- [ ] 3.3 Verificar manifest/configuração sem microfone, USB, telemetria ou upload solicitados pelo shell; documentar distinção entre transporte de desenvolvimento e funcionamento offline do APK embarcado.
+- [x] 3.3 Verificar manifest/configuração sem microfone, USB, telemetria ou upload solicitados pelo shell; documentar distinção entre transporte de desenvolvimento e funcionamento offline do APK embarcado.
 
 ## 4. Testes e comandos JS (CA-03, CA-05)
 
@@ -29,16 +29,16 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 ## 5. Android e smoke (CA-04, CA-05)
 
 - [ ] 5.1 Configurar CNG e development build, comandos start/android/build:android portáveis; verificar prebuild limpo e APK de validação com JS embarcado e assinatura interna de debug sem credenciais de loja, documentando execução Windows/Linux e rollback.
-- [ ] 5.2 Executar smoke do APK instalado: modo avião, Metro desligado, início a frio, navegação/voltar e reabertura; anexar SHA, artefato, aparelho/AVD e OS/API, passos/resultados e limitações sem alegar validação de áudio.
+- [x] 5.2 Executar smoke do APK instalado: modo avião, Metro desligado, início a frio, navegação/voltar e reabertura; anexar SHA, artefato, aparelho/AVD e OS/API, passos/resultados e limitações sem alegar validação de áudio.
 - [ ] 5.3 Verificar TalkBack, fonte Android 200%, alvos de toque e contraste conforme design; corrigir bloqueios e registrar evidência por tela e ambiente, complementando testes de rótulos/ações.
 
 ## 6. CI reproduzível (CA-05)
 
-- [ ] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação e smoke Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
+- [x] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação e smoke Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
 - [ ] 6.2 Adicionar compilação Android Linux com JDK/SDK documentados, cache/timeout e upload do APK por 7 dias; verificar CI do SHA com logs distintos para bundle e compilação nativa, incluindo falha controlada revertida do build.
-- [ ] 6.3 Definir gate agregado e nomes estáveis dos checks, validar success/failure/cancelled/skipped/ausência e artefato ausente dos jobs obrigatórios no mesmo SHA/evento e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
+- [x] 6.3 Definir gate agregado e nomes estáveis dos checks, validar success/failure/cancelled/skipped/ausência e artefato ausente dos jobs obrigatórios no mesmo SHA/evento e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
 
-- [ ] 6.4 Verificar tabela de resultados do gate para falhas de instalação/lint/TS/testes/exportação/build, cancelamento global e gate ausente, mantendo todos os jobs exigidos na primeira implementação; documentar contrato/testes de dispensa futura por filtros e rejeição de classificação inválida/incompleta sem ativar filtros antecipadamente.
+- [x] 6.4 Verificar tabela de resultados do gate para falhas de instalação/lint/TS/testes/exportação/build, cancelamento global e gate ausente, mantendo todos os jobs exigidos na primeira implementação; documentar contrato/testes de dispensa futura por filtros e rejeição de classificação inválida/incompleta sem ativar filtros antecipadamente.
 
 ## 7. Integração, documentação e revisão (CA-06)
 
@@ -56,3 +56,12 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - 4.2: validate completo aprovado. Regressão TS (string atribuída a number) rejeitada com exit 2; ação de navegação inexistente rejeitada pelo Jest com exit 1. Alterações temporárias revertidas; testes voltaram a passar.
 
 - 1.2: npm ci --ignore-scripts limpo em Windows, Node/npm fixados e check:env aprovados; instalação/qualidade/exportação Linux aprovadas no CI ee753f9 (run 40411290983). npm ls confirmou uma versão de React e uma de RN, sem duplicatas nativas.
+
+- 3.3: CNG regenerado sem permissões de áudio/câmera/armazenamento/overlay/vibração solicitadas. Só INTERNET permanece para tooling; shell não contém telemetria, upload ou pedido de permissão. Dev server padrão limitado a localhost; APK offline ainda depende do smoke.
+
+- 6.1: no run 40412254969, documentação Linux/Windows, qualidade/exportação Linux e instalação/scripts/testes Windows passaram no commit dbdb777; governança integrada sem perder seus checks.
+- Revisão independente (arquitetura/diagnóstico, somente leitura) encontrou SDK efetivo e JVM daemon divergentes. Correções revisadas estaticamente pelo revisor e 69 casos tooling passaram, incluindo espaços/duplicidade de properties. Review não substitui CI ou TalkBack.
+
+- 5.2: smoke do run 40412254969 aprovado em Android 16/API36 x86_64, offline/sem Metro, fonte 100%/200%, ida/volta Android/ação e reabertura. Capturas/XML/evidence.json revisados; TalkBack não executado.
+- 6.3/6.4: gate real aprovou conjunto completo do mesmo run; tabela de estados failure/cancelled/skipped/queued/ausência e artefato ausente tem testes. Primeira implementação não permite filtro; contrato/testes de filtros futuros permanece documentado no design, sem bypass de skip. Branch protection preservada.
+- Risco transitivo do tooling aceito temporariamente pelo mantenedor, conforme DEPENDENCIES.md, sem dispensar demais verificações.

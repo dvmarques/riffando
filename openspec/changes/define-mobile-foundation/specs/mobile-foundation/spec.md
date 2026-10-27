@@ -42,7 +42,7 @@ O diagnóstico MUST verificar executáveis, versões e componentes contra a matr
 
 #### Scenario: Ambiente incompatível
 
-- **WHEN** a versão observada por node --version, npm --version, java -version, javac -version ou sdkmanager --list (seção Installed packages) diverge da matriz suportada registrada
+- **WHEN** a versão observada por node --version, npm --version, java -version, javac -version ou Android CLI -V/sdk list (seção Installed packages; sdkmanager é fallback legado) diverge da matriz suportada registrada
 - **THEN** o diagnóstico falha, informa esperado/observado, comando e fonte da matriz, incluindo divergência entre JAVA_HOME e o JDK efetivo do Gradle
 
 #### Scenario: Matriz oficial e ambientes válidos

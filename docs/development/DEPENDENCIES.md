@@ -15,3 +15,13 @@ Runtime novo declara MIT; TypeScript usa Apache-2.0 e cross-spawn (portabilidade
 npm audit reportou cinco entradas high propagadas do CLI Expo, de node-forge 1.4.0 e zod 3. Registro consultado não oferece patch forge superior a 1.4.0; correção Zod é major 4, mas CLI exige major 3. Não aplicar audit fix --force, downgrade para SDK 54 ou override major incompatível. Shell não processa esses certificados/dados externos; risco do tooling não está eliminado. Remediação ou aprovação específica do risco permanece pendente antes de declarar conclusão.
 
 [Advisory forge](https://github.com/advisories/GHSA-86w9-cpqp-85rv), [advisory Zod](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5). Conferir LICENSE/NOTICE dos pacotes instalados. Expo doctor 20/20 não é auditoria de segurança/licença.
+
+cross-spawn 7.0.6 (MIT, LICENSE instalado conferido) executa npm/Gradle em Windows com escaping próprio, sem concatenar argumentos em shell manual. TypeScript 6.0.3 tem LICENSE.txt Apache-2.0. Expo Router não inclui LICENSE no tarball consultado; conferir também o LICENSE da revisão upstream Expo correspondente antes do inventário final.
+
+## Evidência do JavaScript de produção
+
+Exportação real com source maps (expo export --platform android --source-maps --output-dir dist/android-audit): 1.130 fontes mapeadas, 42 pacotes instalados identificados, licenças MIT/ISC. node-forge, Zod, lightningcss e caniuse-lite não aparecem nesse grafo JavaScript. O [inventário](JAVASCRIPT_DEPENDENCIES.json) registra versões e arquivos LICENSE/NOTICE encontrados; preservação de avisos continua obrigatória. Isso não é inventário nativo completo do APK nem elimina o risco de executar tooling vulnerável.
+
+## Aceite temporário do risco de tooling
+
+O mantenedor aceitou explicitamente nesta conversa manter temporariamente os avisos transitivos do CLI Expo. Escopo: tooling de desenvolvimento/build; não autoriza novos usos desses módulos no produto, exposição pública do servidor, supressão de auditoria ou dispensa de Android/TalkBack. Dev server limitado a localhost. Reavaliar ao atualizar SDK/transitivas e antes de publicação de loja; registrar remediação quando houver patch compatível.

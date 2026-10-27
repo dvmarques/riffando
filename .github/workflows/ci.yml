@@ -22,8 +22,8 @@ env:
 
 jobs:
   documentation:
-    name: Documentação e OpenSpec (${{ matrix.os }})
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    name: Documentação e OpenSpec (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
@@ -41,6 +41,7 @@ jobs:
       - run: npm run validate:docs
 
   javascript:
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: Qualidade e exportação Android
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -69,6 +70,7 @@ jobs:
           if-no-files-found: error
 
   windows:
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: Instalação e scripts Windows
     runs-on: windows-latest
     timeout-minutes: 15
@@ -85,8 +87,21 @@ jobs:
       - run: npm run typecheck
       - run: npm run test:foundation-tooling
       - run: npm run test:ci
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 16111833
+          packages: platform-tools
+      - run: sdkmanager 'platforms;android-37.0' 'build-tools;37.0.0' 'ndk;27.1.12297006'
+      - uses: gradle/actions/setup-gradle@v5
+      - run: npm exec -- expo prebuild --platform android --no-install
+      - run: npm run check:env:gradle
 
   android:
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: APK Android nativo
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -117,6 +132,7 @@ jobs:
           retention-days: 7
 
   emulator:
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: Smoke Android offline
     needs: android
     runs-on: ubuntu-latest
@@ -153,7 +169,7 @@ jobs:
 
   gate:
     name: Fundação — gate agregado
-    if: always()
+    if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     needs: [documentation, javascript, windows, android, emulator]
     runs-on: ubuntu-latest
     timeout-minutes: 5

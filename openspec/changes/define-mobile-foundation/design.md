@@ -174,3 +174,7 @@ App único é decisão do mantenedor para esta proposta; gates e adiamento de bi
 ## Estado do Apply
 
 O mantenedor aprovou o plano e autorizou separadamente o Apply nesta conversa em 26/10/2026. A restrição original de planejamento descreve a etapa anterior; shell e gates estão em implementação/validação. Seguir tasks.md para evidência real e pendências, sem expandir escopo, declarar aceite integral ou executar archive/merge antecipados.
+
+## Toolchain concretizada durante Apply
+
+SDK 58 estável selecionado. O repositório oficial Android publica platforms;android-37.0 (compileSdk 37) e command-line tools 23.0, arquivo 16111833. Essa revisão oferece Android CLI -V e sdk list; sdkmanager virou shim legado. O diagnóstico usa o CLI atual com --sdk explícito, conferindo source.properties da revisão fixada e sdk.dir usado pelo Gradle; helpers legados são fallback. A interface observada e os diretórios reais do action foram incorporados sem mudar escopo/arquitetura. Comparar launcher e daemon Gradle, rejeitar properties ambíguos e registrar qualquer divergência antes do assemble. Detalhes em docs/development/MOBILE.md/config/toolchain.json.
