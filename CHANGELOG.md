@@ -21,6 +21,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `define-mobile-foundation` (Refs #11; PR #53) - Evidências finais de build Windows/Linux e acessibilidade consolidadas; README remove referência condicional a versões MIT anteriores por solicitação do mantenedor. Licença atual preservada.
+
 - `ci-skip-draft-prs` - O CI de Pull Request deixa de executar em PRs Draft e passa a rodar ao marcar Ready for review; push na `main` e execução manual não mudam.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Aceite temporário do risco de tooling registrado; smoke Android offline/fontes 100% e 200% comprovado por artefatos. Correções de SDK/JVM revisadas e política de Draft preservada; TalkBack e fonte 200% confirmados manualmente pelo mantenedor em Pixel 7 API 36.

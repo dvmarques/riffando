@@ -7,8 +7,8 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - [x] 1.1 Selecionar SDK estável suportado e matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK; registrar versões e licenças diretas/transitivas relevantes em guia de dependências, verificando fontes das versões e peers antes da adição.
 - [x] 1.2 Ampliar manifest existente para app único e gerar lock sem perder tooling/override; verificar instalação limpa em Windows e Linux, diagnóstico Expo e ausência de React/RN nativos duplicados; documentar pré-requisitos e resolução de incompatibilidades.
 
-- [ ] 1.3 Criar check:env/check:env:android conforme design 3.1, com comandos Node/npm/JDK/sdkmanager/adb/Gradle/Expo e matriz validada; verificar código não zero e mensagens pt-BR para ausência, incompatibilidade, diagnóstico inconclusivo, instalação e compilação, sem aceitar licenças ou alterar toolchain automaticamente.
-- [ ] 1.4 Validar diagnósticos em Windows/Linux com logs reais positivos e casos controlados de executável/pacote ausente, versões inválidas, JAVA_HOME/SDK divergentes e erro do comando; documentar esperado/observado/fontes/correção e comprovar que não iniciam build em falha de pré-requisito.
+- [x] 1.3 Criar check:env/check:env:android conforme design 3.1, com comandos Node/npm/JDK/sdkmanager/adb/Gradle/Expo e matriz validada; verificar código não zero e mensagens pt-BR para ausência, incompatibilidade, diagnóstico inconclusivo, instalação e compilação, sem aceitar licenças ou alterar toolchain automaticamente.
+- [x] 1.4 Validar diagnósticos em Windows/Linux com logs reais positivos e casos controlados de executável/pacote ausente, versões inválidas, JAVA_HOME/SDK divergentes e erro do comando; documentar esperado/observado/fontes/correção e comprovar que não iniciam build em falha de pré-requisito.
 
 ## 2. Tipagem e fronteiras (CA-01, CA-03)
 
@@ -28,7 +28,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 ## 5. Android e smoke (CA-04, CA-05)
 
-- [ ] 5.1 Configurar CNG e development build, comandos start/android/build:android portáveis; verificar prebuild limpo e APK de validação com JS embarcado e assinatura interna de debug sem credenciais de loja, documentando execução Windows/Linux e rollback.
+- [x] 5.1 Configurar CNG e development build, comandos start/android/build:android portáveis; verificar prebuild limpo e APK de validação com JS embarcado e assinatura interna de debug sem credenciais de loja, documentando execução Windows/Linux e rollback.
 - [x] 5.2 Executar smoke do APK instalado: modo avião, Metro desligado, início a frio, navegação/voltar e reabertura; anexar SHA, artefato, aparelho/AVD e OS/API, passos/resultados e limitações sem alegar validação de áudio.
 - [x] 5.3 Verificar TalkBack, fonte Android 200%, alvos de toque e contraste conforme design; corrigir bloqueios e registrar evidência por tela e ambiente, complementando testes de rótulos/ações.
 
@@ -42,8 +42,8 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 ## 7. Integração, documentação e revisão (CA-06)
 
-- [ ] 7.1 Consolidar README/guia de execução com comandos realmente executados em Windows/Linux, troubleshooting, versões/licenças e evidências Android; preservar a arquitetura aprovada no ADR/contexto/decisões/arquitetura e registrar apenas entregas efetivamente verificadas no CHANGELOG na versão em andamento com define-mobile-foundation/#11.
-- [ ] 7.2 Conferir igualdade de escopo/exclusões/CA-01…CA-06 entre issue/proposal, cobertura integral pela spec e cada cenário contra tarefa/evidência, executar npm run validate, lint, tipos, testes, exportação e APK; revisar diff/código e registrar resultados, riscos restantes e CI verde sem declarar features fora do escopo como entregues.
+- [x] 7.1 Consolidar README/guia de execução com comandos realmente executados em Windows/Linux, troubleshooting, versões/licenças e evidências Android; preservar a arquitetura aprovada no ADR/contexto/decisões/arquitetura e registrar apenas entregas efetivamente verificadas no CHANGELOG na versão em andamento com define-mobile-foundation/#11.
+- [x] 7.2 Conferir igualdade de escopo/exclusões/CA-01…CA-06 entre issue/proposal, cobertura integral pela spec e cada cenário contra tarefa/evidência, executar npm run validate, lint, tipos, testes, exportação e APK; revisar diff/código e registrar resultados, riscos restantes e CI verde sem declarar features fora do escopo como entregues.
 
 ## Evidências parciais do Apply — 26/10/2026
 
@@ -72,3 +72,12 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 - 5.3: mantenedor confirmou leitura/anúncios e percurso início → informações → voltar com TalkBack, seguido da confirmação com fonte 200%. Ambiente: Pixel 7 AVD Android 16/API 36 x86_64 Google Play no Windows, APK do run 40443150983 (head 0e4cb81). Capturas mostram shell e foco; leitura e navegação são relato manual do mantenedor, sem gravação de áudio. Contraste/alvos/fontes complementados por MOBILE.md.
 - 6.2: job APK Android nativo aprovado no run 40443150983, head 0e4cb81: bundle e compilação Linux reais; erro Kotlin em MainActivity.kt rejeitado, bytes restaurados e APK recompilado. Logs: Prova negativa / Fonte restaurada. APK 12707632804 e smoke 12708355461 retidos por 7 dias. Gate global falhou pelo build Windows (Ninja/caminho >260), não pela prova Linux.
+
+## Conclusão técnica — run 40522664541
+
+- Head a556c82ce2c9b3d157ce03049cb41b82e6b8c287: todos os sete checks aprovados (documentação Linux/Windows, qualidade/exportação, Windows nativo, Linux nativo, smoke e gate). [Execução](https://github.com/dvmarques/riffando/actions/runs/40522664541).
+- 1.3/1.4: diagnósticos positivos reais nos dois sistemas, launcher/daemon Java 17.0.20.1; Windows CMake 3.31.6/Ninja 1.12.1/caminhos longos habilitados. 71 testes tooling cobrem falhas e estados; diagnóstico anterior rejeitou JDK 25 e NDK ausente antes de compilar. Mensagens distinguem instalação, ambiente e compilação; scripts de diagnóstico não alteram ferramentas/licenças.
+- 5.1: CNG/prebuild e assembleRelease concluídos nos dois sistemas, JS embarcado e assinatura debug interna. APK Windows 12744265590 e Linux 12743252545; smoke 12742713294, retenção 7 dias. Windows BUILD SUCCESSFUL em 12m59s; prova Kotlin e restauração/recompilação Linux aprovadas. start/android são comandos Expo instalados; smoke do APK não depende de Metro. Limites de development build/Expo Go e rollback no guia.
+- 7.1: README/MOBILE/DEPENDENCIES/ADR/contexto/decisões/arquitetura e CHANGELOG revisados; instruções, versões/licenças e comandos reais/evidências Windows/Linux consolidados, sem afirmar teste local nativo Windows onde o resultado foi do CI.
+- 7.2: revisão de código/diff e rastreabilidade dos 10 requisitos/23 cenários conferidas conforme MOBILE.md. npm run validate aprovado, incluindo lint/tipos/71 casos tooling/3 cenários UI; exportação, compilação e smoke comprovados pelo CI. TalkBack/fonte ampliada são relato manual do mantenedor. Escopo/exclusões/CA idênticos à issue. Sem funcionalidades musicais, archive/sync ou merge.
+- Alterações documentais posteriores exigem nova execução verde no commit final da PR; os resultados acima identificam explicitamente o SHA testado e não simulam sucesso no SHA seguinte.

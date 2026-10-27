@@ -28,3 +28,7 @@ Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../.
 ## Estado do Apply — 26/10/2026
 
 Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](../development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.
+
+## Fundação verificada — 27/10/2026
+
+As 20 tarefas de GC-001 foram verificadas na branch da PR #53: builds Windows/Linux e sete checks do run 40522664541 aprovados no head a556c82; smoke Android offline, fonte 200% e TalkBack manual confirmados. Evidências, matriz, riscos e limites em [guia mobile](../development/MOBILE.md). Esse registro supera as pendências históricas de shell/build/acessibilidade acima. O aceite de vulnerabilidades é temporário e restrito ao tooling; nenhuma funcionalidade musical, publicação de loja, archive/sync ou merge foi realizada. Alterações documentais posteriores exigem CI do commit final e os gates de autorização permanecem.

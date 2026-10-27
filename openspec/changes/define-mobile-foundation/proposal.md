@@ -50,3 +50,7 @@ Somente após nova solicitação Apply: manifest existente evolui sem perder too
 ## Estado do Apply
 
 O mantenedor aprovou o plano e autorizou separadamente o Apply nesta conversa em 26/10/2026. A restrição original de planejamento descreve a etapa anterior; shell e gates estão em implementação/validação. Seguir tasks.md para evidência real e pendências, sem expandir escopo, declarar aceite integral ou executar archive/merge antecipados.
+
+## Estado verificado — 27/10/2026
+
+Apply concluído e 20/20 tarefas verificadas, com builds Windows/Linux, exportação, smoke offline e gate aprovados no run 40522664541/head a556c82, além do teste manual TalkBack/fonte 200% confirmado pelo mantenedor. O escopo/exclusões/CA acima permanecem idênticos à issue. As restrições de planejamento originais foram sucedidas pela autorização separada de Apply; não autorizam archive/sync/merge. Evidências e limites consolidados em tasks.md e docs/development/MOBILE.md. O commit de fechamento documental ainda precisa de CI verde antes da integração.

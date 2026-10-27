@@ -77,3 +77,24 @@ Em 27/10/2026, o mantenedor instalou o [APK do run 40443150983](https://github.c
 ## CMake/Ninja no Windows
 
 O run passou nos diagnósticos Windows, mas o build falhou em Ninja com Filename longer than 260 characters. Instalar CMake 3.31.6 (inclui Ninja 1.12.1) pelo SDK Manager e habilitar caminhos longos no Windows, conforme [guia Expo](https://docs.expo.dev/troubleshooting/windows-long-paths/). build:android passa android.cmakeVersion=3.31.6 somente no Windows. O diagnóstico verifica versões/política, sem instalar ferramentas nem alterar registro. O CI configura somente o runner descartável; nenhuma configuração global desta máquina foi alterada. Linux preserva sua configuração. Instalação, prebuild e diagnóstico Windows passaram; build corrigido aguarda nova evidência.
+
+## Resultado consolidado e rastreabilidade
+
+[Run 40522664541](https://github.com/dvmarques/riffando/actions/runs/40522664541), head a556c82ce2c9b3d157ce03049cb41b82e6b8c287: sete checks com success, incluindo documentação Linux/Windows, qualidade/exportação JS, build Windows e Linux, smoke offline e gate. Windows comprovou Java launcher/daemon 17.0.20.1, CMake 3.31.6/Ninja 1.12.1 e build em 12m59s; Linux repetiu a prova Kotlin negativa/restauração e recompilação. [APK Windows](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12744265590), [APK Linux](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12743252545) e [smoke](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12742713294), retidos por 7 dias. Esse resultado supera as pendências de build descritas nas seções históricas acima; novas alterações continuam sujeitas ao CI do commit final.
+
+Verificação da implementação (10 requisitos adicionados, 23 cenários; sem requisitos removidos/renomeados):
+
+- App único/camadas e autorização: manifest/lock/tsconfig/ESLint e ADR; aprovação arquitetural foi separada de Apply, cujo registro consta na issue. Nenhum archive/merge decorre dessas aprovações.
+- Instalação reproduzível: npm ci --ignore-scripts e prebuild nos dois sistemas, scripts Expo reais; matriz em config/toolchain.json. Windows local não foi compilado com o JDK 25 global.
+- Diagnóstico: environment.test.mjs e check:env:gradle cobrem ausente/incompatível/inconclusivo e SDK/JVM divergentes; pré-requisito é verificado antes de Gradle; prova Kotlin distingue falha real de compilação após ambiente válido.
+- Navegação: navigation.test.tsx e smoke cobrem ida/volta, retorno Android/ação e abertura direta. Nenhuma ferramenta musical disponível.
+- Offline/privacidade: app.json e APK instalado, modo avião e Metro desligado; manifest sem áudio/USB e shell sem telemetria/upload/login.
+- Estados/recuperação: recovery.test.tsx injeta falha e verifica recuperação; indisponibilidade e ausência de loading testadas. Não há operação assíncrona necessária no shell: cenário condicional não requer loader fictício.
+- Acessibilidade/idioma: rótulos/ações em Jest, capturas/XML 100%/200%, contraste/alvos e teste manual TalkBack do mantenedor, registrado acima com sua origem.
+- Fronteiras: architecture.test.mjs rejeita imports UI/nativo/infra/rotas por aliases e relativos; lint real mantém import/no-cycle e TS estrito. Sem pastas vazias para simular domínio futuro.
+- Qualidade/build: logs separados de JS/exportação/compilação; provas negativas TS/navegação/fronteira e Kotlin revertidas; APK real e smoke não são apresentados como teste de áudio/USB/desempenho.
+- Gate: gate.test.mjs e CI cobrem success/failure/cancelled/skipped/ausência; falha Windows anterior impediu aprovação real. Dispensa por filtros é contrato futuro condicionado, sem classificador ou filtros habilitados; nesta versão todos os jobs são exigidos. Cancelamento/global ou gate ausente não prova sucesso. Branch protection não foi alterada.
+
+Revisão de coerência: app único, Expo Router, separação de camadas, dependências mínimas e assinatura interna seguem design/ADR; critérios CA-01…CA-06 e exclusões conferidos com a issue/proposal. Arquivos de navegação, recuperação, configuração, scripts de ambiente/build/gate/smoke e testes revisados. A revisão independente anterior foi estática e cobriu SDK/JVM; revisão atual e CI complementam essa evidência, sem atribuir ao revisor testes que não executou.
+
+Limites conhecidos: aceite temporário de vulnerabilidades de tooling em DEPENDENCIES.md; não há inventário jurídico integral nativo ou publicação de loja nesta entrega. Os cenários condicionais de loading e filtros foram avaliados como condicionais, sem verificar funcionalidades inexistentes. Dez requisitos mapeados e cenários aplicáveis cobertos, sem lacuna técnica identificada nesta revisão. Archive/sync/merge não executados. A revalidação documental local e o CI do commit posterior continuam obrigatórios antes da integração.
