@@ -82,7 +82,7 @@ Testes de domínio, migrações, fluxos de sessão, perda de áudio, desconexão
 
 ## Fundação de GC-001/#11 — implementada e verificada
 
-A change [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md) e a issue #11 descrevem os mesmos escopo/exclusões e CA-01…CA-06 para app único. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha fronteiras, dependências mínimas/adiadas, diagnóstico Windows/Linux, CNG/development build, testes e gates. A arquitetura foi implementada e as 20 tarefas verificadas na PR #53. Há shell, testes e builds; áudio/desempenho musical permanecem fora do escopo.
+A change [define-mobile-foundation](../../openspec/changes/archive/2026-10-27-define-mobile-foundation/proposal.md) e a issue #11 descrevem os mesmos escopo/exclusões e CA-01…CA-06 para app único. O [design](../../openspec/changes/archive/2026-10-27-define-mobile-foundation/design.md) detalha fronteiras, dependências mínimas/adiadas, diagnóstico Windows/Linux, CNG/development build, testes e gates. A arquitetura foi implementada e as 20 tarefas verificadas na PR #53. Há shell, testes e builds; áudio/desempenho musical permanecem fora do escopo.
 
 ## Estado da fundação
 

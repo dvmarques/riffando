@@ -71,3 +71,5 @@ Dez requisitos adicionados e 23 cenários revisados, sem remoções/renomes. Ras
 ## Revisão Claude e correções
 
 Claude Code 2.1.304 / modelo configurado claude-sonnet-5-5 revisou estaticamente o head ca8f661, sem executar testes nem inspecionar lock completo. B1: estados contraditórios corrigidos nos próprios cabeçalhos, consolidando este guia. M1: Unicode/escapes Properties.store com testes; M2: jobs reais/lista compartilhada e entrada CLI do gate; M3: versões exatas explicitadas; M4: AVD/ABIs/32 bits explicitados; M5: TalkBack automatizado separado do relato manual. Suite após correções: 57 testes tooling, incluindo invocações reais do CLI, e três cenários UI. Contagens históricas anteriores não descrevem esse conjunto revisado. Revisão e testes do commit de correção, CI antes de archive e CI após archive continuam gates independentes.
+
+O [run 40529243530](https://github.com/dvmarques/riffando/actions/runs/40529243530) aprovou os sete checks no head 6a8b62d, após as correções revisadas pelo Claude. Archive/sync foi efetuado na branch da PR após esse resultado; o commit de archive exige validação e CI próprios antes do squash.

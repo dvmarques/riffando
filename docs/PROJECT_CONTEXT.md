@@ -82,7 +82,7 @@ Configuração da [PR #52](https://github.com/dvmarques/riffando/pull/52), aprov
 
 ## Fundação mobile — planejamento refinado em 26/10/2026
 
-O mantenedor aprovou app único na raiz com React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura e autorizou alinhar a issue #11. A change [define-mobile-foundation](../openspec/changes/define-mobile-foundation/proposal.md), o [ADR 0001](adr/0001-mobile-foundation.md) e a [issue #11](https://github.com/dvmarques/riffando/issues/11) compartilham escopo/exclusões e CA-01…CA-06. Monorepo futuro depende de consumidor concreto ou API/versionamento independente comprovado e novo ADR.
+O mantenedor aprovou app único na raiz com React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura e autorizou alinhar a issue #11. A change [define-mobile-foundation](../openspec/changes/archive/2026-10-27-define-mobile-foundation/proposal.md), o [ADR 0001](adr/0001-mobile-foundation.md) e a [issue #11](https://github.com/dvmarques/riffando/issues/11) compartilham escopo/exclusões e CA-01…CA-06. Monorepo futuro depende de consumidor concreto ou API/versionamento independente comprovado e novo ADR.
 
 Histórico do planejamento em 26/10/2026, antes da autorização separada de Apply: a PR #53 detalhou diagnóstico Windows/Linux, gates de CI e estados de loading foram detalhados. Seleção exata de SDK/toolchain e dependências/licenças fica para implementação autorizada. Naquela etapa não houve implementação; o estado atual implementado está na seção seguinte. Branch protection permanece inalterada. Aprovação arquitetural não autoriza Apply, archive/sync ou merge.
 

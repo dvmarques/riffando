@@ -62,7 +62,7 @@ O mantenedor aprovou a PR #52 e autorizou explicitamente archive antes do squash
 
 ## Fundação mobile — decisão arquitetural de 26/10/2026
 
-O mantenedor decidiu adotar app único na raiz para a proposta #11 e autorizou atualizar a issue para eliminar a exigência de monorepo. Stack: React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura. Sem packages/workspaces sem necessidade real. Menor custo inicial para um produto/consumidor justifica a escolha; monorepo futuro exige consumidor concreto ou API/versionamento independente comprovado e novo ADR. Ver [ADR 0001](adr/0001-mobile-foundation.md) e [change](../openspec/changes/define-mobile-foundation/proposal.md).
+O mantenedor decidiu adotar app único na raiz para a proposta #11 e autorizou atualizar a issue para eliminar a exigência de monorepo. Stack: React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura. Sem packages/workspaces sem necessidade real. Menor custo inicial para um produto/consumidor justifica a escolha; monorepo futuro exige consumidor concreto ou API/versionamento independente comprovado e novo ADR. Ver [ADR 0001](adr/0001-mobile-foundation.md) e [change](../openspec/changes/archive/2026-10-27-define-mobile-foundation/proposal.md).
 
 A aprovação arquitetural foi seguida de autorização separada de Apply. SDK/toolchain, dependências e builds Windows/Linux foram verificados; áudio permanece fora desta entrega. Archive/sync/squash dependem da autorização aplicável, revisão e CI final.
 

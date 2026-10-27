@@ -4,7 +4,7 @@
 
 Motivação e limites em [proposal.md](proposal.md). Base observada: main em `20bf804`, documentação e ferramentas Node 24/npm, OpenSpec 1.15.0, um lockfile, CI documental Linux/Windows e nenhum app. A única spec permanente é `ai-development-workflow`; seus quatro requisitos continuam intactos.
 
-O mantenedor aprovou app único na raiz para esta proposta e autorizou alinhar a issue #11 em 26/10/2026. O [ADR 0001](../../../docs/adr/0001-mobile-foundation.md) registra essa decisão arquitetural. O detalhamento operacional permanece planejamento em revisão; implementação exige nova solicitação Apply. A [spec mobile-foundation](specs/mobile-foundation/spec.md) é um delta de comportamento futuro, não baseline entregue.
+O mantenedor aprovou app único na raiz para esta proposta e autorizou alinhar a issue #11 em 26/10/2026. O [ADR 0001](../../../../docs/adr/0001-mobile-foundation.md) registra essa decisão arquitetural. O detalhamento operacional permanece planejamento em revisão; implementação exige nova solicitação Apply. A [spec mobile-foundation](specs/mobile-foundation/spec.md) é um delta de comportamento futuro, não baseline entregue.
 
 ## Goals / Non-Goals
 

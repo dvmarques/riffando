@@ -3,7 +3,7 @@
 - Data: 26/10/2026.
 - Status: **Aceito; implementação autorizada e verificada na PR #53**.
 - Referências: [GC-001/#11](https://github.com/dvmarques/riffando/issues/11), [PR #53](https://github.com/dvmarques/riffando/pull/53).
-- Change: [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md).
+- Change: [define-mobile-foundation](../../openspec/changes/archive/2026-10-27-define-mobile-foundation/proposal.md).
 
 ## Contexto
 
@@ -23,7 +23,7 @@ Reavaliar monorepo apenas com segundo consumidor concreto de domínio (outro app
 
 ## Consequências e validação
 
-Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Instalação, testes, builds Windows/Linux e acessibilidade têm evidências próprias; as 20 tarefas estão verificadas. A aprovação arquitetural não substitui esses resultados.
+Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/archive/2026-10-27-define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Instalação, testes, builds Windows/Linux e acessibilidade têm evidências próprias; as 20 tarefas estão verificadas. A aprovação arquitetural não substitui esses resultados.
 
 ## Estado da fundação
 

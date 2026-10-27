@@ -21,6 +21,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `define-mobile-foundation` (Refs #11; PR #53) - Change concluída arquivada com sync da spec mobile-foundation; referências e contexto atualizados.
+
 - `define-mobile-foundation` (Refs #11; PR #53) - Arquivo de licença renomeado para LICENSE.md e referências locais atualizadas, preservando integralmente seu conteúdo.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Evidências finais de build Windows/Linux e acessibilidade consolidadas; README remove referência condicional a versões MIT anteriores por solicitação do mantenedor. Licença atual preservada.
