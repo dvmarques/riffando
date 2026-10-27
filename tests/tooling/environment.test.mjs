@@ -54,3 +54,15 @@ test('Windows consulta a chave de registro exata sem duplicar separadores', () =
   checkEnvironment({native:true,platform:'win32',env,exists:()=>true,read:p=>p.endsWith('source.properties') ? 'Pkg.Revision = 23.0' : 'sdk.dir=/sdk',runner:(file,args)=>{if(file==='reg.exe') key=args[1]; return good(file,args);}});
   assert.equal(key, String.raw`HKLM\SYSTEM\CurrentControlSet\Control\FileSystem`);
 });
+
+
+test('local.properties decodifica caminho Unicode escrito por Properties.store', () => {
+  assert.equal(readSdkProperty(String.raw`sdk.dir=C\:\\Users\\Jo\u00E3o\\Android\\Sdk`), 'C:\\Users\\João\\Android\\Sdk');
+  assert.doesNotThrow(() => checkSdkConfiguration({env:{ANDROID_HOME:'/Users/João/Android/Sdk'},exists:()=>true,read:()=>String.raw`sdk.dir=/Users/Jo\u00E3o/Android/Sdk`}));
+  assert.throws(() => readSdkProperty(String.raw`sdk.dir=/Jo\u00G3o`), /escape sdk.dir/);
+});
+
+test('local.properties reconhece escapes de controle sem aceitar chaves ambíguas', () => {
+  assert.equal(readSdkProperty(String.raw`sdk.dir=a\tb\nc\rd\f`), 'a\tb\nc\rd\f');
+  assert.throws(() => readSdkProperty(String.raw`sdk\u002edir=/sdk`), /chave escapada/);
+});

@@ -14,13 +14,13 @@ Aplicativo único na raiz com React Native + Expo + TypeScript estrito e Expo Ro
 
 Decisão arquitetural aprovada para esta proposta: app único na raiz, React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura. A autorização inclui atualizar título, descrição, escopo e critérios da issue #11. Justificativa e gatilhos de extração no ADR 0001 e design. Android primeiro, possibilidade de iOS, offline-first e ausência de backend/login obrigatório permanecem; SQLite é direção futura.
 
-Esta revisão altera somente especificação/documentação e a issue. Todas as tarefas de implementação permanecem abertas. **A aprovação arquitetural não autoriza Apply, instalação de dependências mobile, archive/sync ou merge.** Seleção exata de SDK/toolchain, bibliotecas e validação de sua compatibilidade/licenças permanecem para implementação autorizada; o restante do plano segue em revisão na PR #53.
+A etapa inicial alterou especificação/documentação e a issue. Após autorização separada de Apply, as 20 tarefas foram implementadas e verificadas. **A aprovação arquitetural não autoriza Apply, instalação de dependências mobile, archive/sync ou merge.** A matriz selecionada, compatibilidade/licenças e evidências constam no guia mobile; a PR #53 segue em revisão para integração.
 
 ### Fora do escopo
 
 Afinador, metrônomo, teoria musical, exercícios, sessões, design system completo, banco/migrações, áudio/USB/DSP, publicação/assinatura de loja, OTA, iOS executável e serviços remotos. Não instalar Zustand, Drizzle, Zod, SVG, Reanimated ou Maestro por antecipação. O spike de áudio permanece necessário e separado.
 
-### Critérios de aceite da implementação futura
+### Critérios de aceite da implementação
 
 - CA-01: instalação limpa Windows/Linux com Node/npm fixados e lock único; app único sem workspaces/pacotes vazios; matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK documentada com fontes oficiais e diagnóstico que falha para pré-requisito ausente/incompatível antes do build.
 - CA-02: shell Router com início e informações da fundação, ida/volta e retorno Android; texto, rótulos e erro recuperável em pt-BR; nenhum recurso musical apresentado como disponível.
@@ -29,7 +29,7 @@ Afinador, metrônomo, teoria musical, exercícios, sessões, design system compl
 - CA-05: instalação, lint, tipos, testes, exportação JS e APK Android executam trabalho real; checks documentais Linux/Windows preservados; gate agregado aprova somente jobs obrigatórios executados com sucesso, rejeita falha/cancelamento/ausência/skip indevido e identifica dispensa válida por filtro sem chamá-la de execução; artefato Android registrado quando build exigido.
 - CA-06: README reproduz instalação, diagnóstico, execução, testes, build e troubleshooting em Windows/Linux; licenças e versões avaliadas; evidências de acessibilidade e execução Android anexadas, com rastreabilidade CA → cenário → tarefa → comando/resultado/SHA.
 
-Os mesmos escopo, exclusões e CA-01…CA-06 constam na issue e na [spec](specs/mobile-foundation/spec.md); os cenários e a rastreabilidade no [design](design.md) os detalham. Esta PR entrega planejamento, não esses critérios de implementação nem o encerramento de #11.
+Os mesmos escopo, exclusões e CA-01…CA-06 constam na issue e na [spec](specs/mobile-foundation/spec.md); os cenários e a rastreabilidade no [design](design.md) os detalham. A implementação e evidências foram adicionadas nesta PR após Apply autorizado; o encerramento de #11 depende da integração e dos gates finais.
 
 ## Capabilities
 
@@ -43,9 +43,9 @@ Nenhuma. `ai-development-workflow` permanece vigente; sua validação documental
 
 ## Impact
 
-Agora: quatro artefatos OpenSpec refinados, ADR com decisão arquitetural registrada, contexto/decisões/arquitetura/AGENTS/config/changelog alinhados e issue #11 atualizada. Nenhum manifest, lock, workflow ou código mobile é alterado.
+A PR contém planejamento aprovado, shell mobile, manifest/lock, configurações, scripts, testes, workflows, ADR e documentação/evidências; a issue #11 compartilha o mesmo escopo.
 
-Somente após nova solicitação Apply: manifest existente evolui sem perder tooling/override; arquivos de app, configuração TS/lint/Jest, CI e guia de execução. Riscos centrais: acoplamento entre camadas, compatibilidade do SDK com Node 24/toolchain Android e falsa confiança de mocks para código nativo. EAS não é requisito; áudio não validado.
+O Apply autorizado ampliou o manifest sem perder tooling/override e adicionou app, TS/lint/Jest, CI e guia de execução. Riscos centrais: acoplamento entre camadas, compatibilidade do SDK com Node 24/toolchain Android e falsa confiança de mocks para código nativo. EAS não é requisito; áudio não validado.
 
 ## Estado do Apply
 

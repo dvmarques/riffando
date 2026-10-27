@@ -40,7 +40,7 @@ async function tap(text) {
   }
   throw new Error('Ação inacessível: ' + text);
 }
-const evidence = { sha: process.env.GITHUB_SHA || 'local', package: pkg, android: adb('shell', 'getprop', 'ro.build.version.release').trim(), api: adb('shell', 'getprop', 'ro.build.version.sdk').trim(), model: adb('shell', 'getprop', 'ro.product.model').trim(), checks: [], talkBack: 'Pendente: avaliação manual; smoke automatizado não comprova leitura/foco.' };
+const evidence = { sha: process.env.GITHUB_SHA || 'local', package: pkg, android: adb('shell', 'getprop', 'ro.build.version.release').trim(), api: adb('shell', 'getprop', 'ro.build.version.sdk').trim(), model: adb('shell', 'getprop', 'ro.product.model').trim(), checks: [], talkBack: 'Não coberto pelo smoke automatizado; avaliação manual registrada na tarefa 5.3 da change define-mobile-foundation.' };
 try {
   adb('install', '-r', 'artifacts/riffando-validation.apk');
   const permissions = adb('shell', 'dumpsys', 'package', pkg);

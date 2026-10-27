@@ -17,7 +17,10 @@ export function readCanonicalProperty(properties, key) {
     if (continuation % 2 || !entry || entry[1].includes('\\')) throw new EnvironmentError('Falha de diagnóstico', 'local.properties', 'chaves sem escapes, entradas chave=valor em uma linha', line, 'android/local.properties', 'Regere local.properties com sintaxe canônica, sem continuação ou chave escapada');
     if (entry[1] !== key) continue;
     if (value !== undefined) throw new EnvironmentError('Falha de diagnóstico', key + ' duplicado', 'uma definição', 'múltiplas definições', 'android/local.properties', 'Mantenha somente o SDK efetivo');
-    value = entry[2].replace(/\\(.)/g, (_, escaped) => {
+    value = entry[2].replace(/\\(u[0-9a-fA-F]{4}|.)/g, (_, escaped) => {
+      if (/^u[0-9a-fA-F]{4}$/.test(escaped)) return String.fromCharCode(Number.parseInt(escaped.slice(1), 16));
+      const controls = { t: '\t', n: '\n', r: '\r', f: '\f' };
+      if (Object.hasOwn(controls, escaped)) return controls[escaped];
       if (!['\\', ':', '=', ' '].includes(escaped)) throw new EnvironmentError('Falha de diagnóstico', 'escape sdk.dir', 'caminho canônico', escaped, 'android/local.properties', 'Regere o caminho com escapes padrão');
       return escaped;
     });

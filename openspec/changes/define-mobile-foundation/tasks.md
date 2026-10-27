@@ -1,6 +1,6 @@
 # Tasks
 
-Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implementação em andamento.** Topologia app único aprovada para planejamento em 26/10/2026; iniciar somente após nova solicitação Apply. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
+GC-001/#11: **Apply autorizado e 20 tarefas verificadas.** Topologia app único aprovada em 26/10/2026; implementação concluída na PR #53. Critérios CA-01…CA-06 em proposal.md; contratos na spec; evidências devem apontar comandos, SHA e resultados reais. Autorizações, archive e merge ficam no checklist da PR.
 
 ## 1. Matriz e instalação (CA-01)
 
@@ -34,7 +34,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 ## 6. CI reproduzível (CA-05)
 
-- [x] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação e smoke Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
+- [x] 6.1 Preservar matriz documental Linux/Windows e adicionar qualidade JS/diagnóstico/exportação Linux e instalação/scripts/build Windows; verificar instalação por lock, relatórios, gates reais e permissão contents:read sem secrets em PR.
 - [x] 6.2 Adicionar compilação Android Linux com JDK/SDK documentados, cache/timeout e upload do APK por 7 dias; verificar CI do SHA com logs distintos para bundle e compilação nativa, incluindo falha controlada revertida do build.
 - [x] 6.3 Definir gate agregado e nomes estáveis dos checks, validar success/failure/cancelled/skipped/ausência e artefato ausente dos jobs obrigatórios no mesmo SHA/evento e documentar configuração recomendada de proteção sem alterar branch protection nesta entrega.
 
@@ -76,8 +76,14 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 ## Conclusão técnica — run 40522664541
 
 - Head a556c82ce2c9b3d157ce03049cb41b82e6b8c287: todos os sete checks aprovados (documentação Linux/Windows, qualidade/exportação, Windows nativo, Linux nativo, smoke e gate). [Execução](https://github.com/dvmarques/riffando/actions/runs/40522664541).
-- 1.3/1.4: diagnósticos positivos reais nos dois sistemas, launcher/daemon Java 17.0.20.1; Windows CMake 3.31.6/Ninja 1.12.1/caminhos longos habilitados. 71 testes tooling cobrem falhas e estados; diagnóstico anterior rejeitou JDK 25 e NDK ausente antes de compilar. Mensagens distinguem instalação, ambiente e compilação; scripts de diagnóstico não alteram ferramentas/licenças.
+- 1.3/1.4: diagnósticos positivos reais nos dois sistemas, launcher/daemon Java 17.0.20.1; Windows CMake 3.31.6/Ninja 1.12.1/caminhos longos habilitados. Na execução histórica a556c82, 71 testes tooling cobriram falhas e estados; diagnóstico anterior rejeitou JDK 25 e NDK ausente antes de compilar. Mensagens distinguem instalação, ambiente e compilação; scripts de diagnóstico não alteram ferramentas/licenças.
 - 5.1: CNG/prebuild e assembleRelease concluídos nos dois sistemas, JS embarcado e assinatura debug interna. APK Windows 12744265590 e Linux 12743252545; smoke 12742713294, retenção 7 dias. Windows BUILD SUCCESSFUL em 12m59s; prova Kotlin e restauração/recompilação Linux aprovadas. start/android são comandos Expo instalados; smoke do APK não depende de Metro. Limites de development build/Expo Go e rollback no guia.
 - 7.1: README/MOBILE/DEPENDENCIES/ADR/contexto/decisões/arquitetura e CHANGELOG revisados; instruções, versões/licenças e comandos reais/evidências Windows/Linux consolidados, sem afirmar teste local nativo Windows onde o resultado foi do CI.
-- 7.2: revisão de código/diff e rastreabilidade dos 10 requisitos/23 cenários conferidas conforme MOBILE.md. npm run validate aprovado, incluindo lint/tipos/71 casos tooling/3 cenários UI; exportação, compilação e smoke comprovados pelo CI. TalkBack/fonte ampliada são relato manual do mantenedor. Escopo/exclusões/CA idênticos à issue. Sem funcionalidades musicais, archive/sync ou merge.
+- 7.2: revisão de código/diff e rastreabilidade dos 10 requisitos/23 cenários conferidas conforme MOBILE.md. npm run validate aprovado naquela execução, incluindo lint/tipos/71 casos tooling/3 cenários UI; exportação, compilação e smoke comprovados pelo CI. TalkBack/fonte ampliada são relato manual do mantenedor. Escopo/exclusões/CA idênticos à issue. Sem funcionalidades musicais, archive/sync ou merge.
 - Alterações documentais posteriores exigem nova execução verde no commit final da PR; os resultados acima identificam explicitamente o SHA testado e não simulam sucesso no SHA seguinte.
+
+## Revisão Claude — 27/10/2026
+
+Claude Code 2.1.304, modelo configurado claude-sonnet-5-5, revisão estática do head ca8f661: bloqueador documental B1 corrigido nos próprios textos de estado. M1 Unicode de Properties.store, M2 entrada real do gate e M5 descrição de TalkBack corrigidos com regressões. M3 versões exatas e M4 limites AVD/ABIs explicitados no guia. Suite atual: 57 testes tooling, incluindo os cinco jobs reais e 21 invocações negativas/positiva do CLI, em vez de nomes fictícios; a contagem histórica de 71 pertence ao conjunto anterior. Nenhum teste/build foi atribuído ao Claude. Sugestões de backup/dados e ícone/splash ficam para demandas próprias; shell não persiste dados nem é publicação de loja. Tags de Actions/cache existentes não foram alteradas para expandir escopo; sem pull_request_target ou secrets e cache isolado por PR. Escopo integral de #11 verificado; fechamento após squash autorizado.
+
+A reavaliação estática do Claude após as correções B1/M1…M5 confirmou ausência de bloqueadores para archive/sync e squash, condicionada aos checks. Contagens do run a556c82 acima são históricas; a suite revisada também confere a lista de jobs contra o próprio workflow.

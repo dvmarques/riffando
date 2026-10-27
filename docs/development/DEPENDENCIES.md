@@ -28,7 +28,7 @@ O mantenedor aceitou explicitamente nesta conversa manter temporariamente os avi
 
 ## Avaliação da matriz e obrigações relevantes
 
-A seleção de versões, peers e licenças relevantes da tarefa 1.1 foi avaliada: matriz exata em config/toolchain.json/lock, instalação limpa e Expo doctor aprovados; compilação Linux e APK offline comprovados no run 40412254969. A validação nativa Windows permanece uma entrega separada, ainda pendente.
+A seleção de versões, peers e licenças relevantes da tarefa 1.1 foi avaliada: matriz exata em config/toolchain.json/lock, instalação limpa e Expo doctor aprovados; compilação Linux e APK offline comprovados no run 40412254969. A compilação nativa Windows também foi aprovada no run 40522664541 (head a556c82), com CMake 3.31.6/Ninja 1.12.1.
 
 Os frameworks Expo/Router e React Native usam MIT: [licença upstream Expo SDK 58](https://github.com/expo/expo/blob/sdk-58/LICENSE) e [licença React Native 0.88.0](https://github.com/facebook/react-native/blob/v0.88.0/LICENSE). A ausência de LICENSE no tarball do Router foi confrontada com o upstream correspondente. O inventário do JavaScript identifica os 42 pacotes efetivamente mapeados e seus arquivos de licença. Manter copyright/licenças MIT/ISC/Apache/BSD e NOTICE aplicáveis ao redistribuir; MPL exige preservar suas condições para componentes cobertos, e CC-BY exige atribuição aos dados cobertos. Essas transitivas de transformação não foram encontradas no JavaScript exportado.
 

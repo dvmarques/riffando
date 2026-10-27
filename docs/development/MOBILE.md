@@ -1,20 +1,22 @@
-# Fundação mobile
+# Fundação mobile — execução e evidências
 
-## Estado e autorização
+## Estado
 
-Apply autorizado pelo mantenedor após a proposta da PR #53. Shell em implementação/validação; nenhuma tarefa pendente pode ser considerada concluída por essa autorização. Não arquivar ou integrar enquanto houver tarefas abertas.
+GC-001/#11 implementado em app único, com 20 tarefas verificadas na PR #53. Revisão Claude em 27/10/2026 tratou inconsistências de estado, Unicode e entrada real do gate. O mantenedor autorizou archive/sync e squash condicionados à revisão sem bloqueadores e CI verde no head final. Nenhum recurso musical, banco ou release de loja foi entregue. O estado dos gates fica na PR; as execuções citadas abaixo identificam exatamente os SHAs testados.
 
-## Versões e pré-requisitos
+## Matriz e instalação
 
-Node 24.21.0, npm 12.2.1, Expo 58.0.19, React/React DOM 19.3.0, RN 0.88.0, TS 6.0.3. Java 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006, conferidos nos catálogos nativos instalados e CNG. config/toolchain.json é a matriz executável. Command-line tools 23.0 (arquivo 16111833) e pacote platforms;android-37.0 conferidos no repositório XML oficial; compileSdk continua 37.
+config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.19, React/DOM 19.3.0, RN 0.88.0, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
 
-Fontes: [Expo 58](https://expo.dev/changelog/sdk-58), [matriz Expo](https://docs.expo.dev/versions/v58.0.0/), [JDK Android](https://developer.android.com/build/jdks), [SDK Manager](https://developer.android.com/tools/sdkmanager) e catálogos das versões fixadas no lock. React DOM alinha peer do Router; não há app web. Nenhum JDK global foi alterado.
+O engines aceita Node 24 como família, mas check:env exige as versões **exatas** Node/npm acima. Um patch diferente pode instalar e ser corretamente rejeitado pelo diagnóstico. Se o Node vier com outro npm, instalar conscientemente a versão fixada (npm install --global npm@12.2.1), ou usar runtime isolado; os scripts não fazem essa alteração por conta própria.
 
-Windows PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Confira node --version/npm --version antes dos scripts Node. Instale JDK 17/Android SDK pelos canais oficiais; alinhe JAVA_HOME, ANDROID_HOME, PATH e Gradle JDK do Android Studio. Command-line tools 23.0; o action instala no diretório cmdline-tools/16111833. ANDROID_CMDLINE_TOOLS_ROOT permite indicar outro diretório com source.properties da revisão exata, platform-tools, plataforma/build-tools/NDK da matriz; leia/aceite licenças aplicáveis. Não altere ferramentas de outros projetos.
+Fontes: [Expo SDK 58](https://expo.dev/changelog/sdk-58), [matriz Expo](https://docs.expo.dev/versions/v58.0.0/), [JDK Android](https://developer.android.com/build/jdks), [SDK Manager](https://developer.android.com/tools/sdkmanager) e catálogos das versões no lock. Instalar JDK/SDK pelos canais oficiais; alinhar JAVA_HOME, ANDROID_HOME/ANDROID_SDK_ROOT, PATH e Gradle JDK do Android Studio. Ler/aceitar licenças aplicáveis. ANDROID_CMDLINE_TOOLS_ROOT permite indicar diretório que tenha source.properties da revisão exata.
 
-## Comandos na raiz do worktree
+No Windows, habilitar caminhos longos e instalar CMake/Ninja da matriz conforme [guia Expo](https://docs.expo.dev/troubleshooting/windows-long-paths/). build:android passa android.cmakeVersion=3.31.6 explicitamente; para expo run:android/Android Studio, configurar essa propriedade no Gradle user home conforme o mesmo guia. O CI configura apenas seu runner descartável, sem alterar esta máquina. Não editar módulos nativos/dependências para contornar o problema.
 
-Os comandos são portáveis entre PowerShell e Linux:
+## Comandos no worktree
+
+PowerShell: Get-Command node,npm; Linux: command -v node e command -v npm. Conferir node --version e npm --version antes dos scripts Node. Na raiz do worktree:
 
 ```bash
 npm ci --ignore-scripts
@@ -28,73 +30,44 @@ npm start
 npm run build:android
 ```
 
-android instala development build; start usa Metro. build:android gera APK artifacts/riffando-validation.apk com JS embarcado, variante release assinada com chave debug do template apenas para validação interna; não publicar na loja. CNG/config/plugins são fonte: não editar android/ios gerados. Conferir regeneração em worktree limpo sem apagar trabalho local. iOS exige macOS/Xcode e não é entrega desta fundação.
+android executa a CLI Expo para development build; start inicia Metro em localhost. build:android faz prebuild, verifica SDK/JVM Gradle e assembleRelease, copiando artifacts/riffando-validation.apk com JS embarcado e assinatura debug interna. Sem credenciais de loja; não publicar esse APK. CNG/config/plugins são fonte, android/ios gerados são ignorados. CI parte de checkout sem android para provar geração limpa. Em árvore local existente, preservar alterações antes de qualquer prebuild --clean; nunca apagar trabalho do colaborador. Rollback é reverter os commits da fundação; não há dados reais ou migração nesta fase. iOS executável exige macOS/Xcode e fica fora da entrega.
 
-## Diagnóstico e recuperação
+## Diagnóstico e troubleshooting
 
-check:env verifica versões Node/npm; check:env:android verifica Java/javac PATH/JAVA_HOME, raiz SDK, Android CLI -V/sdk list (ou shim sdkmanager legado), pacotes instalados, adb e evidência de licença. O build verifica JVM efetiva do Gradle antes de assemble. Diagnóstico não instala nem aceita licenças automaticamente.
+check:env verifica Node/npm; check:env:android adiciona Java/javac de PATH/JAVA_HOME, SDK efetivo/local.properties, CLI/revisão/pacotes/ADB/licenças e CMake/Ninja/política Windows. check:env:gradle também confere launcher/daemon e critérios JVM. O SDK da CLI é explícito, e sdk.dir divergente é rejeitado antes da compilação. Valores Unicode e escapes padrão de Properties.store são decodificados; chaves ambíguas, duplicidade e continuação são rejeitadas. Não normaliza silenciosamente toolchain incompatível nem instala/aceita licenças automaticamente.
 
-Mensagens pt-BR distinguem pré-requisito ausente, incompatível e diagnóstico inconclusivo com comando/esperado/observado/correção. npm ci falhando é instalação; prebuild/Gradle após ambiente válido é compilação, sem declarar APK gerado. Falta de emulador impede smoke, não compilação. Windows local tem JDK 25 e nenhum Android SDK/AVD; diagnóstico o rejeita corretamente. Usar JDK 17 local isolado ou CI; não suprimir verificação. Fixtures de teste não comprovam ambiente/build real.
+Mensagens pt-BR separam ausente/incompatível/inconclusivo, com esperado/observado/comando/correção. npm ci falhando é instalação; prebuild/Gradle após ambiente válido é compilação. Falta de emulador impede smoke, não compilação. No início desta tarefa o Windows local tinha JDK 25/sem SDK; o diagnóstico o rejeitou. O mantenedor instalou depois Android Studio/Pixel 7 para teste manual; os builds Windows documentados foram do runner CI, sem troca do JDK global do mantenedor.
 
-## Testes e evidências
+Falhas reais corrigidas: shim sdkmanager.bat fragmentou identificadores no Windows (run 40442508770); substituído por android.exe sdk install com caminhos de pacotes por barras. Ninja antigo falhou em caminho >260 (run 40443150983); versões/política corrigidas e comprovadas no run 40522664541. Divergências SDK/JVM encontradas em revisão independente estática também ganharam regressões. Erro de rede/acesso não vira sucesso ou incompatibilidade falsa. Caminhos curtos/8.3 diferentes devem ser alinhados explicitamente às mesmas variáveis/SDK; não se afirma equivalência de todos os aliases de filesystem.
 
-Jest/RNTL/Router: navegação início/informações/retorno, abertura direta e erro injetado/recuperação com ações pt-BR, sem expor detalhes privados. Shell estático aparece imediatamente: sem loading/delay/operação fictícia. Não há regra musical nem banco. Lint bloqueia fronteiras (aliases/relativos) e ciclos; testes puros de tooling cobrem ambiente e gate, sem inventar domínio.
+## Resultados de CI e APK
 
-CI preserva documentação Linux/Windows, adiciona qualidade/exportação Linux, testes/scripts Windows, APK nativo e smoke AVD API 36 Pixel 7 x86_64 offline sem Metro. APK e evidência (screenshots/XML/modelo/OS/API/SHA/log) retidos por 7 dias. Smoke cobre reabertura, volta Android/ação e fontes 100%/200%; não comprova TalkBack, ainda pendente de avaliação manual.
+[Run 40522664541](https://github.com/dvmarques/riffando/actions/runs/40522664541), head a556c82ce2c9b3d157ce03049cb41b82e6b8c287: sete checks success — documentação Windows/Linux, qualidade/exportação, scripts/build Windows, build Linux, smoke AVD e gate. Windows: Java launcher/daemon 17.0.20.1, CMake 3.31.6/Ninja 1.12.1, BUILD SUCCESSFUL em 12m59s. Linux: erro Kotlin temporário em MainActivity.kt rejeitado, bytes restaurados em finally e APK válido recompilado. [APK Windows](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12744265590), [APK Linux](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12743252545) e [smoke](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12742713294), retenção sete dias. Este run não é apresentado como validação de commits posteriores.
 
-Gate exige documentation (ambas as células), javascript, windows, android e emulator com success, sem filtros/continue-on-error. Failure/cancelled/skipped/ausência bloqueiam aprovação. Upload obrigatório falha sem APK. Gate/workflow ausente ou cancelado não equivale a sucesso. Branch protection não alterada; exigir o gate no SHA final é recomendação.
+O smoke instala APK no AVD Android 16/API 36 x86_64, habilita modo avião, desliga wifi/dados, inicia a frio sem Metro, navega/volta por ação e Back Android, reabre com fontes 100%/200% e salva XML/PNG/evidence.json/logcat. Sha do evidence.json é o checkout de teste GITHUB_SHA (pode ser merge sintético); run e head são registrados separadamente. O campo TalkBack diz que não é coberto pela automação; o teste manual tem registro próprio abaixo.
 
-CA-01 → matriz/diagnóstico/instalação; CA-02 → navegação/smoke; CA-03 → lint/tipos/architecture.test.mjs; CA-04 → recovery.test.tsx e APK offline; CA-05 → gate.test.mjs e jobs/artefatos do SHA; CA-06 → guia/licenças e revisão de acessibilidade. Pendências e evidências reais em tasks.md/PR, sem afirmar áudio/USB/desempenho validados.
+**Limite de hardware:** Pixel 7 é AVD, não aparelho físico. O APK compila x86_64 e arm64-v8a, mas só x86_64 foi executado. A seleção de duas ABIs cobre o emulador de referência e um alvo ARM de compilação sem prometer execução física; armeabi-v7a e x86 de 32 bits foram excluídos desta validação. Não é avaliação de áudio/USB/latência/desempenho ou compatibilidade universal. Ícone/splash personalizados e publicação de loja são demandas futuras. A configuração padrão de backup precisa ser reavaliada antes de persistir dados reais, que o shell não possui. INTERNET permanece também no APK release; essa permissão não prova tráfego, e o shell não faz upload/telemetria ou requisição de rede obrigatória.
 
-## Revisão independente de diagnóstico
+## Acessibilidade manual
 
-O diagnóstico compara ANDROID_HOME/ANDROID_SDK_ROOT com sdk.dir em android/local.properties, antes e depois do prebuild. O CLI recebe --sdk explícito para listar o mesmo SDK do Gradle. Properties aceita espaços antes de chaves canônicas e rejeita duplicidade, continuação e escapes ambíguos com mensagem de correção; não assume silenciosamente a primeira chave. Gradle --version deve comprovar launcher e daemon compatíveis; critérios de daemon divergentes/inconclusivos são rejeitados. Casos negativos cobrem launcher 17/daemon 25 e SDK divergente. Revisão independente foi estática e não substitui build real.
+Em 27/10/2026 o mantenedor instalou o [APK do run 40443150983](https://github.com/dvmarques/riffando/actions/runs/40443150983/artifacts/12707632804) no Pixel 7 AVD Android 16/API 36 x86_64 Google Play no Windows. Confirmou leitura/anúncios e início → informações → voltar com TalkBack, seguido do mesmo percurso com fonte 200% e ações alcançáveis. Capturas na conversa mostram foco verde; leitura audível/usabilidade são relato manual, sem gravação de áudio e sem atribuição ao CI/Claude. Foi necessário ajustar volume de acessibilidade no emulador.
 
-O job Windows prepara JDK/SDK da matriz, regenera CNG e executa check:env:gradle para evidência real de SDK e JVM launcher/daemon. A compilação/execução do APK é validada pelo job Linux/AVD; não alegar compilação Windows ainda não executada.
+Capturas reais do smoke em 100%/200% revisadas: conteúdo rolável sem colisão visível nas regiões capturadas, ações alcançadas. Action mantém mínimo de 52 dp e texto escalável. Contraste das cores de produção: texto 10.71:1; texto raiz 12.03:1; título 16.65:1; ação/destaque 10.91:1. Testes RNTL verificam nomes/papéis pt-BR e ações. O teste manual não é prova de funcionalidade de áudio musical.
 
-## Smoke aprovado
+## Gate e rastreabilidade
 
-Run [40412254969](https://github.com/dvmarques/riffando/actions/runs/40412254969), head dbdb777 e checkout de teste d0bbfe2: APK compilado e instalado em sdk_gphone64_x86_64, Android 16/API 36; modo avião/Metro desligado, início frio, navegação/retorno por ação e Back Android, reabertura e fontes 100%/200% aprovados. Capturas e XML revisados sem sobreposição visível; evidência não comprova TalkBack. Os [artefatos](https://github.com/dvmarques/riffando/actions/runs/40412254969/artifacts/12694691449) são retidos por 7 dias.
+CI exige documentation (matriz completa), javascript, windows, android e emulator com success. O agregador compartilha essa lista com os testes e recebe toJSON(needs); o CLI real é executado em testes para sucesso e cada job ausente/failure/cancelled/skipped. Outros estados e diagnóstico são testados por função. Artefato ausente falha no upload/download obrigatório; a opção genérica artifactRequired de evaluateGate não é a verificação produtiva do artefato. Cancelamento/global ou gate ausente não prova aprovação. Draft não executa jobs; ready_for_review dispara todos. Não há filtros de arquivos/continue-on-error. Branch protection preservada; exigir o check estável Fundação — gate agregado é recomendação, não configuração já aplicada. Cache Gradle segue escopo de PR do Actions, sem pull_request_target ou secrets. Revisão não autoriza ampliar escrita de cache de fork na main.
 
-A política de #56 foi preservada: jobs não executam em PR Draft; ready_for_review dispara a validação integral, e main/manual continuam. Draft/skipped não comprova aprovação. O gate em Ready exige todos os jobs com success no SHA corrente.
+Dez requisitos adicionados e 23 cenários revisados, sem remoções/renomes. Rastreabilidade CA-01…CA-06 e textos canônicos conferidos com issue/proposal:
 
-## Gates nativos complementares
+- App único/camadas/autorização: manifest/lock/TS/ESLint/ADR. Aprovação de arquitetura é separada de Apply e dos gates finais.
+- Instalação/diagnóstico (CA-01): npm ci/prebuild/ambientes reais Windows/Linux; environment.test.mjs, SDK/JVM e mensagens. Provas negativas não são apresentadas como builds reais.
+- Navegação (CA-02): navigation.test.tsx e APK smoke cobrem ida/volta/Android/abertura direta e indisponibilidade.
+- Fronteiras (CA-03): architecture.test.mjs rejeita UI/nativo/infra/rotas por aliases/relativos; lint real inclui import/no-cycle e TS estrito, sem pastas vazias para simular domínio.
+- Offline/privacidade/recuperação (CA-04): app.json/APK em modo avião/sem Metro; recovery.test.tsx injeta e recupera erro sem detalhe privado. Não há operação assíncrona necessária, portanto nenhum loader fictício é exigido pelo cenário condicional.
+- Qualidade/build/gate (CA-05): provas negativas TS/navegação/fronteiras/Kotlin revertidas; logs separados, APK e matriz do gate. Filtros são contrato futuro condicionado: sem classificador ou dispensa habilitados nesta versão.
+- Reprodução/licenças/acessibilidade (CA-06): este guia, DEPENDENCIES.md, avisos e testes manuais/automatizados distintos. O aceite temporário de risco do tooling não é uma auditoria jurídica nativa ou autorização de loja.
 
-Windows executa check:env:gradle e build:android com APK próprio android-validation-windows. Linux, após build válido, injeta erro Kotlin somente no MainActivity.kt gerado, exige falha de compilação localizada, restaura os bytes originais em finally e recompila APK válido antes do upload. Log da prova fica no artefato; nenhuma regressão é commitada ou enviada ao usuário no APK. Cache Gradle usa o escopo isolado da PR. Confirmar resultados do SHA final antes de marcar essas tarefas.
+## Revisão Claude e correções
 
-## Revisão visual e contraste parcial
-
-Capturas reais do smoke em 100% e 200% conferidas: conteúdo rolável, sem corte/colisão nas regiões capturadas e ações alcançadas pelo smoke. Contraste calculado das cores de produção: texto 10.71:1; texto raiz 12.03:1; título 16.65:1; ação 10.91:1; destaque 10.91:1. Action.tsx mantém mínimo de 52 dp e texto escalável. TalkBack/foco/anúncios confirmado manualmente pelo mantenedor, conforme registro abaixo.
-
-## Correção da instalação Windows
-
-O run 40442508770 rejeitou corretamente NDK ausente no Windows. O shim sdkmanager.bat da revisão 23.0 fragmentou identificadores com ponto e vírgula (log: Package ndk not found), apesar de retornar sucesso na instalação. O job passa a chamar android.exe diretamente, com raiz explícita e caminhos com barras, conforme [android sdk install](https://developer.android.com/tools/agents/android-cli/commands/sdk_install). O diagnóstico continua obrigatório e não foi relaxado; resultado positivo depende da nova execução.
-
-## Acessibilidade manual confirmada
-
-Em 27/10/2026, o mantenedor instalou o [APK do run 40443150983](https://github.com/dvmarques/riffando/actions/runs/40443150983/artifacts/12707632804) em Pixel 7 AVD Android 16/API 36 x86_64 Google Play no Windows. Confirmou início → informações → voltar com TalkBack, leitura dos controles e fonte 200% com ações alcançáveis. Capturas na conversa mostram foco verde; leitura audível/usabilidade são relato do mantenedor, sem gravação de áudio. O volume de acessibilidade precisou ser ajustado no emulador antes do teste. Complementa rótulos, contraste e smoke; não comprova áudio musical.
-
-## CMake/Ninja no Windows
-
-O run passou nos diagnósticos Windows, mas o build falhou em Ninja com Filename longer than 260 characters. Instalar CMake 3.31.6 (inclui Ninja 1.12.1) pelo SDK Manager e habilitar caminhos longos no Windows, conforme [guia Expo](https://docs.expo.dev/troubleshooting/windows-long-paths/). build:android passa android.cmakeVersion=3.31.6 somente no Windows. O diagnóstico verifica versões/política, sem instalar ferramentas nem alterar registro. O CI configura somente o runner descartável; nenhuma configuração global desta máquina foi alterada. Linux preserva sua configuração. Instalação, prebuild e diagnóstico Windows passaram; build corrigido aguarda nova evidência.
-
-## Resultado consolidado e rastreabilidade
-
-[Run 40522664541](https://github.com/dvmarques/riffando/actions/runs/40522664541), head a556c82ce2c9b3d157ce03049cb41b82e6b8c287: sete checks com success, incluindo documentação Linux/Windows, qualidade/exportação JS, build Windows e Linux, smoke offline e gate. Windows comprovou Java launcher/daemon 17.0.20.1, CMake 3.31.6/Ninja 1.12.1 e build em 12m59s; Linux repetiu a prova Kotlin negativa/restauração e recompilação. [APK Windows](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12744265590), [APK Linux](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12743252545) e [smoke](https://github.com/dvmarques/riffando/actions/runs/40522664541/artifacts/12742713294), retidos por 7 dias. Esse resultado supera as pendências de build descritas nas seções históricas acima; novas alterações continuam sujeitas ao CI do commit final.
-
-Verificação da implementação (10 requisitos adicionados, 23 cenários; sem requisitos removidos/renomeados):
-
-- App único/camadas e autorização: manifest/lock/tsconfig/ESLint e ADR; aprovação arquitetural foi separada de Apply, cujo registro consta na issue. Nenhum archive/merge decorre dessas aprovações.
-- Instalação reproduzível: npm ci --ignore-scripts e prebuild nos dois sistemas, scripts Expo reais; matriz em config/toolchain.json. Windows local não foi compilado com o JDK 25 global.
-- Diagnóstico: environment.test.mjs e check:env:gradle cobrem ausente/incompatível/inconclusivo e SDK/JVM divergentes; pré-requisito é verificado antes de Gradle; prova Kotlin distingue falha real de compilação após ambiente válido.
-- Navegação: navigation.test.tsx e smoke cobrem ida/volta, retorno Android/ação e abertura direta. Nenhuma ferramenta musical disponível.
-- Offline/privacidade: app.json e APK instalado, modo avião e Metro desligado; manifest sem áudio/USB e shell sem telemetria/upload/login.
-- Estados/recuperação: recovery.test.tsx injeta falha e verifica recuperação; indisponibilidade e ausência de loading testadas. Não há operação assíncrona necessária no shell: cenário condicional não requer loader fictício.
-- Acessibilidade/idioma: rótulos/ações em Jest, capturas/XML 100%/200%, contraste/alvos e teste manual TalkBack do mantenedor, registrado acima com sua origem.
-- Fronteiras: architecture.test.mjs rejeita imports UI/nativo/infra/rotas por aliases e relativos; lint real mantém import/no-cycle e TS estrito. Sem pastas vazias para simular domínio futuro.
-- Qualidade/build: logs separados de JS/exportação/compilação; provas negativas TS/navegação/fronteira e Kotlin revertidas; APK real e smoke não são apresentados como teste de áudio/USB/desempenho.
-- Gate: gate.test.mjs e CI cobrem success/failure/cancelled/skipped/ausência; falha Windows anterior impediu aprovação real. Dispensa por filtros é contrato futuro condicionado, sem classificador ou filtros habilitados; nesta versão todos os jobs são exigidos. Cancelamento/global ou gate ausente não prova sucesso. Branch protection não foi alterada.
-
-Revisão de coerência: app único, Expo Router, separação de camadas, dependências mínimas e assinatura interna seguem design/ADR; critérios CA-01…CA-06 e exclusões conferidos com a issue/proposal. Arquivos de navegação, recuperação, configuração, scripts de ambiente/build/gate/smoke e testes revisados. A revisão independente anterior foi estática e cobriu SDK/JVM; revisão atual e CI complementam essa evidência, sem atribuir ao revisor testes que não executou.
-
-Limites conhecidos: aceite temporário de vulnerabilidades de tooling em DEPENDENCIES.md; não há inventário jurídico integral nativo ou publicação de loja nesta entrega. Os cenários condicionais de loading e filtros foram avaliados como condicionais, sem verificar funcionalidades inexistentes. Dez requisitos mapeados e cenários aplicáveis cobertos, sem lacuna técnica identificada nesta revisão. Archive/sync/merge não executados. A revalidação documental local e o CI do commit posterior continuam obrigatórios antes da integração.
+Claude Code 2.1.304 / modelo configurado claude-sonnet-5-5 revisou estaticamente o head ca8f661, sem executar testes nem inspecionar lock completo. B1: estados contraditórios corrigidos nos próprios cabeçalhos, consolidando este guia. M1: Unicode/escapes Properties.store com testes; M2: jobs reais/lista compartilhada e entrada CLI do gate; M3: versões exatas explicitadas; M4: AVD/ABIs/32 bits explicitados; M5: TalkBack automatizado separado do relato manual. Suite após correções: 57 testes tooling, incluindo invocações reais do CLI, e três cenários UI. Contagens históricas anteriores não descrevem esse conjunto revisado. Revisão e testes do commit de correção, CI antes de archive e CI após archive continuam gates independentes.

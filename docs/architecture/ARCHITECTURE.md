@@ -80,14 +80,10 @@ Esses números são hipóteses de engenharia, não resultados garantidos.
 
 Testes de domínio, migrações, fluxos de sessão, perda de áudio, desconexão USB, permissões e acessibilidade. Matriz de aparelhos reais e logs locais de diagnóstico sem gravações sensíveis.
 
-## Refinamento de GC-001/#11 — especificação em revisão
+## Fundação de GC-001/#11 — implementada e verificada
 
-A change [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md) e a issue #11 descrevem os mesmos escopo/exclusões e CA-01…CA-06 para app único. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha fronteiras, dependências mínimas/adiadas, diagnóstico Windows/Linux, CNG/development build, testes e gates. A arquitetura está aprovada para esta proposta; o plano operacional segue em revisão na PR #53 e todas as tarefas de implementação estão abertas. Sem código, build ou comprovação de áudio/desempenho.
+A change [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md) e a issue #11 descrevem os mesmos escopo/exclusões e CA-01…CA-06 para app único. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha fronteiras, dependências mínimas/adiadas, diagnóstico Windows/Linux, CNG/development build, testes e gates. A arquitetura foi implementada e as 20 tarefas verificadas na PR #53. Há shell, testes e builds; áudio/desempenho musical permanecem fora do escopo.
 
-## Estado do Apply — 26/10/2026
+## Estado da fundação
 
-Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](../development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.
-
-## Fundação verificada — 27/10/2026
-
-As 20 tarefas de GC-001 foram verificadas na branch da PR #53: builds Windows/Linux e sete checks do run 40522664541 aprovados no head a556c82; smoke Android offline, fonte 200% e TalkBack manual confirmados. Evidências, matriz, riscos e limites em [guia mobile](../development/MOBILE.md). Esse registro supera as pendências históricas de shell/build/acessibilidade acima. O aceite de vulnerabilidades é temporário e restrito ao tooling; nenhuma funcionalidade musical, publicação de loja, archive/sync ou merge foi realizada. Alterações documentais posteriores exigem CI do commit final e os gates de autorização permanecem.
+GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](../development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.

@@ -36,6 +36,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Fixed
 
+- `define-mobile-foundation` (Refs #11; PR #53) - Revisão Claude corrigiu estados documentais contraditórios, suporte a Unicode em propriedades Android, teste do gate com jobs/formato reais e identificação da evidência manual de TalkBack.
+
 - `define-mobile-foundation` (Refs #11; PR #53) - Build Windows seleciona CMake 3.31.6/Ninja 1.12.1 e diagnóstico exige caminhos longos para corrigir causa observada no CI sem alterar toolchain global do colaborador.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Diagnóstico compara SDK efetivo e JVM launcher/daemon, rejeita properties ambíguos e usa SDK explícito; comandos Windows usam escaping próprio e a instalação chama a CLI Android diretamente para preservar os identificadores de pacotes. Governança de #54 preservada na atualização da branch.

@@ -10,7 +10,7 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 | Idioma | pt-BR primeiro; preparar i18n | Diferenciação no mercado brasileiro |
 | Plataformas | Android primeiro, iOS depois se viável | Publicação incremental |
 | Framework | React Native + Expo + TypeScript | Reuso de conhecimento e código |
-| Fundação GC-001/#11 | App único na raiz, Expo Router, TS estrito e UI/domínio/infraestrutura separados; sem workspaces desnecessários | Decisão do mantenedor para planejamento em 26/10/2026; ADR 0001, implementação não autorizada |
+| Fundação GC-001/#11 | App único na raiz, Expo Router, TS estrito e UI/domínio/infraestrutura separados; sem workspaces desnecessários | Decisão do mantenedor em 26/10/2026; ADR 0001, Apply autorizado e fundação implementada |
 | Modelo de operação | Offline-first, sem backend/login obrigatório | Privacidade e custo recorrente zero de infraestrutura |
 | Entradas | Microfone e USB quando compatível | Flexibilidade de prática |
 | Entrega | Produto completo em fases | Redução de risco |
@@ -64,12 +64,8 @@ O mantenedor aprovou a PR #52 e autorizou explicitamente archive antes do squash
 
 O mantenedor decidiu adotar app único na raiz para a proposta #11 e autorizou atualizar a issue para eliminar a exigência de monorepo. Stack: React Native + Expo + TypeScript estrito, Expo Router e separação UI/domínio/infraestrutura. Sem packages/workspaces sem necessidade real. Menor custo inicial para um produto/consumidor justifica a escolha; monorepo futuro exige consumidor concreto ou API/versionamento independente comprovado e novo ADR. Ver [ADR 0001](adr/0001-mobile-foundation.md) e [change](../openspec/changes/define-mobile-foundation/proposal.md).
 
-Aprovação limitada à arquitetura/planejamento e alinhamento da issue; não autoriza Apply, archive/sync ou merge. A especificação refinada segue em revisão na PR #53. SDK/toolchain exatos, dependências/licenças e viabilidade de áudio permanecem sujeitos às verificações planejadas. Nenhum app, build ou teste mobile entregue; tarefas de implementação abertas.
+A aprovação arquitetural foi seguida de autorização separada de Apply. SDK/toolchain, dependências e builds Windows/Linux foram verificados; áudio permanece fora desta entrega. Archive/sync/squash dependem da autorização aplicável, revisão e CI final.
 
-## Estado do Apply — 26/10/2026
+## Estado da fundação
 
-Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.
-
-## Fundação verificada — 27/10/2026
-
-As 20 tarefas de GC-001 foram verificadas na branch da PR #53: builds Windows/Linux e sete checks do run 40522664541 aprovados no head a556c82; smoke Android offline, fonte 200% e TalkBack manual confirmados. Evidências, matriz, riscos e limites em [guia mobile](development/MOBILE.md). Esse registro supera as pendências históricas de shell/build/acessibilidade acima. O aceite de vulnerabilidades é temporário e restrito ao tooling; nenhuma funcionalidade musical, publicação de loja, archive/sync ou merge foi realizada. Alterações documentais posteriores exigem CI do commit final e os gates de autorização permanecem.
+GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.

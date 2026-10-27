@@ -4,7 +4,7 @@
 
 Oferecer uma base Android reproduzível, offline e acessível para o desenvolvimento incremental do Riffando, com evidências distintas para qualidade JavaScript e execução nativa.
 
-Escopo, exclusões e CA-01…CA-06 canônicos em [proposal.md](../../proposal.md), reproduzidos na issue #11. Arquitetura aprovada para planejamento em 26/10/2026; Apply autorizado separadamente; cenários abaixo definem o contrato, cuja entrega deve ser verificada em tasks.md.
+Escopo, exclusões e critérios CA-01…CA-06 estão alinhados à issue #11. A arquitetura e a autorização de implementação são decisões separadas; a entrega exige evidências de instalação, testes, build, execução offline e acessibilidade.
 
 ## ADDED Requirements
 
@@ -12,15 +12,15 @@ Escopo, exclusões e CA-01…CA-06 canônicos em [proposal.md](../../proposal.md
 
 A fundação MUST manter um único aplicativo na raiz, com TypeScript estrito, navegação Expo Router e separação UI/domínio/infraestrutura, sem packages/workspaces sem consumidor real. A aprovação dessa arquitetura MUST NOT ser interpretada como autorização de implementação.
 
-#### Scenario: Estrutura da fundação futura
+#### Scenario: Estrutura da fundação
 
 - **WHEN** a estrutura entregue for conferida após implementação separadamente autorizada
 - **THEN** há um app na raiz e um lockfile, sem monorepo ou pacotes vazios, e as dependências entre camadas são verificáveis
 
 #### Scenario: Autorização restrita ao planejamento
 
-- **WHEN** a arquitetura e a issue são alinhadas nesta revisão
-- **THEN** as tarefas continuam abertas e nenhum Apply, código mobile, archive/sync ou merge é executado
+- **WHEN** somente a arquitetura e a issue são aprovadas, sem autorização de Apply
+- **THEN** a aprovação não inicia implementação nem autoriza archive/sync ou merge; cada etapa segue os gates e autorizações aplicáveis
 
 ### Requirement: Instalação e execução reproduzíveis
 

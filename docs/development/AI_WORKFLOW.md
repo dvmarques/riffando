@@ -4,7 +4,7 @@ As políticas de trabalho estão em [AGENTS.md](../../AGENTS.md). O contexto, as
 
 ## Instalar e atualizar
 
-Pré-requisitos: Git, Node.js 24 (`.nvmrc`), npm e Codex CLI/IDE ou Claude Code instalado e autenticado pelo desenvolvedor. OpenSpec **1.15.0** está fixado no manifest/lock; não há app Expo executável nesta etapa.
+Pré-requisitos: Git, Node.js 24 (`.nvmrc`), npm e Codex CLI/IDE ou Claude Code instalado e autenticado pelo desenvolvedor. OpenSpec **1.15.0** está fixado no manifest/lock; a fundação Expo está implementada; comandos mobile e versões exatas em [MOBILE.md](MOBILE.md).
 
 ```bash
 npm ci --ignore-scripts

@@ -1,13 +1,13 @@
 # ADR 0001 — Organização da fundação mobile
 
 - Data: 26/10/2026.
-- Status: **Arquitetura aprovada para esta proposta pelo mantenedor; implementação não autorizada**.
+- Status: **Aceito; implementação autorizada e verificada na PR #53**.
 - Referências: [GC-001/#11](https://github.com/dvmarques/riffando/issues/11), [PR #53](https://github.com/dvmarques/riffando/pull/53).
 - Change: [define-mobile-foundation](../../openspec/changes/define-mobile-foundation/proposal.md).
 
 ## Contexto
 
-Existe um produto mobile, documentação e tooling Node; nenhum aplicativo implementado. A issue originalmente exigia monorepo. Após a comparação das alternativas, o mantenedor autorizou app único para esta proposta e a atualização da issue (título, descrição, escopo e critérios) em 26/10/2026. Essa autorização não inicia Apply, instalação de dependências mobile, archive/sync ou merge.
+Na decisão original de 26/10/2026 havia documentação e tooling Node, ainda sem aplicativo. A issue originalmente exigia monorepo. Após a comparação das alternativas, o mantenedor autorizou app único para esta proposta e a atualização da issue (título, descrição, escopo e critérios) em 26/10/2026. A autorização inicial foi restrita ao planejamento; o Apply foi autorizado separadamente e concluído, sem ampliar o escopo funcional.
 
 ## Alternativas e justificativa
 
@@ -15,7 +15,7 @@ App único: um manifest/lock, app e src na raiz, módulos Expo locais apenas qua
 
 ## Decisão arquitetural
 
-Adotar app único na raiz, React Native + Expo + TypeScript estrito e Expo Router, com separação UI/features, domínio puro e infraestrutura. Ampliar o manifest de tooling existente preservando scripts/lock. Não criar packages/workspaces ou diretórios vazios sem necessidade real. A escolha está consolidada, não pendente; seleção exata de SDK/toolchain e bibliotecas/licenças continua sujeita às verificações do plano na implementação separadamente autorizada.
+Adotar app único na raiz, React Native + Expo + TypeScript estrito e Expo Router, com separação UI/features, domínio puro e infraestrutura. Ampliar o manifest de tooling existente preservando scripts/lock. Não criar packages/workspaces ou diretórios vazios sem necessidade real. A escolha está consolidada, não pendente; SDK/toolchain e bibliotecas/licenças selecionados e verificados constam no guia mobile.
 
 ## Critérios de migração futura
 
@@ -23,12 +23,8 @@ Reavaliar monorepo apenas com segundo consumidor concreto de domínio (outro app
 
 ## Consequências e validação
 
-Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Aprovação arquitetural não comprova instalação, testes ou build mobile. Todas as tarefas permanecem abertas; a PR #53 segue em revisão documental sem implementação.
+Issue e OpenSpec compartilham escopo/exclusões e CA-01…CA-06. O [design](../../openspec/changes/define-mobile-foundation/design.md) detalha diagnóstico Windows/Linux, política do gate, dependências, testes e evidências. Instalação, testes, builds Windows/Linux e acessibilidade têm evidências próprias; as 20 tarefas estão verificadas. A aprovação arquitetural não substitui esses resultados.
 
-## Estado do Apply — 26/10/2026
+## Estado da fundação
 
-Após aprovação do plano e autorização separada do mantenedor, GC-001 entrou em implementação na PR #53. Shell de início/informações, recuperação pt-BR, TS estrito, testes, diagnóstico e CI foram adicionados. Resultados e pendências atuais em [guia mobile](../development/MOBILE.md). Esta atualização supera as referências históricas acima a implementação não autorizada/não existente; não indica app completo. Somente tarefas verificadas são concluídas. Demais funcionalidades, inventário final/licenças, risco de transitivas e validação Android/acessibilidade permanecem fora de qualquer declaração de conclusão. Sem archive/merge.
-
-## Fundação verificada — 27/10/2026
-
-As 20 tarefas de GC-001 foram verificadas na branch da PR #53: builds Windows/Linux e sete checks do run 40522664541 aprovados no head a556c82; smoke Android offline, fonte 200% e TalkBack manual confirmados. Evidências, matriz, riscos e limites em [guia mobile](../development/MOBILE.md). Esse registro supera as pendências históricas de shell/build/acessibilidade acima. O aceite de vulnerabilidades é temporário e restrito ao tooling; nenhuma funcionalidade musical, publicação de loja, archive/sync ou merge foi realizada. Alterações documentais posteriores exigem CI do commit final e os gates de autorização permanecem.
+GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](../development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.
