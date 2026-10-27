@@ -8,7 +8,7 @@
 
 ## Estratégia escolhida: rollout em duas fases
 
-A **fase 1** (alternativa 1) é a única aplicada nesta change. Ela não altera jobs, nomes de checks, disparos, `if` de Draft, testes nem o agregador; só remove trabalho repetido. O tempo de parede do CI é ditado pelo job Windows (build Gradle), portanto o único ganho relevante e seguro é reaproveitar saídas de compilação entre execuções com o cache de build do Gradle, que é indexado pelo conteúdo das entradas de cada tarefa. A **fase 2** (alternativas 2 e 3) segue como proposta (seção "Propostas não aplicadas") e depende de aprovação específica do mantenedor.
+A **fase 1** (alternativa 1) é a única aplicada nesta change. Ela não altera jobs, nomes de checks, disparos, `if` de Draft, testes nem o agregador; reaproveita trabalho repetido e ajusta apenas o limite de tempo do job Windows. O tempo de parede do CI é ditado pelo job Windows (build Gradle), portanto o único ganho relevante e seguro é reaproveitar saídas de compilação entre execuções com o cache de build do Gradle, que é indexado pelo conteúdo das entradas de cada tarefa. A **fase 2** (alternativas 2 e 3) segue como proposta (seção "Propostas não aplicadas") e depende de aprovação específica do mantenedor.
 
 Justificativa da escolha: o repositório não tem proteção de branch nem rulesets (verificado abaixo), mas a política do projeto exige todos os gates em todos os PRs. Mudar a frequência dos builds seria mudança de política; reaproveitar saídas idênticas não é.
 
@@ -42,7 +42,8 @@ Consulta somente leitura em 27/10/2026: `gh api repos/dvmarques/riffando/branche
 - `scripts/build-android.mjs`: acrescenta `--build-cache` ao `assembleRelease` somente quando a variável `CI` está definida. A chave de cada entrada do cache de build do Gradle depende das entradas (fontes, dependências, versões e argumentos), portanto uma saída reaproveitada é idêntica à que seria compilada. Local e CI sem `CI` continuam sem cache de build.
 - `scripts/probe-android-compilation.mjs` **não** muda: a prova negativa altera `MainActivity.kt`, o que invalida a chave da tarefa Kotlin, e o compilador precisa rejeitar o código; essa prova segue sem cache.
 - `.github/workflows/ci.yml`: `NPM_CONFIG_AUDIT=false` e `NPM_CONFIG_FUND=false` no ambiente do workflow (sem consulta de auditoria/financiamento em `npm ci` e na instalação global do npm). A auditoria de dependências continua manual (`npm audit`).
-- Nenhuma ação, versão, permissão (`contents: read`), nome de job, `needs`, condição de Draft ou timeout foi alterada.
+- `.github/workflows/ci.yml`: `timeout-minutes` do job `windows` de 30 para 45. Sem esse ajuste o job era cancelado pelo limite em execuções frias: o run #37 (push na `main`) e a execução manual A desta change (`workflow_dispatch`, cache vazio) foram cancelados aos 30 min com `npm run build:android` ainda em andamento, o gate reprovou e nenhum cache de build do Windows era gravado (o passo de pós-processamento do `setup-gradle` só grava cache quando o job conclui). O aumento não reduz cobertura nem muda nomes; um job travado passa a levar até 15 min a mais para falhar.
+- Nenhuma ação, versão, permissão (`contents: read`), nome de job, `needs` ou condição de Draft foi alterada.
 - `tests/tooling/ci-workflow.test.mjs`: invariantes do workflow (permissões mínimas, condição de Draft em todo job, npm fixado em todo job que roda `npm ci`, cache de build apenas em CI e fora da prova negativa, builds nativos e smoke preservados).
 
 ### O que foi examinado e mantido
@@ -71,7 +72,6 @@ Nenhuma destas propostas foi aplicada nesta change; todas exigem decisão do man
 | Filtro por caminhos com fallback completo | Alterações só de documentação não compilam Android | Escapes por mudanças transversais (scripts, lockfile, workflow); exige classificador testado |
 | Windows compilar só `x86_64` (hoje `x86_64,arm64-v8a`) | Menos tarefas CMake no job crítico | Reduz cobertura de compilação arm64 no Windows (Linux continua com as duas ABIs) |
 | Dispensar `lintVitalRelease` no Windows | Ganho não medido | Remove uma verificação do build release |
-| `timeout-minutes` do job Windows de 30 para 40 | Evita cancelamento por tempo; o run #37 (push na `main`) foi cancelado aos 30m10s, com `build:android` em 25m51s | Jobs travados consomem mais tempo antes de falhar |
 | `cancel-in-progress` somente em PRs | Cada commit da `main` obtém gate completo e grava o cache de build usado por PRs | Mais execuções completas na `main` |
 | Fixar actions por SHA (hoje por tag principal: `@v6`, `@v4`, `@v5`, `@v3`, `@v2`) | Endurece a cadeia de suprimentos | Custo de manutenção; exige política de atualização |
 | ccache/cache de saída CMake | Potencial não medido | Chaves e caminhos específicos por toolchain; não testado |
@@ -90,6 +90,6 @@ A API `GET /repos/{repo}/actions/runs/{id}/jobs` fornece `started_at` e `complet
 | [#34](https://github.com/dvmarques/riffando/actions/runs/40529243530) | 25min55s | success | 24m49s | 12m43s + 3m53s | 18m54s | 26m02s | 44m56s |
 | [#36](https://github.com/dvmarques/riffando/actions/runs/40563957799) | 29min24s | success | 28m02s | 16m42s + 3m17s | 22m25s | 29m57s | 52m22s |
 
-Média de parede: **24min20s**; mediana: **25min55s**. Média da soma dos jobs: 45m07s. Os tempos de parede incluem agendamento. O job `windows` define o caminho crítico em todas as execuções; nele, `npm run build:android` levou 13m05s, 20m06s e 20m50s (`Build cache is disabled`, 851 de 851 tarefas executadas no run #36). Na `main`, o run [#37](https://github.com/dvmarques/riffando/actions/runs/40568519633) foi cancelado no limite de 30 min do job Windows (`build:android` com 25m51s) e o gate reprovou. Runs cancelados e Drafts skipped não entram na média.
+Média de parede: **24min20s**; mediana: **25min55s**. Média da soma dos jobs: 45m07s. Os tempos de parede incluem agendamento. O job `windows` define o caminho crítico em todas as execuções; nele, `npm run build:android` levou 13m05s, 20m06s e 20m50s (`Build cache is disabled`, 851 de 851 tarefas executadas no run #36). Na `main`, o run [#37](https://github.com/dvmarques/riffando/actions/runs/40568519633) foi cancelado no limite de 30 min do job Windows (com `npm run build:android` ainda em execução após 25m51s) e o gate reprovou. Runs cancelados e Drafts skipped não entram na média.
 
 Etapas medidas em `windows` (run #36): `npm install --global npm@12.2.1` 27 s, `npm ci` 64 s, `test:ci` 29 s, instalação do SDK 65 s, `setup-gradle` 32 s e 118 s no post, `build:android` 1250 s. Em `android` (mesmo run): `build:android` 816 s e prova de compilação 74 s (runs #31 e #34: 636 s e 603 s). Não há métricas de tokens disponíveis nesses runs.
