@@ -10,7 +10,7 @@ O CI #36 teve Windows ~28 min e Android Linux ~17 min, com validações repetida
 
 - Medir baseline de tempo de feedback e runner-minutos; tokens apenas quando houver métrica observável.
 - **Fase 1 (aplicada nesta change):** reaproveitar saídas de build e remover trabalho repetido sem alterar jobs, checks, disparos, gate nem cobertura (Linux, Windows, Android e smoke).
-- **Fase 2 (proposta, depende de aprovação):** execução incremental de validações por tipo de alteração e mudança de frequência dos builds. Documentada em `design.md`, sem aplicação.
+- **Fase 2 (proposta, depende de aprovação):** execução incremental de validações por tipo de alteração e mudança de frequência dos builds. Documentada em `design.md`, sem aplicação; acompanhamento na issue <https://github.com/dvmarques/riffando/issues/59>.
 - Melhorar seleção de contexto e revisões por risco nos agentes, mantendo `AGENTS.md` canônico e sem criar instruções concorrentes.
 
 ## Fora do escopo

@@ -78,7 +78,7 @@ Nenhuma destas propostas foi aplicada nesta change; todas exigem decisão do man
 
 ## Decisões pendentes
 
-Aprovação da política de CI da fase 2 (matriz mínima obrigatória por tipo de alteração e rollout) e de qualquer proposta acima.
+Aprovação da política de CI da fase 2 (matriz mínima obrigatória por tipo de alteração e rollout) e de qualquer proposta acima. O acompanhamento da fase 2 fica na issue [#59](https://github.com/dvmarques/riffando/issues/59) (Refs #57 e #58); esta change não tem tarefas da fase 2.
 
 ## Resultados medidos da fase 1
 
