@@ -8,7 +8,7 @@
 ## Implementação (após aprovação)
 - [ ] Implementar cache e reduzir instalações/validações redundantes sem perder cobertura.
 - [ ] Implementar seleção de CI com fallback seguro e gate agregado, conforme política aprovada.
-- [ ] Otimizar leitura de contexto, checkpoints e revisões incrementais dos agentes.
+- [x] Otimizar leitura de contexto, checkpoints e revisões incrementais dos agentes (guia AI_WORKFLOW.md, commit 6be8915).
 - [ ] Testar alterações docs-only, JS, nativas, workflow, lockfile e falhas intencionais.
 - [ ] Atualizar docs e CHANGELOG; executar npm run validate e validações nativas aplicáveis.
 
