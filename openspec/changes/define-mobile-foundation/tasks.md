@@ -4,7 +4,7 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 
 ## 1. Matriz e instalação (CA-01)
 
-- [ ] 1.1 Selecionar SDK estável suportado e matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK; registrar versões e licenças diretas/transitivas relevantes em guia de dependências, verificando fontes das versões e peers antes da adição.
+- [x] 1.1 Selecionar SDK estável suportado e matriz Expo/React/RN/TS/Node/npm/JDK/Android SDK; registrar versões e licenças diretas/transitivas relevantes em guia de dependências, verificando fontes das versões e peers antes da adição.
 - [x] 1.2 Ampliar manifest existente para app único e gerar lock sem perder tooling/override; verificar instalação limpa em Windows e Linux, diagnóstico Expo e ausência de React/RN nativos duplicados; documentar pré-requisitos e resolução de incompatibilidades.
 
 - [ ] 1.3 Criar check:env/check:env:android conforme design 3.1, com comandos Node/npm/JDK/sdkmanager/adb/Gradle/Expo e matriz validada; verificar código não zero e mensagens pt-BR para ausência, incompatibilidade, diagnóstico inconclusivo, instalação e compilação, sem aceitar licenças ou alterar toolchain automaticamente.
@@ -65,3 +65,5 @@ Implementação futura de GC-001/#11. **Apply autorizado pelo mantenedor; implem
 - 5.2: smoke do run 40412254969 aprovado em Android 16/API36 x86_64, offline/sem Metro, fonte 100%/200%, ida/volta Android/ação e reabertura. Capturas/XML/evidence.json revisados; TalkBack não executado.
 - 6.3/6.4: gate real aprovou conjunto completo do mesmo run; tabela de estados failure/cancelled/skipped/queued/ausência e artefato ausente tem testes. Primeira implementação não permite filtro; contrato/testes de filtros futuros permanece documentado no design, sem bypass de skip. Branch protection preservada.
 - Risco transitivo do tooling aceito temporariamente pelo mantenedor, conforme DEPENDENCIES.md, sem dispensar demais verificações.
+
+- 1.1: matriz exata/peers conferidos no lock e catálogos, frameworks MIT upstream e 42 pacotes do JS avaliados; obrigações e limites de redistribuição em DEPENDENCIES.md. Não equivale a inventário nativo integral ou autorização de publicação.

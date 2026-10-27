@@ -32,7 +32,7 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Fixed
 
-- `define-mobile-foundation` (Refs #11; PR #53) - Diagnóstico compara SDK efetivo e JVM launcher/daemon, rejeita properties ambíguos e usa SDK explícito; comandos Windows usam escaping próprio. Governança de #54 preservada na atualização da branch.
+- `define-mobile-foundation` (Refs #11; PR #53) - Diagnóstico compara SDK efetivo e JVM launcher/daemon, rejeita properties ambíguos e usa SDK explícito; comandos Windows usam escaping próprio e a instalação chama a CLI Android diretamente para preservar os identificadores de pacotes. Governança de #54 preservada na atualização da branch.
 
 - `setup-ai-development` (PR #52) - Comparação das integrações oficiais compatível com checkouts Windows CRLF, preservando a detecção de alterações reais no conteúdo.
 - `setup-ai-development` (PR #52) - Dependências de validação Markdown atualizadas para corrigir vulnerabilidades; markdownlint-cli2 0.24.0 e override limitado de KaTeX 0.18.2.

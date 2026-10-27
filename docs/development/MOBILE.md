@@ -61,3 +61,11 @@ A política de #56 foi preservada: jobs não executam em PR Draft; ready_for_rev
 ## Gates nativos complementares
 
 Windows executa check:env:gradle e build:android com APK próprio android-validation-windows. Linux, após build válido, injeta erro Kotlin somente no MainActivity.kt gerado, exige falha de compilação localizada, restaura os bytes originais em finally e recompila APK válido antes do upload. Log da prova fica no artefato; nenhuma regressão é commitada ou enviada ao usuário no APK. Cache Gradle usa o escopo isolado da PR. Confirmar resultados do SHA final antes de marcar essas tarefas.
+
+## Revisão visual e contraste parcial
+
+Capturas reais do smoke em 100% e 200% conferidas: conteúdo rolável, sem corte/colisão nas regiões capturadas e ações alcançadas pelo smoke. Contraste calculado das cores de produção: texto 10.71:1; texto raiz 12.03:1; título 16.65:1; ação 10.91:1; destaque 10.91:1. Action.tsx mantém mínimo de 52 dp e texto escalável. TalkBack/foco/anúncios permanece pendente: o mantenedor informou que validará no emulador; isso ainda não é confirmação de aprovação.
+
+## Correção da instalação Windows
+
+O run 40442508770 rejeitou corretamente NDK ausente no Windows. O shim sdkmanager.bat da revisão 23.0 fragmentou identificadores com ponto e vírgula (log: Package ndk not found), apesar de retornar sucesso na instalação. O job passa a chamar android.exe diretamente, com raiz explícita e caminhos com barras, conforme [android sdk install](https://developer.android.com/tools/agents/android-cli/commands/sdk_install). O diagnóstico continua obrigatório e não foi relaxado; resultado positivo depende da nova execução.

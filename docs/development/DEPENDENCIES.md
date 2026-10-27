@@ -12,7 +12,7 @@ Runtime novo declara MIT; TypeScript usa Apache-2.0 e cross-spawn (portabilidade
 
 ## Risco identificado em 26/10/2026
 
-npm audit reportou cinco entradas high propagadas do CLI Expo, de node-forge 1.4.0 e zod 3. Registro consultado não oferece patch forge superior a 1.4.0; correção Zod é major 4, mas CLI exige major 3. Não aplicar audit fix --force, downgrade para SDK 54 ou override major incompatível. Shell não processa esses certificados/dados externos; risco do tooling não está eliminado. Remediação ou aprovação específica do risco permanece pendente antes de declarar conclusão.
+npm audit reportou cinco entradas high propagadas do CLI Expo, de node-forge 1.4.0 e zod 3. Registro consultado não oferece patch forge superior a 1.4.0; correção Zod é major 4, mas CLI exige major 3. Não aplicar audit fix --force, downgrade para SDK 54 ou override major incompatível. Shell não processa esses certificados/dados externos; risco do tooling não está eliminado. O aceite temporário específico está registrado abaixo; reavaliar a remediação conforme esse aceite.
 
 [Advisory forge](https://github.com/advisories/GHSA-86w9-cpqp-85rv), [advisory Zod](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5). Conferir LICENSE/NOTICE dos pacotes instalados. Expo doctor 20/20 não é auditoria de segurança/licença.
 
@@ -25,3 +25,11 @@ Exportação real com source maps (expo export --platform android --source-maps 
 ## Aceite temporário do risco de tooling
 
 O mantenedor aceitou explicitamente nesta conversa manter temporariamente os avisos transitivos do CLI Expo. Escopo: tooling de desenvolvimento/build; não autoriza novos usos desses módulos no produto, exposição pública do servidor, supressão de auditoria ou dispensa de Android/TalkBack. Dev server limitado a localhost. Reavaliar ao atualizar SDK/transitivas e antes de publicação de loja; registrar remediação quando houver patch compatível.
+
+## Avaliação da matriz e obrigações relevantes
+
+A seleção de versões, peers e licenças relevantes da tarefa 1.1 foi avaliada: matriz exata em config/toolchain.json/lock, instalação limpa e Expo doctor aprovados; compilação Linux e APK offline comprovados no run 40412254969. A validação nativa Windows permanece uma entrega separada, ainda pendente.
+
+Os frameworks Expo/Router e React Native usam MIT: [licença upstream Expo SDK 58](https://github.com/expo/expo/blob/sdk-58/LICENSE) e [licença React Native 0.88.0](https://github.com/facebook/react-native/blob/v0.88.0/LICENSE). A ausência de LICENSE no tarball do Router foi confrontada com o upstream correspondente. O inventário do JavaScript identifica os 42 pacotes efetivamente mapeados e seus arquivos de licença. Manter copyright/licenças MIT/ISC/Apache/BSD e NOTICE aplicáveis ao redistribuir; MPL exige preservar suas condições para componentes cobertos, e CC-BY exige atribuição aos dados cobertos. Essas transitivas de transformação não foram encontradas no JavaScript exportado.
+
+A avaliação desta fundação não autoriza publicação de loja nem afirma um inventário nativo integral do APK. Antes de distribuição pública, consolidar os avisos das dependências efetivamente distribuídas, inclusive nativas, conforme suas licenças. Essa limitação não é apresentada como risco aceito de licenciamento nem como auditoria jurídica concluída.
