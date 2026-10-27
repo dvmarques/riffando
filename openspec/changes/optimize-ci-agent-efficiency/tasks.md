@@ -13,11 +13,6 @@
 - [x] Testar o gate (`skipped`/`cancelled`/`failure`/ausente) e as invariantes do workflow (`tests/tooling/ci-workflow.test.mjs`).
 - [x] Atualizar docs e CHANGELOG; executar `npm run validate` e `openspec validate --all --strict --no-interactive`.
 
-## Fase 2: proposta (aguarda aprovação do mantenedor)
-
-- [ ] Selecionar CI por tipo de alteração com fallback completo e gate agregado aceitando `skipped` somente por política aprovada.
-- [ ] Testar alterações docs-only, JS, nativas, workflow e lockfile no seletor aprovado.
-
 ## Verificação
 
 - [x] Comparar baseline e resultado, registrar limitações e evidências na PR: runs A, B e C em `design.md`; economia de tempo indicativa, não comprovada.
