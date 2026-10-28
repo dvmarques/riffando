@@ -29,6 +29,7 @@ export default function AudioDiagnosticsScreen() {
   const [config, setConfig] = useState<CaptureConfig | null>(null);
   const [metrics, setMetrics] = useState<CaptureMetrics | null>(null);
   const operation = useRef(0);
+  const awaitingPermission = useRef(false);
   const mounted = useRef(true);
   const busy = status === 'starting' || status === 'requestingPermission' || status === 'stopping';
 
@@ -39,6 +40,7 @@ export default function AudioDiagnosticsScreen() {
       await nativeCapture.stop();
       if (mounted.current) {
         setMetrics(null);
+        setConfig(null);
         setStatus('idle');
       }
     } catch {
@@ -71,7 +73,7 @@ export default function AudioDiagnosticsScreen() {
     }
 
     const appStateListener = AppState.addEventListener('change', (state) => {
-      if (state !== 'active') {
+      if (state !== 'active' && !awaitingPermission.current) {
         operation.current++;
         void nativeCapture.stop().catch(() => {});
         if (mounted.current) {
@@ -103,8 +105,14 @@ export default function AudioDiagnosticsScreen() {
     }
     try {
       setStatus('requestingPermission');
-      const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
-      if (!mounted.current || id !== operation.current) return;
+      awaitingPermission.current = true;
+      let granted;
+      try {
+        granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
+      } finally {
+        awaitingPermission.current = false;
+      }
+      if (!mounted.current || id !== operation.current || AppState.currentState !== 'active') return;
       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
         setStatus('error');
         setError('O microfone precisa de autorização para iniciar a captura.');
