@@ -68,4 +68,4 @@ Sem salvar ou transmitir PCM nem introduzir histórico/SQLite, rede, telemetria 
 
 CA-01 permissões; CA-02 captura nativa; CA-03 buffers/cleanup; CA-04 timestamp; CA-05 UI; CA-06 ciclo de vida; CA-07 offline/privacidade/CI; CA-08 aparelho físico. As tarefas em [tasks.md](tasks.md) permanecem abertas até execução comprovada.
 
-O refinamento e esta change foram solicitados; **implementação (Apply), archive/sync e merge não estão autorizados**. Após aprovação da proposta, executar em branch isolada e seguir Verify, review, CI e gates de `AGENTS.md`.
+O refinamento e a proposta foram solicitados, e posteriormente o mantenedor autorizou **Apply em 28/10/2026**. O trabalho está na PR #60, em branch isolada. A implementação está em validação e não deve ser confundida com a comprovação de captura/latência no Android físico. **Archive/sync e merge não autorizados**; seguem Verify, revisão, CI e gates de `AGENTS.md`.

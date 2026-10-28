@@ -1,10 +1,10 @@
 # Tasks
 
-GC-013 / issue #23 — `implement-native-pcm-capture`. **Planejamento preparado; Apply ainda não autorizado.** Nenhuma tarefa abaixo foi executada. Referências CA-01…CA-08 em [proposal.md](proposal.md); gates de PR, archive e squash ficam fora deste checklist, conforme AGENTS.md.
+GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/10/2026; implementação parcial na PR #60.** Tarefas continuam abertas quando ainda exigem testes ou evidência física. Não há CI, OpenSpec Verify ou execução em Android físico comprovados neste registro. Referências CA-01…CA-08 em [proposal.md](proposal.md); gates de PR, archive e squash ficam fora deste checklist, conforme AGENTS.md.
 
 ## 1. Configuração, contrato e escolha de API (CA-01, CA-02, CA-04)
 
-- [ ] 1.1 Conferir SDK/Expo Modules API e requisitos de `AudioRecord` no Android alvo; registrar alternativa Kotlin versus biblioteca/Oboe, licenças, dependências, versão e consequências para iOS.
+- [x] 1.1 Conferir SDK/Expo Modules API e requisitos de `AudioRecord` no Android alvo; registrar alternativa Kotlin versus biblioteca/Oboe, licenças, dependências, versão e consequências para iOS. Evidência: docs/development/AUDIO_CAPTURE.md, design.md, documentação oficial Expo/Android; sem biblioteca adicional.
 - [ ] 1.2 Implementar configuração Expo regenerável de `RECORD_AUDIO`, removendo apenas seu bloqueio atual; verificar permissão no manifest do APK e que não houve inclusão de permissões amplas; documentar consentimento e revogação.
 - [ ] 1.3 Definir tipos TypeScript de `CaptureConfig`, `CaptureStatus`, `CaptureMetrics` e erros categorizados, mantendo fronteiras de UI/infraestrutura e sem APIs de USB/pitch não usadas.
 

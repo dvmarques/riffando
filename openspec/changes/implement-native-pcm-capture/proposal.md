@@ -56,4 +56,4 @@ A estratégia Kotlin/AudioRecord e o formato inicial são **decisões propostas 
 
 ## Aprovação e estado
 
-Esta change formaliza o **Propose** autorizado em 28/10/2026 (refinamento da issue e preparação de especificações). **Apply não está autorizado** nesta etapa: não adicionar código nativo/dependências nem alterar `app.json` até aprovação separada. Archive/sync, PR Ready for review e merge por squash dependem dos gates e autorizações de `AGENTS.md`.
+Esta change formalizou o **Propose** em 28/10/2026. Posteriormente, o mantenedor autorizou **Apply da GC-013** nesta conversa. A PR #60 recebeu código Kotlin, ponte TypeScript, tela de diagnóstico, configuração de `RECORD_AUDIO`, testes iniciais e documentação. Esses commits não constituem comprovação de compilação/funcionamento físico. Testes, Verify, revisão, CI e evidências Android físico são pendências obrigatórias; **archive/sync e merge por squash permanecem não autorizados**.
