@@ -5,7 +5,7 @@ export const messages = {
   welcome: 'Seu próximo riff começa aqui.',
   introduction: 'Estamos preparando um espaço para aprender e praticar guitarra, no seu ritmo.',
   unavailableTitle: 'Ferramentas em preparação',
-  unavailable: 'Afinador, metrônomo e exercícios ainda não estão disponíveis. Nenhuma medição ou avaliação é realizada nesta versão.',
+  unavailable: 'Afinador, metrônomo e exercícios ainda não estão disponíveis. O diagnóstico técnico pode medir níveis de áudio, mas não reconhece notas nem avalia sua prática.',
   aboutAction: 'Conhecer a fundação',
   audioAction: 'Testar captura de áudio',
   aboutTitle: 'Sobre esta versão',
