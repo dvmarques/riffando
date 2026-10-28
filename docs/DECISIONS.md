@@ -38,7 +38,7 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 - Avaliar compatibilidade de licenças das dependências e autorização de contribuições para eventual licença comercial (CLA).
 - Criar GitHub Project, milestones, labels e relações de dependência.
 - Determinar critérios objetivos para MVP e publicação.
-- Decidir quando iniciar a implementação; **não iniciada**.
+- Prosseguir com a validação física da GC-013 antes de decidir sua conclusão; as demais funcionalidades continuam sujeitas a refinamento e autorização.
 
 ## Como registrar uma nova decisão
 

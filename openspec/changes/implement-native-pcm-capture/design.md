@@ -31,7 +31,7 @@ Contrato **conceitual**, detalhar tipos no Apply:
 - `getCaptureStatus(): Promise<CaptureStatus>` — `idle | requestingPermission | starting | recording | stopping | error`.
 - `onCaptureMetrics(listener): Subscription` — entrega estatísticas com taxa limitada (ponto de partida até 5 eventos/s), permite cancelar na desmontagem.
 
-As métricas incluem sample rate/encoding/channels efetivos, tamanho de buffer, frames observados, RMS em dBFS (não volume acústico calibrado), pico e proximidade de saturação. Reportar somente contagens sustentadas por leituras/códigos de erro e descontinuidades detectáveis; uma métrica de “buffers perdidos” exata requer comprovação específica. `AudioTimestamp` deve incluir flag `hardware | monotonic-derived | unavailable` e epoch/observação apropriados. Timestamps monotônicos não demonstram por si só latência de entrada ponta a ponta.
+As métricas incluem sample rate/encoding/channels efetivos, tamanho de buffer, frames observados, RMS em dBFS (não volume acústico calibrado), pico e proximidade de saturação. Reportar somente contagens sustentadas por leituras/códigos de erro e descontinuidades detectáveis; uma métrica de “buffers perdidos” exata requer comprovação específica. `AudioTimestamp` expõe `timestampOrigin: audio-record | unavailable` e o instante monotônico de observação. Um resultado do `AudioRecord` não deve ser tratado como prova independente de timestamp de hardware. Timestamps monotônicos não demonstram por si só latência de entrada ponta a ponta.
 
 **Fluxo:** hardware → `AudioRecord.read` em worker dedicado → buffer bounded → medição de amplitude/frames no Kotlin → snapshot de métricas limitado → bridge Expo → UI. O JS não recebe array PCM por callback periódico. Não criar domínio musical vazio, DI container ou singleton React genérico sem consumidor real.
 
@@ -39,7 +39,7 @@ As métricas incluem sample rate/encoding/channels efetivos, tamanho de buffer, 
 
 Preferir PCM 16-bit mono e tentar 48 kHz; negociar fallback compatível após observar capacidades/erros de inicialização, registrando solicitado e efetivo. `AudioRecord.getMinBufferSize` é referência mínima, não garantia de latência; dimensionar buffer para estabilidade, fazer leitura contínua fora da UI e medir duração/erros observáveis. Testar `UNPROCESSED` somente quando `AudioManager.PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED` ou teste explícito indicar suporte confiável; usar `MIC` de fallback. Não assumir que uma fonte desativa todo processamento em cada OEM. Não exigir 48 kHz se o dispositivo negociar outra frequência.
 
-Usar `SystemClock.elapsedRealtimeNanos` como base monotônica para eventos internos e `AudioRecord.getTimestamp(..., TIMEBASE_MONOTONIC)` quando a plataforma fornecer frames/timestamp válidos; documentar limites no startup e após reconfigurações. Relacionar contagem de frames e timestamp de captura, sem apresentar “latência de áudio” calculada apenas por subtração de tempos sem referência externa. O contrato futuro preserva possibilidade de processador DSP e iOS.
+Usar `System.nanoTime` como base monotônica para eventos internos e `AudioRecord.getTimestamp(..., TIMEBASE_MONOTONIC)` quando a plataforma fornecer frames/timestamp válidos; documentar limites no startup e após reconfigurações. Relacionar contagem de frames e timestamp de captura, sem apresentar “latência de áudio” calculada apenas por subtração de tempos sem referência externa. O contrato futuro preserva possibilidade de processador DSP e iOS.
 
 ### 4. Estados, erros e privacidade
 

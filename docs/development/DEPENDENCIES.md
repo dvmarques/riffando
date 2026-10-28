@@ -36,7 +36,6 @@ A avaliação desta fundação não autoriza publicação de loja nem afirma um 
 
 O source map identifica pretty-format 29.7.0 e sua cópia aninhada react-is 18.3.1; o inventário registra a versão do caminho efetivamente mapeado, não a cópia react-is 19.3.1 da raiz.
 
-
 ## Atualização experimental para GC-013 — 28/10/2026
 
 Patches sincronizados com o catálogo do Expo SDK 58: Expo 58.0.21, expo-constants 58.0.14, expo-linking 58.0.15, expo-dev-client 58.0.17, expo-router 58.0.28 e jest-expo 58.0.13; demais dependências transitivas resolvidas por npm 12.2.1 e registradas em package-lock.json. Fonte: [run de regeneração 40773765389](https://github.com/dvmarques/riffando/actions/runs/40773765389). O workflow temporário sem permissão de escrita foi removido. JUnit 4.13.2 (EPL-1.0 ou alternativamente CPL-1.0 para JUnit 4; confirmar avisos da distribuição) foi incluído **somente para testes locais Gradle** da matemática PCM; não deve entrar no runtime do APK. Licenças e NOTICE nativos devem ser consolidados antes de publicação pública.

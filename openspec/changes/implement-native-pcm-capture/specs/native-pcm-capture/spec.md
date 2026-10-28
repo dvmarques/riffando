@@ -45,9 +45,9 @@ A captura MUST usar worker nativo e buffers limitados, MUST expor início/parada
 
 ### Requirement: Tempo monotônico e qualidade de timestamp explícita
 
-O módulo MUST usar referência temporal monotônica para eventos de captura e MUST distinguir timestamps de hardware disponíveis, derivações/estimativas e indisponibilidade; MUST NOT afirmar medição de latência ponta a ponta sem método independente.
+O módulo MUST usar referência temporal monotônica para eventos de captura e MUST distinguir timestamps válidos retornados por `AudioRecord` de indisponibilidade; MUST NOT chamar esse retorno de prova independente de timestamp de hardware nem afirmar medição de latência ponta a ponta sem método externo.
 
-#### Scenario: Timestamp de hardware indisponível
+#### Scenario: Timestamp AudioRecord indisponível
 
 - **WHEN** o Android não fornece `AudioTimestamp` válido
 - **THEN** o diagnóstico informa a limitação e, se houver derivação, distingue sua origem sem inventar tempo de captura de hardware

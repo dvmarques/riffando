@@ -28,6 +28,7 @@ export default function AudioDiagnosticsScreen() {
   const router = useRouter();
   const [status, setStatus] = useState<CaptureStatus>('idle');
   const [error, setError] = useState('');
+  const [moduleUnavailable, setModuleUnavailable] = useState(false);
   const [config, setConfig] = useState<CaptureConfig | null>(null);
   const [metrics, setMetrics] = useState<CaptureMetrics | null>(null);
   const operation = useRef(0);
@@ -38,7 +39,7 @@ export default function AudioDiagnosticsScreen() {
 
   const stop = useCallback(async () => {
     operation.current++;
-    startPending.current = false;
+    // Manter o bloqueio do start pendente até a promessa antiga finalizar.
     setStatus('stopping');
     try {
       await nativeCapture.stop();
@@ -61,6 +62,7 @@ export default function AudioDiagnosticsScreen() {
     let metricsSubscription: { remove: () => void } | undefined;
     let errorSubscription: { remove: () => void } | undefined;
     try {
+      if (Platform.OS !== 'android') throw new Error('PLATFORM_UNSUPPORTED');
       metricsSubscription = nativeCapture.onMetrics((value) => {
         if (mounted.current) setMetrics(value);
       });
@@ -77,7 +79,10 @@ export default function AudioDiagnosticsScreen() {
       // A falha é propagada fora da fase síncrona de configuração do efeito.
       void Promise.resolve().then(() => {
         if (mounted.current) {
-          setError('O módulo nativo exige o aplicativo Android compilado, não o Expo Go.');
+          setModuleUnavailable(true);
+          setError(Platform.OS === 'android'
+            ? 'O módulo nativo exige o aplicativo Android compilado, não o Expo Go.'
+            : 'O diagnóstico de áudio está disponível apenas no Android.');
           setStatus('error');
         }
       });
@@ -86,7 +91,6 @@ export default function AudioDiagnosticsScreen() {
     const appStateListener = AppState.addEventListener('change', (state) => {
       if (state !== 'active' && !awaitingPermission.current) {
         operation.current++;
-        startPending.current = false;
         void nativeCapture.stop().catch(() => {});
         if (mounted.current) {
           setStatus('idle');
@@ -106,7 +110,7 @@ export default function AudioDiagnosticsScreen() {
   }, []);
 
   const start = async () => {
-    if (busy || status === 'recording' || startPending.current) return;
+    if (moduleUnavailable || busy || status === 'recording' || startPending.current) return;
     startPending.current = true;
     const id = ++operation.current;
     setError('');
@@ -195,7 +199,9 @@ export default function AudioDiagnosticsScreen() {
           dBFS indica nível digital, não volume acústico nem latência. Não há medição exata de buffers perdidos.
         </Text>
       </View>
-      {status === 'recording' ? (
+      {moduleUnavailable ? (
+        <Text style={styles.note}>A captura não está disponível nesta instalação.</Text>
+      ) : status === 'recording' ? (
         <Action label="Parar captura" onPress={() => { void stop(); }} />
       ) : !busy ? (
         <Action label="Iniciar captura" onPress={() => { void start(); }} />

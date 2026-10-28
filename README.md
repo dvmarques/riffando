@@ -61,7 +61,7 @@ As funcionalidades serão desenvolvidas **por fases**; esta lista representa a v
 4. Treinador inteligente e indicadores de progresso.
 5. Estúdio de áudio local, acessibilidade, testes e publicação Android.
 
-O roadmap e as estimativas serão refinados antes do início da implementação.
+O roadmap e as estimativas serão refinados conforme a implementação e as validações evoluírem.
 
 ## Licenciamento
 

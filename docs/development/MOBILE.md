@@ -80,7 +80,6 @@ O run 40562313720 rejeitou expo 58.0.19, dev-client 58.0.15 e router 58.0.26 ap�
 
 O inventário JS atualizado cobre 44 pacotes/versões e 1.130 fontes; licenças declaradas MIT/ISC e fontes de avisos ausentes em DEPENDENCIES.md. Auditoria atual: três avisos high propagados de Zod 3 no tooling, dentro do aceite temporário anterior; node-forge atualizado para 1.4.2 deixou de constar no audit. O teste manual TalkBack documentado acima usou o APK anterior aos patches; componentes da interface não foram alterados, e as verificações automatizadas/build do novo head precisam passar. Esse registro não atribui novo teste manual ao APK atualizado.
 
-
 ## GC-013 — Atualização de patches e validação nativa (28/10/2026)
 
 Na branch da [PR #60](https://github.com/dvmarques/riffando/pull/60), o Expo SDK 58 foi atualizado para **58.0.21**, constants **58.0.14**, dev-client **58.0.17**, linking **58.0.15**, router **58.0.28** e jest-expo **58.0.13**, conforme o catálogo exigido no run 40772160118. O lockfile foi **regenerado com npm 12.2.1 em Actions**, sem `--force` e sem suprimir `check:expo`, no [run 40773765389](https://github.com/dvmarques/riffando/actions/runs/40773765389); o workflow temporário foi removido. As demais versões-base, inclusive RN 0.88.0, permanecem conforme `config/toolchain.json` e `package-lock.json`.

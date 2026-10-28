@@ -1,5 +1,5 @@
 import { renderRouter, screen } from 'expo-router/testing-library';
-import { userEvent, waitFor } from '@testing-library/react-native';
+import { act, userEvent, waitFor } from '@testing-library/react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 import Layout from '../../app/_layout';
 import Home from '../../app/index';
@@ -66,4 +66,29 @@ it('inicia somente após permissão concedida e permite parar', async () => {
   } finally {
     Object.defineProperty(Platform, 'OS', { configurable: true, value: originalOS });
   }
+});
+
+it('não solicita microfone quando módulo nativo não está instalado', async () => {
+  const originalOS = Platform.OS;
+  Object.defineProperty(Platform, 'OS', { configurable: true, value: 'android' });
+  jest.mocked(nativeCapture.onMetrics).mockImplementationOnce(() => { throw new Error('missing native'); });
+  const permission = jest.spyOn(PermissionsAndroid, 'request');
+  try {
+    await renderRouter({ _layout: Layout, index: Home, 'diagnostico-audio': Audio }, { initialUrl: '/diagnostico-audio' });
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/módulo nativo exige/));
+    expect(screen.queryByRole('button', { name: 'Iniciar captura' })).toBeNull();
+    expect(permission).not.toHaveBeenCalled();
+  } finally {
+    Object.defineProperty(Platform, 'OS', { configurable: true, value: originalOS });
+  }
+});
+
+it('mostra erro nativo sem inventar uma medição', async () => {
+  await renderRouter({ _layout: Layout, index: Home, 'diagnostico-audio': Audio }, { initialUrl: '/diagnostico-audio' });
+  const listener = jest.mocked(nativeCapture.onError).mock.calls[0]?.[0];
+  expect(listener).toBeDefined();
+  await act(async () => { listener?.({ code: 'AUDIO_READ_FAILED' }); });
+  expect(screen.getByRole('alert')).toHaveTextContent('A leitura do microfone foi interrompida.');
+  expect(screen.getByText('Captura indisponível')).toBeVisible();
+  expect(screen.getByText('RMS: — dBFS')).toBeVisible();
 });
