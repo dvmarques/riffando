@@ -19,6 +19,7 @@ jest.mock('@/infrastructure/audio/nativeCapture', () => ({
   },
 }));
 
+beforeEach(() => jest.clearAllMocks());
 afterEach(() => jest.restoreAllMocks());
 
 it('navega ao diagnóstico sem solicitar microfone na inicialização', async () => {
@@ -39,9 +40,29 @@ it('nega permissão sem iniciar microfone', async () => {
   try {
     await renderRouter({ _layout: Layout, index: Home, 'diagnostico-audio': Audio }, { initialUrl: '/diagnostico-audio' });
     await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
-    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('O microfone precisa de autorização'));
+    await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/O microfone precisa de autorização/));
     expect(request).toHaveBeenCalledWith(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
     expect(nativeCapture.start).not.toHaveBeenCalled();
+  } finally {
+    Object.defineProperty(Platform, 'OS', { configurable: true, value: originalOS });
+  }
+});
+
+it('inicia somente após permissão concedida e permite parar', async () => {
+  const originalOS = Platform.OS;
+  Object.defineProperty(Platform, 'OS', { configurable: true, value: 'android' });
+  const request = jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(PermissionsAndroid.RESULTS.GRANTED);
+  try {
+    await renderRouter({ _layout: Layout, index: Home, 'diagnostico-audio': Audio }, { initialUrl: '/diagnostico-audio' });
+    expect(nativeCapture.start).not.toHaveBeenCalled();
+    await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+    await waitFor(() => expect(screen.getByText('Captura ativa')).toBeVisible());
+    expect(request).toHaveBeenCalledTimes(1);
+    expect(nativeCapture.start).toHaveBeenCalledTimes(1);
+    expect(screen.getByText('Frequência: 48000 Hz')).toBeVisible();
+    await userEvent.setup().press(screen.getByRole('button', { name: 'Parar captura' }));
+    await waitFor(() => expect(screen.getByText('Captura parada')).toBeVisible());
+    expect(nativeCapture.stop).toHaveBeenCalled();
   } finally {
     Object.defineProperty(Platform, 'OS', { configurable: true, value: originalOS });
   }
