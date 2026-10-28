@@ -68,8 +68,13 @@ export default function AudioDiagnosticsScreen() {
         }
       });
     } catch {
-      setError('O módulo nativo exige o aplicativo Android compilado, não o Expo Go.');
-      setStatus('error');
+      // A falha é propagada fora da fase síncrona de configuração do efeito.
+      void Promise.resolve().then(() => {
+        if (mounted.current) {
+          setError('O módulo nativo exige o aplicativo Android compilado, não o Expo Go.');
+          setStatus('error');
+        }
+      });
     }
 
     const appStateListener = AppState.addEventListener('change', (state) => {
@@ -84,7 +89,6 @@ export default function AudioDiagnosticsScreen() {
     });
     return () => {
       mounted.current = false;
-      operation.current++;
       metricsSubscription?.remove();
       errorSubscription?.remove();
       appStateListener.remove();
