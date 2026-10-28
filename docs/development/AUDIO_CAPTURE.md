@@ -22,6 +22,7 @@ npm run validate
 npm run check:expo
 npm run check:env:android
 npm run build:android
+cd android && ./gradlew :riffando-audio:testDebugUnitTest && node ../scripts/verify-pcm-junit.mjs
 ```
 
 `build:android` gera APK interno com JS embarcado. Instalar em Android físico; usar Expo Go não valida módulos locais. Nunca inserir credenciais de distribuição nem publicar APK de validação como release. O CLI/SDK não deve ser atualizado automaticamente para resolver problemas desta change.
