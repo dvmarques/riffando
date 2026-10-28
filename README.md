@@ -77,6 +77,10 @@ Contribuições não comerciais e propostas de melhorias são bem-vindas. Antes 
 
 O projeto está em fase inicial. Informações de compatibilidade de dispositivos, precisão de análise musical e datas de lançamento só serão confirmadas após testes.
 
+## Diagnóstico experimental de áudio (GC-013)
+
+A captura PCM nativa Android está em implementação na [PR #60](https://github.com/dvmarques/riffando/pull/60) e **não foi validada em aparelho físico nem integrada à main**. Consulte o [guia de captura de áudio](docs/development/AUDIO_CAPTURE.md) para permissões, testes e limitações. Não confundir essa implementação em branch com afinador funcional.
+
 ## Executar a fundação
 
 Consulte [guia mobile](docs/development/MOBILE.md) para versões, instalação, testes, development build e APK interno Android, e [dependências/riscos](docs/development/DEPENDENCIES.md). Builds Windows/Linux e smoke Android validados; testes/evidências no guia. Sem release publicada.
