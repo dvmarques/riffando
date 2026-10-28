@@ -30,7 +30,7 @@ npm start
 npm run build:android
 ```
 
-android executa a CLI Expo para development build; start inicia Metro em localhost. build:android faz prebuild, verifica SDK/JVM Gradle e assembleRelease, copiando artifacts/riffando-validation.apk com JS embarcado e assinatura debug interna. Sem credenciais de loja; não publicar esse APK. CNG/config/plugins são fonte, android/ios gerados são ignorados. CI parte de checkout sem android para provar geração limpa. Em árvore local existente, preservar alterações antes de qualquer prebuild --clean; nunca apagar trabalho do colaborador. Rollback é reverter os commits da fundação; não há dados reais ou migração nesta fase. iOS executável exige macOS/Xcode e fica fora da entrega.
+android executa a CLI Expo para development build; start inicia Metro em localhost. build:android faz prebuild, verifica SDK/JVM Gradle e assembleRelease, copiando artifacts/riffando-validation.apk com JS embarcado e assinatura debug interna. Sem credenciais de loja; não publicar esse APK. CNG/config/plugins são fonte, android/ios gerados são ignorados. CI parte de checkout sem android para provar geração limpa. No CI, build:android habilita o cache de build do Gradle (--build-cache, só com CI=true); a prova negativa de compilação Kotlin não o usa. Em árvore local existente, preservar alterações antes de qualquer prebuild --clean; nunca apagar trabalho do colaborador. Rollback é reverter os commits da fundação; não há dados reais ou migração nesta fase. iOS executável exige macOS/Xcode e fica fora da entrega.
 
 ## Diagnóstico e troubleshooting
 
