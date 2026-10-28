@@ -44,7 +44,7 @@ const evidence = { sha: process.env.GITHUB_SHA || 'local', package: pkg, android
 try {
   adb('install', '-r', 'artifacts/riffando-validation.apk');
   const permissions = adb('shell', 'dumpsys', 'package', pkg);
-  if (permissions.includes('android.permission.RECORD_AUDIO')) throw new Error('Permissão de áudio inesperada no APK');
+  if (!permissions.includes('android.permission.RECORD_AUDIO')) throw new Error('Permissão de microfone ausente no APK');
   adb('shell', 'cmd', 'connectivity', 'airplane-mode', 'enable');
   adb('shell', 'svc', 'wifi', 'disable');
   adb('shell', 'svc', 'data', 'disable');
@@ -54,6 +54,9 @@ try {
     adb('shell', 'am', 'force-stop', pkg);
     adb('shell', 'monkey', '-p', pkg, '-c', 'android.intent.category.LAUNCHER', '1');
     await waitText('Riffando', 'inicio-' + scale);
+    if (!adb('shell', 'dumpsys', 'package', pkg).includes('android.permission.RECORD_AUDIO: granted=false')) {
+      throw new Error('A fundação solicitou ou recebeu microfone sem ação do usuário');
+    }
     await tap('Conhecer a fundação');
     await waitText('Sobre esta versão', 'informacoes-' + scale);
     adb('shell', 'input', 'keyevent', '4');

@@ -11,6 +11,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
+- `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
+
 - `issue-54-adaptive-ai-workflow` (issue #54) - Fluxo adaptativo Fast/Standard/Critical, mapa de contexto, política de modelos e qualidade, revisores consultivos e validação de skills próprias entre Codex e Claude, sem app implementado.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Apply autorizado: shell Expo com rotas/erro pt-BR, TS estrito, testes, diagnósticos e CI Android/emulador. Em validação, sem funcionalidades musicais.
