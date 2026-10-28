@@ -23,6 +23,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `implement-native-pcm-capture` (Refs #23; PR #60) - Patches da matriz Expo 58 e lockfile npm sincronizados em runner reproduzível, testes unitários Kotlin integrados ao CI e revisão da liberação segura da captura.
+
 - `optimize-ci-agent-efficiency` (issue #57; PR #58) - Cache de build Gradle somente no CI (`--build-cache`, prova negativa de compilação sem cache), npm sem auditoria/funding no CI, timeout do job Windows de 30 para 45 min, invariantes do workflow testadas, guia de agentes com leitura incremental, arquivos gerados fora do contexto padrão e consulta direcionada de logs. Jobs, checks, gate e cobertura preservados; mudanças de frequência de build e proteção de branch apenas propostas.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Change concluída arquivada com sync da spec mobile-foundation; referências e contexto atualizados.

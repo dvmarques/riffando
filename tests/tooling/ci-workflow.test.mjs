@@ -85,6 +85,7 @@ test('cache de build Gradle só é habilitado em CI e a prova negativa não o us
 test('jobs Windows e Linux continuam compilando o APK nativo', () => {
   assert.ok(runs(jobs.windows).includes('npm run build:android'));
   assert.ok(runs(jobs.android).includes('npm run build:android'));
+  assert.ok(runs(jobs.android).includes('cd android && ./gradlew :riffando-audio:testReleaseUnitTest'));
   assert.ok(runs(jobs.android).includes('node scripts/probe-android-compilation.mjs'));
   assert.ok(jobs.emulator.steps.some(step => step.with?.script === 'node scripts/smoke-android.mjs'));
 });

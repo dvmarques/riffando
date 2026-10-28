@@ -140,6 +140,8 @@ jobs:
           cache-read-only: false
       - run: npm ci --ignore-scripts
       - run: npm run build:android
+      - name: Testar agregação de PCM em Kotlin (JVM)
+        run: cd android && ./gradlew :riffando-audio:testReleaseUnitTest
       - run: node scripts/probe-android-compilation.mjs
       - uses: actions/upload-artifact@v4
         with:
