@@ -25,6 +25,7 @@ Config nativa: `RECORD_AUDIO` está em `blockedPermissions`; removê-la desse bl
 ### 2. Contrato mínimo e fluxo de dados
 
 Contrato **conceitual**, detalhar tipos no Apply:
+
 - `startCapture(): Promise<CaptureConfig>` — resolvido somente após permissão e início real ou rejeitado com erro categorizado.
 - `stopCapture(): Promise<void>` — idempotente, libera captura/thread/buffers/observers.
 - `getCaptureStatus(): Promise<CaptureStatus>` — `idle | requestingPermission | starting | recording | stopping | error`.
