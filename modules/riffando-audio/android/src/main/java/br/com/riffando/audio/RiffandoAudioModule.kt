@@ -73,10 +73,15 @@ class RiffandoAudioModule : Module() {
     val manager = context.getSystemService(android.content.Context.AUDIO_SERVICE) as AudioManager
     val supportsUnprocessed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
       manager.getProperty(AudioManager.PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED) == "true"
-    val source = if (supportsUnprocessed) MediaRecorder.AudioSource.UNPROCESSED else MediaRecorder.AudioSource.MIC
+    val sources = if (supportsUnprocessed) {
+      intArrayOf(MediaRecorder.AudioSource.UNPROCESSED, MediaRecorder.AudioSource.MIC)
+    } else {
+      intArrayOf(MediaRecorder.AudioSource.MIC)
+    }
 
     var started: Session? = null
-    for (rate in intArrayOf(48000, 44100, 16000)) {
+    for (source in sources) {
+      for (rate in intArrayOf(48000, 44100, 16000)) {
       val minSize = AudioRecord.getMinBufferSize(
         rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
       )
@@ -122,6 +127,8 @@ class RiffandoAudioModule : Module() {
       } catch (_: IllegalStateException) {
         record?.release()
       }
+      }
+      if (started != null) break
     }
     val session = started ?: throw IllegalStateException("AUDIO_INITIALIZATION_FAILED")
     describe(session)
@@ -163,6 +170,13 @@ class RiffandoAudioModule : Module() {
     var errorCode: String? = null
     try {
       while (session.active.get()) {
+        val context = appContext.reactContext
+        if (context == null || ContextCompat.checkSelfPermission(
+            context, Manifest.permission.RECORD_AUDIO
+          ) != PackageManager.PERMISSION_GRANTED) {
+          errorCode = "AUDIO_PERMISSION_REVOKED"
+          break
+        }
         val count = session.recorder.read(
           data, 0, data.size, AudioRecord.READ_BLOCKING
         )
