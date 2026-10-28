@@ -15,7 +15,7 @@ export type CaptureMetrics = {
   peakDbfs: number;
   clipping: boolean;
   framesRead: number;
-  timestampOrigin: 'hardware' | 'unavailable';
+  timestampOrigin: 'audio-record' | 'unavailable';
   timestampNanos: string;
   timestampFrame: number;
   observedAtNanos: string;

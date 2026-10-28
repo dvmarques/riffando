@@ -22,6 +22,9 @@ test('o autolinking do módulo aponta para implementação Kotlin local', () => 
   assert.match(kotlin, /AudioRecord\.Builder\(\)/);
   assert.match(kotlin, /AudioTimestamp\.TIMEBASE_MONOTONIC/);
   assert.match(kotlin, /AudioRecord\.READ_BLOCKING/);
+  assert.doesNotMatch(kotlin, /OnAppContextDestroys/);
+  assert.match(kotlin, /AUDIO_STOPPING/);
+  assert.match(kotlin, /snapshotAndReset/);
   assert.doesNotMatch(kotlin, /FileOutputStream|MediaRecorder\(\)|HttpURLConnection|OutputStream/);
 });
 

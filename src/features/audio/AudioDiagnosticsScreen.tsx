@@ -20,6 +20,8 @@ const errorLabels: Record<string, string> = {
   AUDIO_INITIALIZATION_FAILED: 'Não foi possível iniciar o microfone neste aparelho.',
   AUDIO_READ_FAILED: 'A leitura do microfone foi interrompida.',
   AUDIO_CONTEXT_UNAVAILABLE: 'O microfone não está disponível neste momento.',
+  AUDIO_STOPPING: 'O microfone ainda está sendo liberado. Tente novamente.',
+  AUDIO_STOP_TIMEOUT: 'O microfone demorou para encerrar. Tente novamente ou reinicie o aplicativo.',
 };
 
 export default function AudioDiagnosticsScreen() {
@@ -32,15 +34,18 @@ export default function AudioDiagnosticsScreen() {
   const awaitingPermission = useRef(false);
   const mounted = useRef(true);
   const busy = status === 'starting' || status === 'requestingPermission' || status === 'stopping';
+  const startPending = useRef(false);
 
   const stop = useCallback(async () => {
     operation.current++;
+    startPending.current = false;
     setStatus('stopping');
     try {
       await nativeCapture.stop();
       if (mounted.current) {
         setMetrics(null);
         setConfig(null);
+        setError('');
         setStatus('idle');
       }
     } catch {
@@ -65,6 +70,7 @@ export default function AudioDiagnosticsScreen() {
           setError(errorLabels[code] ?? 'Ocorreu um erro ao capturar áudio.');
           setStatus('error');
           setMetrics(null);
+          setConfig(null);
         }
       });
     } catch {
@@ -80,15 +86,18 @@ export default function AudioDiagnosticsScreen() {
     const appStateListener = AppState.addEventListener('change', (state) => {
       if (state !== 'active' && !awaitingPermission.current) {
         operation.current++;
+        startPending.current = false;
         void nativeCapture.stop().catch(() => {});
         if (mounted.current) {
           setStatus('idle');
           setMetrics(null);
+          setConfig(null);
         }
       }
     });
     return () => {
       mounted.current = false;
+      startPending.current = false;
       metricsSubscription?.remove();
       errorSubscription?.remove();
       appStateListener.remove();
@@ -97,12 +106,14 @@ export default function AudioDiagnosticsScreen() {
   }, []);
 
   const start = async () => {
-    if (busy || status === 'recording') return;
+    if (busy || status === 'recording' || startPending.current) return;
+    startPending.current = true;
     const id = ++operation.current;
     setError('');
     setMetrics(null);
 
     if (Platform.OS !== 'android') {
+      startPending.current = false;
       setStatus('error');
       setError('O diagnóstico de áudio está disponível apenas no Android.');
       return;
@@ -137,6 +148,8 @@ export default function AudioDiagnosticsScreen() {
       const code = Object.keys(errorLabels).find((key) => message.includes(key));
       setStatus('error');
       setError(code ? errorLabels[code] ?? '' : 'Não foi possível iniciar a captura. Tente novamente.');
+    } finally {
+      startPending.current = false;
     }
   };
 
@@ -177,15 +190,17 @@ export default function AudioDiagnosticsScreen() {
         <Text style={styles.body}>Pico: {format(metrics?.peakDbfs)} dBFS</Text>
         <Text style={styles.body}>Saturação detectada: {metrics ? metrics.clipping ? 'Sim' : 'Não' : '—'}</Text>
         <Text style={styles.body}>Frames observados: {metrics?.framesRead ?? '—'}</Text>
-        <Text style={styles.body}>Timestamp do áudio: {metrics?.timestampOrigin === 'hardware' ? 'Disponível' : 'Indisponível'}</Text>
+        <Text style={styles.body}>Timestamp do áudio: {metrics?.timestampOrigin === 'audio-record' ? 'AudioRecord (monotônico)' : 'Indisponível'}</Text>
         <Text style={styles.note}>
           dBFS indica nível digital, não volume acústico nem latência. Não há medição exata de buffers perdidos.
         </Text>
       </View>
       {status === 'recording' ? (
         <Action label="Parar captura" onPress={() => { void stop(); }} />
-      ) : (
+      ) : !busy ? (
         <Action label="Iniciar captura" onPress={() => { void start(); }} />
+      ) : (
+        <Text style={styles.note}>Aguarde a conclusão da operação.</Text>
       )}
       <Action label="Voltar ao início" onPress={back} />
       <Text style={styles.note}>A captura é encerrada ao sair desta tela ou colocar o app em segundo plano.</Text>
