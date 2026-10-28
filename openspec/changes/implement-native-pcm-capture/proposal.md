@@ -46,7 +46,7 @@ O mantenedor confirmou que dispõe de **celular Android físico e guitarra com a
 
 ### Modified Capabilities
 
-- `mobile-foundation`: alterar somente permissões/configuração e integração necessária para a tela de diagnóstico, preservando navegação, offline, segurança e gates da fundação. Não redefinir seus requisitos existentes.
+Nenhuma. O shell da `mobile-foundation` continua sem solicitar microfone na inicialização; a nova tela de diagnóstico introduz uma capacidade independente com permissão contextual, preservando a spec permanente. A configuração Android e a navegação são pontos de integração, não mudança das obrigações da fundação.
 
 ## Impact
 
