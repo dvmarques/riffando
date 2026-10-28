@@ -12,16 +12,11 @@ import androidx.core.content.ContextCompat
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.math.abs
-import kotlin.math.log10
 import kotlin.math.max
-import kotlin.math.sqrt
 
 /**
- * Captura somente em memória. Nunca encaminha amostras PCM para JavaScript.
- *
- * O worker publica apenas estatísticas em intervalos limitados. Nenhuma medida de
- * latência é inferida a partir do horário de entrega dos eventos à interface.
+ * Captura exclusiva em memória; JS recebe métricas a no máximo 5 Hz.
+ * O gravador só é liberado pelo worker, depois da última chamada read().
  */
 class RiffandoAudioModule : Module() {
   private val lock = Any()
@@ -35,103 +30,111 @@ class RiffandoAudioModule : Module() {
     val readSamples: Int,
   ) {
     val active = AtomicBoolean(true)
-    var worker: Thread? = null
+    lateinit var worker: Thread
   }
 
   override fun definition() = ModuleDefinition {
     Name("RiffandoAudio")
     Events("onMetrics", "onCaptureError")
 
-    AsyncFunction("startCapture") {
-      startCaptureInternal()
-    }
-
-    AsyncFunction("stopCapture") {
-      stopCaptureInternal()
-    }
-
+    AsyncFunction("startCapture") { startCaptureInternal() }
+    AsyncFunction("stopCapture") { stopCaptureInternal(waitForRelease = true) }
     AsyncFunction("getCaptureStatus") {
       synchronized(lock) {
-        mapOf("state" to if (current?.active?.get() == true) "recording" else "idle")
+        mapOf("state" to when {
+          current == null -> "idle"
+          current?.active?.get() == true -> "recording"
+          else -> "stopping"
+        })
       }
     }
 
+    // OnAppContextDestroys não existe na DSL Android do SDK atual.
     OnActivityEntersBackground { stopCaptureInternal() }
     OnActivityDestroys { stopCaptureInternal() }
-    OnAppContextDestroys { stopCaptureInternal() }
   }
 
   private fun startCaptureInternal(): Map<String, Any> = synchronized(lock) {
-    current?.takeIf { it.active.get() }?.let { return@synchronized describe(it) }
+    current?.let { session ->
+      if (session.active.get()) return@synchronized describe(session)
+      throw IllegalStateException("AUDIO_STOPPING")
+    }
 
     val context = appContext.reactContext
       ?: throw IllegalStateException("AUDIO_CONTEXT_UNAVAILABLE")
-    if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+    if (ContextCompat.checkSelfPermission(
+        context, Manifest.permission.RECORD_AUDIO
+      ) != PackageManager.PERMISSION_GRANTED) {
       throw SecurityException("AUDIO_PERMISSION_DENIED")
     }
 
     val manager = context.getSystemService(android.content.Context.AUDIO_SERVICE) as AudioManager
-    val supportsUnprocessed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+    val unprocessed = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
       manager.getProperty(AudioManager.PROPERTY_SUPPORT_AUDIO_SOURCE_UNPROCESSED) == "true"
-    val sources = if (supportsUnprocessed) {
+    val sources = if (unprocessed) {
       intArrayOf(MediaRecorder.AudioSource.UNPROCESSED, MediaRecorder.AudioSource.MIC)
     } else {
       intArrayOf(MediaRecorder.AudioSource.MIC)
     }
 
-    var started: Session? = null
     for (source in sources) {
       for (rate in intArrayOf(48000, 44100, 16000)) {
-      val minSize = AudioRecord.getMinBufferSize(
-        rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
-      )
-      if (minSize <= 0) continue
-      val size = max(minSize * 2, (rate / 10) * 2)
-      var record: AudioRecord? = null
-      try {
-        record = AudioRecord.Builder()
-          .setAudioSource(source)
-          .setAudioFormat(
-            AudioFormat.Builder()
-              .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-              .setSampleRate(rate)
-              .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
-              .build()
-          )
-          .setBufferSizeInBytes(size)
-          .build()
+        val minimum = AudioRecord.getMinBufferSize(
+          rate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT
+        )
+        if (minimum <= 0) continue
+        val size = max(minimum * 2, rate / 5 * 2)
+        var recorder: AudioRecord? = null
+        try {
+          recorder = AudioRecord.Builder()
+            .setAudioSource(source)
+            .setAudioFormat(
+              AudioFormat.Builder()
+                .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
+                .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
+                .setSampleRate(rate)
+                .build()
+            )
+            .setBufferSizeInBytes(size)
+            .build()
 
-        if (record.state != AudioRecord.STATE_INITIALIZED) {
-          record.release()
-          continue
+          if (recorder.state != AudioRecord.STATE_INITIALIZED) continue
+          recorder.startRecording()
+          if (recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING) continue
+
+          val session = Session(
+            recorder, recorder.sampleRate, source, size, minOf(2048, max(256, size / 2))
+          )
+          session.worker = Thread({ readLoop(session) }, "riffando-pcm")
+          current = session
+          try {
+            session.worker.start()
+          } catch (failure: Exception) {
+            current = null
+            session.active.set(false)
+            throw failure
+          }
+          recorder = null // O worker é o único responsável pela liberação.
+          return@synchronized describe(session)
+        } catch (error: SecurityException) {
+          throw error
+        } catch (_: IllegalArgumentException) {
+          // Formato/fonte recusados: tentar alternativa documentada.
+        } catch (_: IllegalStateException) {
+          // Dispositivo ocupado ou estado inválido: tentar alternativa.
+        } finally {
+          recorder?.let {
+            try {
+              if (it.recordingState == AudioRecord.RECORDSTATE_RECORDING) it.stop()
+            } catch (_: IllegalStateException) {
+              // release deve ocorrer também na falha de stop.
+            }
+            it.release()
+          }
         }
-        record.startRecording()
-        if (record.recordingState != AudioRecord.RECORDSTATE_RECORDING) {
-          record.release()
-          continue
-        }
-        val actualRate = record.sampleRate
-        val session = Session(record, actualRate, source, size, max(256, minOf(size / 2, 2048)))
-        current = session
-        session.worker = Thread({ readLoop(session) }, "riffando-pcm").apply {
-          isDaemon = true
-          start()
-        }
-        started = session
-        break
-      } catch (security: SecurityException) {
-        record?.release()
-        throw security
-      } catch (_: IllegalArgumentException) {
-        record?.release()
-      } catch (_: IllegalStateException) {
-        record?.release()
       }
-      }
-      if (started != null) break
     }
-    val session = started ?: throw IllegalStateException("AUDIO_INITIALIZATION_FAILED")
-    describe(session)
+    throw IllegalStateException("AUDIO_INITIALIZATION_FAILED")
   }
 
   private fun describe(session: Session): Map<String, Any> = mapOf(
@@ -143,31 +146,33 @@ class RiffandoAudioModule : Module() {
   )
 
   /**
-   * stop() pode desbloquear um read() pendente. A liberação ocorre ao final do
-   * worker, evitando release concorrente durante a leitura.
+   * Mantém a sessão no slot até o worker liberar o AudioRecord.
+   * Não bloqueia o thread principal ao receber callbacks de lifecycle.
    */
-  private fun stopCaptureInternal() {
-    val session = synchronized(lock) {
-      val old = current
-      current = null
-      old
-    } ?: return
+  private fun stopCaptureInternal(waitForRelease: Boolean = false) {
+    val session = synchronized(lock) { current } ?: return
     session.active.set(false)
     try {
       if (session.recorder.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-        session.recorder.stop()
+        session.recorder.stop() // Pode desbloquear read(READ_BLOCKING).
       }
     } catch (_: IllegalStateException) {
-      // O worker libera o recurso inclusive quando a parada falha.
+      // O worker tentará liberar o gravador em finally.
+    }
+    if (waitForRelease && Thread.currentThread() !== session.worker) {
+      session.worker.join(2000L)
+      if (session.worker.isAlive) throw IllegalStateException("AUDIO_STOP_TIMEOUT")
     }
   }
 
   private fun readLoop(session: Session) {
-    val data = ShortArray(session.readSamples)
-    val timestamp = AudioTimestamp()
-    var frames: Long = 0
-    var lastReportNs = System.nanoTime()
+    val buffer = ShortArray(session.readSamples)
+    val clock = AudioTimestamp()
+    val statistics = PcmSignalAccumulator()
+    var frames = 0L
+    var lastReport = System.nanoTime()
     var errorCode: String? = null
+
     try {
       while (session.active.get()) {
         val context = appContext.reactContext
@@ -177,52 +182,46 @@ class RiffandoAudioModule : Module() {
           errorCode = "AUDIO_PERMISSION_REVOKED"
           break
         }
-        val count = session.recorder.read(
-          data, 0, data.size, AudioRecord.READ_BLOCKING
-        )
+
+        val samples = session.recorder.read(buffer, 0, buffer.size, AudioRecord.READ_BLOCKING)
         if (!session.active.get()) break
-        if (count < 0) {
+        if (samples < 0) {
           errorCode = "AUDIO_READ_FAILED"
           break
         }
-        if (count == 0) continue
-
-        frames += count.toLong()
+        if (samples == 0) continue
+        frames += samples.toLong()
+        statistics.add(buffer, samples)
         val now = System.nanoTime()
-        if (now - lastReportNs < 200_000_000L) continue
-        lastReportNs = now
+        if (now - lastReport < 200_000_000L) continue
+        lastReport = now
 
-        var sum = 0.0
-        var peak = 0
-        var clipped = 0
-        for (i in 0 until count) {
-          val level = abs(data[i].toInt())
-          peak = max(peak, level)
-          if (level >= 32760) clipped++
-          sum += level.toDouble() * level.toDouble()
-        }
-        val rms = sqrt(sum / count) / 32768.0
-        val rmsDbfs = if (rms == 0.0) -120.0 else max(-120.0, 20.0 * log10(rms))
-        val peakDbfs = if (peak == 0) -120.0 else 20.0 * log10(peak / 32768.0)
-
-        val hasHardwareTimestamp = try {
-          session.recorder.getTimestamp(timestamp, AudioTimestamp.TIMEBASE_MONOTONIC) ==
+        val signal = statistics.snapshotAndReset() ?: continue
+        val audioTimestampAvailable = try {
+          session.recorder.getTimestamp(clock, AudioTimestamp.TIMEBASE_MONOTONIC) ==
             AudioRecord.SUCCESS
         } catch (_: IllegalStateException) {
           false
         }
 
-        // NanoTime usa a mesma base monotônica de TIMEBASE_MONOTONIC.
-        sendEvent("onMetrics", mapOf(
-          "rmsDbfs" to rmsDbfs,
-          "peakDbfs" to peakDbfs,
-          "clipping" to (clipped > 0),
-          "framesRead" to frames.toDouble(),
-          "timestampOrigin" to if (hasHardwareTimestamp) "hardware" else "unavailable",
-          "timestampNanos" to if (hasHardwareTimestamp) timestamp.nanoTime.toString() else "",
-          "timestampFrame" to if (hasHardwareTimestamp) timestamp.framePosition.toDouble() else -1.0,
-          "observedAtNanos" to now.toString()
-        ))
+        // AudioTimestamp é tempo de captura fornecido por AudioRecord; não mede
+        // necessariamente hardware timestamp nem latência ponta a ponta.
+        try {
+          sendEvent("onMetrics", mapOf(
+            "rmsDbfs" to signal.rmsDbfs,
+            "peakDbfs" to signal.peakDbfs,
+            "clipping" to signal.clipping,
+            "framesRead" to frames.toDouble(),
+            "timestampOrigin" to if (audioTimestampAvailable) "audio-record" else "unavailable",
+            "timestampNanos" to if (audioTimestampAvailable) clock.nanoTime.toString() else "",
+            "timestampFrame" to if (audioTimestampAvailable) clock.framePosition.toDouble() else -1.0,
+            "observedAtNanos" to now.toString()
+          ))
+        } catch (_: Exception) {
+          // A desmontagem da bridge não deve deixar o microfone capturando.
+          errorCode = "AUDIO_CONTEXT_UNAVAILABLE"
+          break
+        }
       }
     } catch (_: SecurityException) {
       errorCode = "AUDIO_PERMISSION_REVOKED"
@@ -230,16 +229,23 @@ class RiffandoAudioModule : Module() {
       errorCode = "AUDIO_READ_FAILED"
     } finally {
       session.active.set(false)
-      synchronized(lock) {
-        if (current === session) current = null
-      }
       try {
-        if (session.recorder.recordingState == AudioRecord.RECORDSTATE_RECORDING) session.recorder.stop()
+        if (session.recorder.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+          session.recorder.stop()
+        }
       } catch (_: IllegalStateException) {
-        // Falha de parada não impede liberação.
+        // Sempre liberar mesmo que stop() falhe.
+      } finally {
+        session.recorder.release()
+        synchronized(lock) { if (current === session) current = null }
       }
-      session.recorder.release()
-      if (errorCode != null) sendEvent("onCaptureError", mapOf("code" to errorCode))
+      if (errorCode != null) {
+        try {
+          sendEvent("onCaptureError", mapOf("code" to errorCode))
+        } catch (_: Exception) {
+          // JS pode já ter sido desmontado.
+        }
+      }
     }
   }
 }
