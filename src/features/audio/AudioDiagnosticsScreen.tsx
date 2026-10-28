@@ -106,13 +106,13 @@ export default function AudioDiagnosticsScreen() {
     try {
       setStatus('requestingPermission');
       awaitingPermission.current = true;
-      let granted;
+      let granted: string;
       try {
         granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO);
       } finally {
         awaitingPermission.current = false;
       }
-      if (!mounted.current || id !== operation.current || AppState.currentState !== 'active') return;
+      if (!mounted.current || id !== operation.current || AppState.currentState === 'background') return;
       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
         setStatus('error');
         setError('O microfone precisa de autorização para iniciar a captura.');
