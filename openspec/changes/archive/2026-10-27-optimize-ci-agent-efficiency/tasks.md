@@ -16,4 +16,4 @@
 ## Verificação
 
 - [x] Comparar baseline e resultado, registrar limitações e evidências na PR: runs A, B e C em `design.md`; economia de tempo indicativa, não comprovada.
-- [ ] Revisar diff, validar compatibilidade Claude/Codex e CI do commit final.
+- [x] Revisar diff, validar compatibilidade Claude/Codex e CI do commit final.
