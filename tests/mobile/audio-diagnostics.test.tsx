@@ -19,8 +19,15 @@ jest.mock('@/infrastructure/audio/nativeCapture', () => ({
   },
 }));
 
-beforeEach(() => jest.clearAllMocks());
-afterEach(() => jest.restoreAllMocks());
+const originalPlatform = Platform.OS;
+beforeEach(() => {
+  jest.clearAllMocks();
+  Object.defineProperty(Platform, 'OS', { configurable: true, value: 'android' });
+});
+afterEach(() => {
+  jest.restoreAllMocks();
+  Object.defineProperty(Platform, 'OS', { configurable: true, value: originalPlatform });
+});
 
 it('navega ao diagnóstico sem solicitar microfone na inicialização', async () => {
   const request = jest.spyOn(PermissionsAndroid, 'request');
