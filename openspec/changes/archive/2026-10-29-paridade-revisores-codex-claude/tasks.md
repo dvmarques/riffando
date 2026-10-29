@@ -31,3 +31,5 @@ Evidências CI proporcional: `npm run validate` passou; testes direcionados incl
 Evidências patch: `npm ci --ignore-scripts`, `npm run validate` (81 testes tooling e 14 mobile), `npm run check:expo` (20/20) e `npm run export:android` passaram localmente. Builds nativos e CI serão conferidos na PR; não há nova validação física.
 
 Revisão Claude do patch: sem achados bloqueantes; referências históricas e inventário foram identificados explicitamente. Builds nativos e CI continuam sujeitos aos gates da PR.
+
+CI pré-archive: run 40895886806 no commit 9ee4166 passou integralmente, incluindo gate, builds Android Linux/Windows, testes Kotlin e smoke offline. Revisões Claude sem achados pendentes.
