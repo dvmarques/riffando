@@ -23,6 +23,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `implement-native-pcm-capture` (Refs #23; PR #60) - Decisão de start/stop, estado e leitura de timestamp do módulo Kotlin extraídos para funções puras (`CaptureLifecycle.kt`) com 6 testes JUnit (start idempotente, bloqueio durante parada, 20 ciclos, concorrência, timestamp sem valores inventados); verificação JUnit do CI passa a exigir as duas suites. Novos testes Jest para segundo plano, diálogo de permissão e recusa por `AUDIO_STOPPING`. Validação física no Galaxy S25 FE registrada em `AUDIO_CAPTURE.md`.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Actions do CI com runtime Node.js 24: `setup-android` v3→v4, `upload-artifact` v4→v7 e `download-artifact` v4→v8 (matriz Node 24.21.0/npm 12.2.1/Java 17 preservada); teste impede retorno de majors Node 20.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Patches da matriz Expo 58 e lockfile npm sincronizados em runner reproduzível, testes unitários Kotlin integrados ao CI e revisão da liberação segura da captura.

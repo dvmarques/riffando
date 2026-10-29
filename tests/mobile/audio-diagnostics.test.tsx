@@ -1,6 +1,6 @@
 import { renderRouter, screen } from 'expo-router/testing-library';
 import { act, userEvent, waitFor } from '@testing-library/react-native';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { AppState, PermissionsAndroid, Platform } from 'react-native';
 import Layout from '../../app/_layout';
 import Home from '../../app/index';
 import Audio from '../../app/diagnostico-audio';
@@ -98,4 +98,59 @@ it('mostra erro nativo sem inventar uma medição', async () => {
   expect(screen.getByRole('alert')).toHaveTextContent('A leitura do microfone foi interrompida.');
   expect(screen.getByText('Captura indisponível')).toBeVisible();
   expect(screen.getByText('RMS: — dBFS')).toBeVisible();
+});
+
+const route = { _layout: Layout, index: Home, 'diagnostico-audio': Audio };
+const grantPermission = () =>
+  jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(PermissionsAndroid.RESULTS.GRANTED);
+
+it('explica que o microfone ainda está sendo liberado quando o start é recusado', async () => {
+  grantPermission();
+  jest.mocked(nativeCapture.start).mockRejectedValueOnce(new Error('Call to function failed: AUDIO_STOPPING'));
+  await renderRouter(route, { initialUrl: '/diagnostico-audio' });
+  await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+  await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/ainda está sendo liberado/));
+  expect(screen.getByText('Captura indisponível')).toBeVisible();
+  // Recuperação: após o erro é possível tentar de novo.
+  await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+  await waitFor(() => expect(screen.getByText('Captura ativa')).toBeVisible());
+});
+
+it('encerra a captura ao ir para segundo plano e não retoma sozinha', async () => {
+  grantPermission();
+  let onChange: ((state: string) => void) | undefined;
+  jest.spyOn(AppState, 'addEventListener').mockImplementation((_event, listener) => {
+    onChange = listener as (state: string) => void;
+    return { remove: jest.fn() } as never;
+  });
+  await renderRouter(route, { initialUrl: '/diagnostico-audio' });
+  await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+  await waitFor(() => expect(screen.getByText('Captura ativa')).toBeVisible());
+  jest.mocked(nativeCapture.stop).mockClear();
+  await act(async () => { onChange?.('background'); });
+  expect(nativeCapture.stop).toHaveBeenCalledTimes(1);
+  expect(screen.getByText('Captura parada')).toBeVisible();
+  await act(async () => { onChange?.('active'); });
+  expect(screen.getByText('Captura parada')).toBeVisible();
+  expect(nativeCapture.start).toHaveBeenCalledTimes(1);
+});
+
+it('não abre o diálogo de permissão nem encerra a captura quando o app fica inativo durante a permissão', async () => {
+  let resolvePermission: (value: 'granted') => void = () => {};
+  jest.spyOn(PermissionsAndroid, 'request').mockImplementation(
+    () => new Promise(resolve => { resolvePermission = resolve as typeof resolvePermission; }),
+  );
+  let onChange: ((state: string) => void) | undefined;
+  jest.spyOn(AppState, 'addEventListener').mockImplementation((_event, listener) => {
+    onChange = listener as (state: string) => void;
+    return { remove: jest.fn() } as never;
+  });
+  await renderRouter(route, { initialUrl: '/diagnostico-audio' });
+  await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+  await waitFor(() => expect(screen.getByText('Aguardando permissão do microfone')).toBeVisible());
+  jest.mocked(nativeCapture.stop).mockClear();
+  await act(async () => { onChange?.('inactive'); });
+  expect(nativeCapture.stop).not.toHaveBeenCalled();
+  await act(async () => { resolvePermission('granted'); });
+  await waitFor(() => expect(screen.getByText('Captura ativa')).toBeVisible());
 });

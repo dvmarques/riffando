@@ -41,11 +41,7 @@ class RiffandoAudioModule : Module() {
     AsyncFunction("stopCapture") { stopCaptureInternal(waitForRelease = true) }
     AsyncFunction("getCaptureStatus") {
       synchronized(lock) {
-        mapOf("state" to when {
-          current == null -> "idle"
-          current?.active?.get() == true -> "recording"
-          else -> "stopping"
-        })
+        mapOf("state" to captureStateOf(current != null, current?.active?.get() == true).wire)
       }
     }
 
@@ -55,9 +51,11 @@ class RiffandoAudioModule : Module() {
   }
 
   private fun startCaptureInternal(): Map<String, Any> = synchronized(lock) {
-    current?.let { session ->
-      if (session.active.get()) return@synchronized describe(session)
-      throw IllegalStateException("AUDIO_STOPPING")
+    val existing = current
+    when (decideStart(existing != null, existing?.active?.get() == true)) {
+      StartDecision.REUSE_ACTIVE -> return@synchronized describe(existing!!)
+      StartDecision.REJECT_STOPPING -> throw IllegalStateException("AUDIO_STOPPING")
+      StartDecision.CREATE -> Unit
     }
 
     val context = appContext.reactContext
@@ -203,6 +201,7 @@ class RiffandoAudioModule : Module() {
         } catch (_: IllegalStateException) {
           false
         }
+        val reading = timestampReading(audioTimestampAvailable, clock.nanoTime, clock.framePosition)
 
         // AudioTimestamp é tempo de captura fornecido por AudioRecord; não mede
         // necessariamente hardware timestamp nem latência ponta a ponta.
@@ -212,9 +211,9 @@ class RiffandoAudioModule : Module() {
             "peakDbfs" to signal.peakDbfs,
             "clipping" to signal.clipping,
             "framesRead" to frames.toDouble(),
-            "timestampOrigin" to if (audioTimestampAvailable) "audio-record" else "unavailable",
-            "timestampNanos" to if (audioTimestampAvailable) clock.nanoTime.toString() else "",
-            "timestampFrame" to if (audioTimestampAvailable) clock.framePosition.toDouble() else -1.0,
+            "timestampOrigin" to reading.origin,
+            "timestampNanos" to reading.nanos,
+            "timestampFrame" to reading.frame,
             "observedAtNanos" to now.toString()
           ))
         } catch (_: Exception) {

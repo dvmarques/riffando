@@ -3,27 +3,34 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const report = resolve(
-  '..', 'modules', 'riffando-audio', 'android', 'build',
-  'test-results', 'testDebugUnitTest', 'TEST-br.com.riffando.audio.PcmSignalAccumulatorTest.xml',
+const directory = resolve(
+  '..', 'modules', 'riffando-audio', 'android', 'build', 'test-results', 'testDebugUnitTest',
 );
+// Suites e quantidades esperadas: divergência indica teste removido ou não executado.
+const expected = {
+  PcmSignalAccumulatorTest: 4,
+  CaptureLifecycleTest: 6,
+};
 
-const xml = readFileSync(report, 'utf8');
-const suite = xml.match(/<testsuite\b[^>]*>/)?.[0];
-const count = name => {
-  const value = suite?.match(new RegExp(`\\b${name}="(\\d+)"`))?.[1];
-  return value === undefined ? NaN : Number(value);
-};
-const observed = (xml.match(/<testcase\b/g) ?? []).length;
-const results = {
-  tests: count('tests'),
-  errors: count('errors'),
-  failures: count('failures'),
-  skipped: count('skipped'),
-  observed,
-};
-if (results.tests !== 4 || results.observed !== 4 ||
-    results.errors !== 0 || results.failures !== 0 || results.skipped !== 0) {
-  throw new Error(`JUnit PCM inválido: ${JSON.stringify(results)}`);
+const results = {};
+let total = 0;
+for (const [name, count] of Object.entries(expected)) {
+  const xml = readFileSync(resolve(directory, `TEST-br.com.riffando.audio.${name}.xml`), 'utf8');
+  const suite = xml.match(/<testsuite\b[^>]*>/)?.[0];
+  const read = attribute => {
+    const value = suite?.match(new RegExp(`\\b${attribute}="(\\d+)"`))?.[1];
+    return value === undefined ? NaN : Number(value);
+  };
+  const observed = (xml.match(/<testcase\b/g) ?? []).length;
+  const result = {
+    tests: read('tests'), errors: read('errors'), failures: read('failures'),
+    skipped: read('skipped'), observed,
+  };
+  results[name] = result;
+  if (result.tests !== count || result.observed !== count || result.errors !== 0 ||
+      result.failures !== 0 || result.skipped !== 0) {
+    throw new Error(`JUnit PCM inválido em ${name}: ${JSON.stringify(results)}`);
+  }
+  total += result.tests;
 }
-console.log(`JUnit PCM confirmado: ${results.tests} testes Kotlin executados, sem falhas, erros ou skips.`);
+console.log(`JUnit PCM confirmado: ${total} testes Kotlin executados em ${Object.keys(expected).length} suites, sem falhas, erros ou skips.`);
