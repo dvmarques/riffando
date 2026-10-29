@@ -39,14 +39,14 @@ cd android && ./gradlew :riffando-audio:testDebugUnitTest && node ../scripts/ver
 | Commit SHA e APK instalado | `90d27e3`; APK `riffando-validation.apk` do artefato `android-validation` da run 40794999831, instalado via adb |
 | Sample rate, encoding, source, buffer efetivos | 48000 Hz, mono PCM 16-bit, `MIC`, buffer nativo 19200 bytes |
 | Timestamp de hardware disponível? | `AudioRecord` forneceu timestamp monotônico; não prova timestamp de hardware nem latência |
-| Permissão concedida, negada, revogada | Negada: aviso pt-BR, sem captura. Concedida: captura iniciou. Revogada: pendente |
+| Permissão concedida, negada, revogada | Negada: aviso pt-BR, sem captura. Concedida: captura iniciou. Revogada em Configurações (app em segundo plano): processo reiniciado na tela inicial, permissão pedida de novo. Revogada com captura em primeiro plano (`adb shell pm revoke`): o app fechou; sem `FATAL EXCEPTION` no log recente, mas sem registro explícito de quem o encerrou. O aviso pt-BR de revogação não foi exercitado |
 | Silêncio por 30 segundos | OK. Silêncio ambiente com portas fechadas: RMS −54,4 dBFS, pico −35,8, sem saturação; frames crescentes. Primeira leitura, com ruído ambiente: RMS −42,2, pico −22,5 |
 | Guitarra amplificada, volume moderado, 2 minutos | OK (2 min, observação manual de prints pontuais, não de médias) |
 | Notas suaves/fortes, distâncias diferentes, clipping | 50 cm: fraco RMS −10,0/pico −1,2; forte RMS −11,5/pico −0,4 (sem margem; saturação não marcada, limiar ≈ 0 dBFS). 1 m: fraco RMS −23,5/pico −12,8; forte RMS −9,5/pico −3,8. Sem sinal de compressão forte; 1 m deixa margem de ~4 dB |
-| Captura contínua por 10 minutos | Pendente |
-| 20 ciclos iniciar/parar | Pendente |
-| Segundo plano/primeiro plano e saída da tela | Pendente |
-| Outro aplicativo de áudio, se reproduzível | Pendente |
+| Captura contínua por 10 minutos | OK, com áudio de TV (não guitarra): 29.945.856 frames ao fim ≈ 624 s a 48 kHz, sem erros; RMS −41,0/pico −30,5, sem saturação. Calor/consumo não medidos |
+| 20 ciclos iniciar/parar | OK: 20 ciclos sem erros |
+| Segundo plano/primeiro plano e saída da tela | OK: com a captura ativa, ao sair do app o ponto do microfone apagou; ao voltar, a captura estava parada |
+| Outro aplicativo de áudio, se reproduzível | Não testado |
 | Falhas, logs sanitizados, consumo percebido | Nenhuma falha observada nos testes feitos até aqui; logs não coletados |
 
 Testar offline e, se possível, com TalkBack e fonte ampliada. O emulador CI serve para validar navegação, APK e início sem rede; não mede captura acústica real ou USB. **Não afirmar sucesso físico ou estabilidade antes de observar**. Dados PCM pessoais não devem ser anexados ao repositório público nem capturados por logs. Screenshots apenas de métricas não sensíveis e com permissão do mantenedor.
