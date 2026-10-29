@@ -27,6 +27,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `implement-native-pitch-tuner` (Refs #24; PR #61) - `react-native` 0.88.0 → 0.88.1 (exato), versão esperada pelo Expo SDK 58 no `check:expo`; lock, `config/toolchain.json` e inventário de dependências/licenças alinhados. Autorizado pelo mantenedor em 29/10/2026.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Change concluída (17/17 tarefas) arquivada com sync da spec `native-pcm-capture`; validada em CI e no Galaxy S25 FE (um aparelho, sem conclusões de latência ou precisão).
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Decisão de start/stop, estado e leitura de timestamp do módulo Kotlin extraídos para funções puras (`CaptureLifecycle.kt`) com 6 testes JUnit (start idempotente, bloqueio durante parada, 20 ciclos, concorrência, timestamp sem valores inventados); verificação JUnit do CI passa a exigir as duas suites. Novos testes Jest para segundo plano, diálogo de permissão e recusa por `AUDIO_STOPPING`. Validação física no Galaxy S25 FE registrada em `AUDIO_CAPTURE.md`.
