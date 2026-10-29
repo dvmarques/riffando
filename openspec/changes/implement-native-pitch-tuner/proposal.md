@@ -10,7 +10,7 @@ A [GC-014 / #24](https://github.com/dvmarques/riffando/issues/24), vinculada ao 
 - Interface com **nota grande, ponteiro visual e desvio em cents**.
 - Primeira entrega **básica e confiável**, offline, usando microfone integrado e com validação física.
 
-**Proposta funcional:** detecção monofônica de frequência fundamental, conversão Hz → nota/oitava/cents (A4=440 Hz fixo nesta etapa, sujeito a confirmação), estimativa de confiança e supressão de resultados não confiáveis; modo guitarra evidencia corda-alvo sem impedir operação cromática. UI acessível em pt-BR com estados sem sinal, instável, captura negada/interrompida e erro. Analisar limitações de harmônicos, amplificador, ruído e oitavas.
+**Proposta funcional:** detecção monofônica de frequência fundamental, conversão Hz → nota/oitava/cents (A4=440 Hz fixo nesta etapa como hipótese de escopo, sujeita a confirmação na revisão), estimativa de confiança e supressão de resultados não confiáveis; modo guitarra permite selecionar uma das seis cordas como referência sem apresentar correspondência falsa quando a nota observada difere da corda-alvo. UI acessível em pt-BR com estados sem sinal, instável, captura negada/interrompida e erro. Analisar limitações de harmônicos, amplificador, ruído e oitavas.
 
 ## Fora do escopo
 USB/seleção de dispositivos (#25), redução avançada de ruído (#26), afinações Drop D/personalizadas e referência A4 configurável (PRD RF-01, fases futuras), acordes/polifonia, treinador/onsets, metrônomo, C++/iOS, armazenamento/gravação, telemetria, backend, login e publicação.
@@ -21,7 +21,7 @@ USB/seleção de dispositivos (#25), redução avançada de ruído (#26), afina�
 - CA-03: modo cromático e modo guitarra padrão com referências corretas; cromático não fica limitado às seis notas de cordas soltas.
 - CA-04: tela em pt-BR com nota grande, ponteiro e cents, sinalização inequívoca de grave/afinado/agudo, estabilidade visual e acessibilidade (TalkBack/fonte ampliada).
 - CA-05: arquitetura mantém DSP e PCM no Android, ponte de eventos limitada e domínio de conversão musical testável; sem dependências desnecessárias; iOS futuro não bloqueado.
-- CA-06: testes determinísticos com tons sintetizados, silêncios, ruído, harmônicos, mudanças de nota, desafinação ± cents e limites; algoritmos/limiares explicitados com evidência.
+- CA-06: definir antes do Apply faixa operacional, tolerâncias de erro e confiança, orçamento de atualização e protocolo de medição; testes determinísticos com tons sintetizados, silêncios, ruído, harmônicos, mudanças de nota, desafinação ± cents e limites; algoritmos/limiares explicitados com evidência.
 - CA-07: validação real no Galaxy S25 FE (Android 16), microfone embutido, guitarra com amplificador, diferentes cordas/volumes e distâncias, repetição, 10 min contínuos, background/permissão; registrar SHA, método, falhas, incertezas e resultados, não extrapolar precisão universal.
 - CA-08: sem upload, persistência de PCM ou telemetria; funciona offline; `npm run validate`, `npm run check:expo`, testes nativos, APK e CI conforme impacto, documentação/licenças e revisão.
 
@@ -29,7 +29,7 @@ USB/seleção de dispositivos (#25), redução avançada de ruído (#26), afina�
 ### New Capabilities
 - `native-pitch-tuner`: análise de pitch monofônico e afinador visual no Android.
 ### Modified Capabilities
-- `native-pcm-capture`: integração do analisador sem alterar as garantias de privacidade, permissões ou ciclo de vida da captura; especificar alteração de contrato se necessária.
+Nenhuma alteração de requisito da capability `native-pcm-capture` é prevista nesta proposta. A implementação reutilizará seu contrato; se a análise exigir mudar requisitos observáveis, adicionar delta explícito e submeter à revisão antes do Apply.
 
 ## Impact
 Módulo Expo Android existente, adaptador TypeScript, domínio musical puro, tela/rota de afinador, testes Kotlin/JS, docs/DECISIONS.md, docs/development/, CHANGELOG.md e possível atualização da navegação. Sem migração de dados.
