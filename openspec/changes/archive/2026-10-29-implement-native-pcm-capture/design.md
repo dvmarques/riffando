@@ -4,7 +4,7 @@
 
 A `main` do Riffando contém app único Expo 58/React Native, Expo Router, TypeScript estrito, CNG, CI Android Linux/Windows e smoke em emulador, mas nenhum motor de áudio. O `app.json` bloqueia RECORD_AUDIO. O spike integra-se à arquitetura de UI/features, domínio e infraestrutura da fundação sem criar monorepo.
 
-Fontes: [issue #23](https://github.com/dvmarques/riffando/issues/23), [PRD](../../../docs/product/PRD.md), [arquitetura](../../../docs/architecture/ARCHITECTURE.md), [decisões](../../../docs/DECISIONS.md), [matriz mobile](../../../docs/development/MOBILE.md) e [políticas](../../../AGENTS.md).
+Fontes: [issue #23](https://github.com/dvmarques/riffando/issues/23), [PRD](../../../../docs/product/PRD.md), [arquitetura](../../../../docs/architecture/ARCHITECTURE.md), [decisões](../../../../docs/DECISIONS.md), [matriz mobile](../../../../docs/development/MOBILE.md) e [políticas](../../../../AGENTS.md).
 
 ## Goals / Non-Goals
 
