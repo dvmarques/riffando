@@ -1,0 +1,10 @@
+// GC-014: POC offline, Node 22+, sem dependências nem integração Android.
+// Reproduza: node experiments/gc-014/compare-pitch.mjs
+import { performance } from 'node:perf_hooks';
+const fs=8000,N=2048,lo=Math.floor(fs/1000),hi=Math.ceil(fs/70);
+const cases=[['E2',82.4069,0,0],['A2',110,0,0],['D3',146.8324,0,0],['G3',195.9977,0,0],['B3',246.9417,0,0],['E4',329.6276,0,0],['A4',440,0,0],['A2 com harmônico',110,.65,0],['E2 +15 cents',82.4069*2**(15/1200),.35,0],['B3 com ruído',246.9417,.25,.09],['silêncio',0,0,0]];
+function signal(f,h,n){let seed=51237;const x=new Float64Array(N);for(let i=0;i<N;i++){seed=(1664525*seed+1013904223)>>>0;x[i]=f?.7*(Math.sin(2*Math.PI*f*i/fs)+h*Math.sin(4*Math.PI*f*i/fs))+n*(seed/2**32*2-1):0;}return x;}
+function acf(x){let p=0;for(const v of x)p+=v*v;if(p/N<1e-8)return null;let best=-Infinity,lag=null;for(let t=lo;t<=hi;t++){let xy=0,xx=0,yy=0;for(let i=0;i<N-t;i++){xy+=x[i]*x[i+t];xx+=x[i]*x[i];yy+=x[i+t]*x[i+t];}const c=xy/Math.sqrt(xx*yy);if(c>best){best=c;lag=t;}}return best>=.65?fs/lag:null;}
+function yin(x){let p=0;for(const v of x)p+=v*v;if(p/N<1e-8)return null;const cm=new Float64Array(hi+1);let cumulative=0;for(let t=1;t<=hi;t++){let d=0;for(let i=0;i<N-hi;i++){const a=x[i]-x[i+t];d+=a*a;}cumulative+=d;cm[t]=cumulative?d*t/cumulative:1;}let t=null;for(let j=lo;j<=hi;j++)if(cm[j]<.12){while(j+1<=hi&&cm[j+1]<cm[j])j++;t=j;break;}if(t===null)return null;const a=cm[t-1],b=cm[t],c=cm[t+1],denom=a-2*b+c;const offset=denom?.5*(a-c)/denom:0;return fs/(t+Math.max(-1,Math.min(1,offset)));}
+const results=[];for(const [name,hz,harmonic,noise] of cases){const x=signal(hz,harmonic,noise);for(const [algorithm,fn] of [['ACF',acf],['YIN',yin]]){const start=performance.now(),found=fn(x),computeMs=performance.now()-start;results.push({case:name,algorithm,expectedHz:hz||null,foundHz:found===null?null:+found.toFixed(2),errorCents:hz&&found?+(1200*Math.log2(found/hz)).toFixed(1):null,computeMs:+computeMs.toFixed(2)});}}
+console.log(JSON.stringify({configuration:{fs,N,windowMs:N/fs*1000,minHz:70,maxHz:1000,seed:51237},results},null,2));
