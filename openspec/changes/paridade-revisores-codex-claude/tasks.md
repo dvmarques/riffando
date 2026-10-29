@@ -21,3 +21,13 @@ Evidências: `npm run validate` passou (inclui 6 testes de revisores, 68 testes 
 - [x] 3.4 Executar validação completa, revisar diff e registrar evidências.
 
 Evidências CI proporcional: `npm run validate` passou; testes direcionados incluem merge-base e diff Git real, renome, modos de arquivo, fallback completo e gate; revisão Claude concluída sem achados bloqueantes. A PR que altera CI ainda exige matriz completa.
+
+## 4. Compatibilidade Expo
+
+- [x] 4.1 Atualizar React Native ao patch exigido, lockfile e matriz; avaliar licenças e registrar efeitos na documentação.
+- [x] 4.2 Executar instalação, validação, Expo doctor e exportação; registrar resultados e limitações.
+- [x] 4.3 Revisar diff e obter revisão do Claude; corrigir os achados verificáveis.
+
+Evidências patch: `npm ci --ignore-scripts`, `npm run validate` (81 testes tooling e 14 mobile), `npm run check:expo` (20/20) e `npm run export:android` passaram localmente. Builds nativos e CI serão conferidos na PR; não há nova validação física.
+
+Revisão Claude do patch: sem achados bloqueantes; referências históricas e inventário foram identificados explicitamente. Builds nativos e CI continuam sujeitos aos gates da PR.

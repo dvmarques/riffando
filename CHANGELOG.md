@@ -25,6 +25,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `paridade-revisores-codex-claude` (PR #62) - React Native atualizado de 0.88.0 para 0.88.1 conforme catálogo do Expo SDK 58, com matriz e lockfile sincronizados.
+
 - `paridade-revisores-codex-claude` (Refs #59; PR #62) - CI de PRs seleciona validações por impacto, com fallback completo e gate que verifica resultados esperados.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Change concluída (17/17 tarefas) arquivada com sync da spec `native-pcm-capture`; validada em CI e no Galaxy S25 FE (um aparelho, sem conclusões de latência ou precisão).

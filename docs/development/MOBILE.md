@@ -6,7 +6,7 @@ GC-001/#11 implementado em app único, com 20 tarefas verificadas na PR #53. Rev
 
 ## Matriz e instalação
 
-config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.21, React/DOM 19.3.0, RN 0.88.0, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
+config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.21, React/DOM 19.3.0, RN 0.88.1, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
 
 O engines aceita Node 24 como família, mas check:env exige as versões **exatas** Node/npm acima. Um patch diferente pode instalar e ser corretamente rejeitado pelo diagnóstico. Se o Node vier com outro npm, instalar conscientemente a versão fixada (npm install --global npm@12.2.1), ou usar runtime isolado; os scripts não fazem essa alteração por conta própria.
 
@@ -82,6 +82,10 @@ O inventário JS atualizado cobre 44 pacotes/versões e 1.130 fontes; licenças 
 
 ## GC-013 — Atualização de patches e validação nativa (28/10/2026)
 
-Na branch da [PR #60](https://github.com/dvmarques/riffando/pull/60), o Expo SDK 58 foi atualizado para **58.0.21**, constants **58.0.14**, dev-client **58.0.17**, linking **58.0.15**, router **58.0.28** e jest-expo **58.0.13**, conforme o catálogo exigido no run 40772160118. O lockfile foi **regenerado com npm 12.2.1 em Actions**, sem `--force` e sem suprimir `check:expo`, no [run 40773765389](https://github.com/dvmarques/riffando/actions/runs/40773765389); o workflow temporário foi removido. As demais versões-base, inclusive RN 0.88.0, permanecem conforme `config/toolchain.json` e `package-lock.json`.
+Na branch da [PR #60](https://github.com/dvmarques/riffando/pull/60), o Expo SDK 58 foi atualizado para **58.0.21**, constants **58.0.14**, dev-client **58.0.17**, linking **58.0.15**, router **58.0.28** e jest-expo **58.0.13**, conforme o catálogo exigido no run 40772160118. O lockfile foi **regenerado com npm 12.2.1 em Actions**, sem `--force` e sem suprimir `check:expo`, no [run 40773765389](https://github.com/dvmarques/riffando/actions/runs/40773765389); o workflow temporário foi removido. À época, as demais versões-base, inclusive RN 0.88.0, estavam alinhadas a `config/toolchain.json` e `package-lock.json`; a PR #62 atualiza o patch.
 
 O módulo local Kotlin/AudioRecord precisa ser compilado no CI e executar o alvo real `:riffando-audio:testDebugUnitTest`. O Android Gradle Plugin 9.2.1 habilita unit tests do build type testado (debug) por padrão; `testReleaseUnitTest` não existe nesta matriz. O CI executa `testDebugUnitTest` e confirma que a suite `PcmSignalAccumulatorTest` realmente gerou quatro casos, sem falhas, erros ou skips, por leitura do XML JUnit. A verificação de testes JVM usa dados PCM sintéticos para RMS/pico/clipping, não representa entrada de microfone do hardware. Emulador verifica a UI e o APK offline, mas a [matriz física da GC-013](AUDIO_CAPTURE.md) permanece obrigatória antes do aceite.
+
+## Patch React Native — PR #62
+
+React Native 0.88.1 substitui 0.88.0 para acompanhar o catálogo do Expo SDK 58; matriz, manifest e lock usam o patch novo. As evidências anteriores de build e aparelho correspondem às versões indicadas na época e não comprovam o novo patch. Os resultados do CI da PR registram a validação dos novos builds.

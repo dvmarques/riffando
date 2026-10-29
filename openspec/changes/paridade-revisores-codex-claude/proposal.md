@@ -10,6 +10,7 @@ Os revisores consultivos versionados para Claude não estão disponíveis em um 
 - Verificar a equivalência e documentar uso e limitações.
 - Preservar as integrações OpenSpec oficiais existentes, sem duplicar comandos migrados.
 - Selecionar validações do CI por impacto em PRs prontas, com fallback completo conservador e gate verificável (Refs #59).
+- Atualizar React Native ao patch exigido pelo catálogo Expo e validar a matriz, conforme autorização do mantenedor.
 
 Critérios: PRs apenas de documentação e agentes executam documentação; mudanças desconhecidas, app, dependências ou CI exigem matriz completa; Draft não executa CI; push em main e execução manual preservam matriz completa. O gate falha se classificação ou jobs exigidos não tiverem sucesso. Ambos os revisores são descobertos pelo Codex, mantêm a mesma orientação consultiva do Claude e a validação detecta divergência. Fora do escopo: mudanças no aplicativo, permissões globais, modelos e novas integrações. Refs #54 (workflow adaptativo); solicitação do mantenedor nesta tarefa.
 
@@ -25,4 +26,4 @@ Nenhuma.
 
 ## Impact
 
-Arquivos de configuração de agentes, validação de tooling, guia e changelog. Sem dependências novas ou mudanças de produto.
+Arquivos de configuração de agentes, validação de tooling, guia e changelog. Atualização de patch do React Native e suas transitivas; sem dependências diretas novas ou funcionalidades de produto.
