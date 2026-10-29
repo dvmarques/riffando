@@ -1,24 +1,24 @@
-# Tasks — GC-014 (Propose refinado; Apply não autorizado)
+# Tasks — GC-014
 
-Refs #24, PR #61. Nenhuma tarefa de implementação foi iniciada. Rastreabilidade: **CA** em [proposal.md](proposal.md) → **Requisito** em [spec](specs/native-pitch-tuner/spec.md) → tarefa → teste/evidência. Protocolo físico: [TUNER_VALIDATION.md](../../../docs/development/TUNER_VALIDATION.md). Autorização, archive, merge e fechamento de issue ficam no checklist da PR (AGENTS.md).
+**Apply autorizado pelo mantenedor em 29/10/2026** (implementação até a PR; archive, merge e release seguem não autorizados). Refs #24, PR #61. Estado: implementação nativa e de interface escrita; testes Jest e de tooling executados localmente; **JUnit/Kotlin não pôde ser compilado neste executor (aguarda o CI) e nada foi medido em aparelho físico.** Rastreabilidade: **CA** em [proposal.md](proposal.md) → **Requisito** em [spec](specs/native-pitch-tuner/spec.md) → tarefa → teste/evidência. Protocolo físico: [TUNER_VALIDATION.md](../../../docs/development/TUNER_VALIDATION.md). Autorização, archive, merge e fechamento de issue ficam no checklist da PR (AGENTS.md).
 
 ## 1. Refinar e medir (CA-05, CA-06)
 
-- [ ] 1.1 Inspecionar o contrato e a implementação Kotlin atuais da GC-013 (assinaturas, worker, lock, ciclo de vida) e as specs permanentes; documentar impactos reais na integração. Estado: a documentação (`AUDIO_CAPTURE.md`, `native-pcm-capture`) foi lida no refinamento; o código Kotlin **não** foi inspecionado e isso é a primeira ação do Apply.
+- [x] 1.1 Inspecionar o contrato e a implementação Kotlin atuais da GC-013 (assinaturas, worker, lock, ciclo de vida) e as specs permanentes. Evidência: `RiffandoAudioModule.kt` (um `AudioRecord`, worker `riffando-pcm`, lock de sessão, `decideStart`); integração aditiva: `startTuner`, evento `onPitch`, `sessionId`, conflito de modo `AUDIO_MODE_CONFLICT`; `startCapture` e o diagnóstico permanecem inalterados.
 - [x] 1.2 Comparar YIN, autocorrelação refinada (MPM) e baseline em sinais sintéticos, definindo limiares e limitações reproduzíveis. Evidência: `experiments/gc-014/results/report.md` (`node experiments/gc-014/run-benchmark.mjs`), 423 casos, 11 categorias, janelas 32–128 ms, 48 e 16 kHz, sequências com estabilizador; testes `tests/tooling/gc-014-pitch-poc.test.mjs`. Limite: sintético; algoritmo final depende de 4.2.
-- [ ] 1.3 Definir o contrato `PitchEvent` (estados, nulabilidade, `sessionId`, `sequence`), mapeamento Hz→nota/oitava/cents, nomes pt-BR/cifras, política de estados e sinalização de oitava. Verificável por teste de domínio e de contrato TS (CA-03, CA-05).
+- [x] 1.3 Contrato `PitchEvent` (estados, nulabilidade, `sessionId`, `sequence`), mapeamento Hz→nota/oitava/cents, nomes pt-BR/cifras e sinalização de oitava. Evidência: `src/infrastructure/audio/nativeTuner.ts`, `src/domain/tuning/*`, `tests/mobile/tuning-domain.test.tsx` (executado).
 
 ## 2. Motor nativo (CA-01, CA-02, CA-05, CA-06)
 
-- [ ] 2.1 Integrar MPM (NSDF, k = 0,9, janela 64 ms, hop 20 ms, faixa 70–1000 Hz) ao worker nativo existente, sem segundo `AudioRecord` e sem PCM cru no JS. Teste: JUnit com vetores determinísticos do POC (paridade |Δ| ≤ 0,5 c em todos os vetores; Req. “Análise nativa”).
-- [ ] 2.2 Implementar gate −50 dBFS, confiança ≥ 0,90, estabilizador K = 3 (dispersão ≤ 50 c, mediana), estados e emissão ≤ 10 Hz. Teste: JUnit com sequências do POC (estabilização mediana ≤ 200 ms, P95 ≤ 300 ms a 10 Hz; 0 falsos positivos em silêncio/ruído; Req. “Rejeição”, “Estabilização”).
-- [ ] 2.3 Testar sessão, interrupções, permissões, ciclo de vida, buffers e erro sem retenção de PCM; eventos tardios descartados por `sessionId`/`sequence`. Teste: JUnit + Jest (Req. “Estabilização, taxa de eventos e correção de sessão”, “Privacidade”).
-- [ ] 2.4 Registrar custo por quadro no Kotlin (ms/quadro no aparelho) e decidir, com evidência, se decimação/otimização é necessária. Sem limite prometido antes da medição.
+- [ ] 2.1 Integrar MPM (NSDF, k = 0,9, janela 64 ms, hop 20 ms, faixa 70–1000 Hz) ao worker nativo existente, sem segundo `AudioRecord` e sem PCM cru no JS. Estado: `MpmPitchDetector.kt`, `PitchPipeline.kt` e `RiffandoAudioModule.kt` escritos; teste estático `native-pitch-config.test.mjs` executado; `PitchPipelineTest` (paridade com o POC, |Δ| ≤ 0,5 c) **aguarda execução no CI**.
+- [ ] 2.2 Gate −50 dBFS, confiança ≥ 0,90, estabilizador K = 3 (dispersão ≤ 50 c, mediana), estados e emissão ≤ 10 Hz. Estado: implementado em `PitchPipeline.kt`/módulo; comportamento antecipado por simulação Node idêntica ao algoritmo; JUnit **aguarda o CI**.
+- [ ] 2.3 Testar sessão, interrupções, permissões, ciclo de vida, buffers e erro sem retenção de PCM; eventos tardios descartados por `sessionId`/`sequence`. Estado: filtro de sessão e UI testados em Jest (executados); ciclo de vida nativo e interrupções **dependem do CI e do aparelho**.
+- [ ] 2.4 Registrar custo por quadro no Kotlin (ms/quadro no aparelho) e decidir, com evidência, se decimação/otimização é necessária. Estado: o evento `onPitch` já informa `analysisMicros` (média por quadro); **medição no aparelho pendente**.
 
 ## 3. Domínio e interface (CA-03, CA-04)
 
-- [ ] 3.1 Implementar a conversão musical F0 → nota/oitava/cents (A4 = 440 Hz) e a sinalização “oitava acima/abaixo” da corda-alvo, com testes de limites (Req. “Modos”, “Tratamento de erro de oitava”).
-- [ ] 3.2 Criar o seletor cromático/guitarra, a corda-alvo e a UI acessível de nota grande, ponteiro, cents e estados, sem confundir cents cromático e relativo à corda (Req. “Modos”, “Feedback visual”). Teste: Jest/React Native Testing Library para estados, rótulos e texto Grave/Afinado/Agudo.
+- [x] 3.1 Conversão F0 → nota/oitava/cents (A4 = 440 Hz) e sinalização “oitava acima/abaixo” da corda-alvo, com testes de limites. Evidência: `src/domain/tuning/notes.ts`, `guitar.ts` e `tests/mobile/tuning-domain.test.tsx` (executado).
+- [x] 3.2 Seletor cromático/guitarra, corda-alvo e UI de nota grande, ponteiro, cents e estados, sem confundir cents cromático e relativo à corda. Evidência: `src/features/tuner/TunerScreen.tsx`, `useTuner.ts`, rota `app/afinador.tsx`; `tests/mobile/tuner-screen.test.tsx` (9 testes, executados: permissão, estados, sessão, guitarra, oitava, leitura obsoleta, erro nativo).
 - [ ] 3.3 Validar atualização, TalkBack (sem anúncio por evento), fonte ampliada, alvos de toque ≥ 48 dp e offline em aparelho (Req. “Feedback visual”).
 
 ## 4. Verificação (CA-01…CA-08)

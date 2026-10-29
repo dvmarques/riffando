@@ -81,3 +81,9 @@ Observação: o limiar de "Saturação detectada" (amostra ≥ 32760) é estrito
 O estágio não identifica nota, cents ou afinação (#24), não seleciona USB (#25), não implementa redução avançada de ruído (#26), não executa DSP C++ nem valida iOS. A precisão do relógio e a diferença entre frames/tempo de notificação não bastam para medir latência real; nenhum alvo de jitter/precisão foi comprovado.
 
 Ao concluir testes, atualizar este documento com valores observados e SHA, conferir `docs/DECISIONS.md`, tarefas OpenSpec, revisão de código e CI do commit final. Archive/sync e squash somente com autorização e com todas as tarefas concluídas.
+
+## Afinador sobre a captura (GC-014 / issue #24)
+
+> **Estado em 29/10/2026:** implementação em validação (PR #61). Sem medição em aparelho físico: não representa afinador comprovado. Protocolo: [TUNER_VALIDATION.md](TUNER_VALIDATION.md).
+
+O módulo ganhou `startTuner()` e o evento `onPitch`, **aditivos**: `startCapture()`, `onMetrics` e a tela de diagnóstico não mudaram. A sessão do afinador usa o mesmo `AudioRecord` e o mesmo worker; o PCM alimenta `PitchPipeline` (janela deslizante de 64 ms, hop de 20 ms): gate de nível (RMS ≥ −50 dBFS) → MPM (NSDF, k = 0,9, faixa 70–1000 Hz) → confiança ≥ 0,90 → estabilizador (3 quadros consecutivos, dispersão ≤ 50 cents, mediana). O JS recebe no máximo 10 eventos/s com `sessionId`, `sequence`, `state` (`reading`, `no-signal`, `unstable`, `unreliable`), `frequencyHz` (só em `reading`), `confidence`, `rmsDbfs`, `windowMs`, `sampleRateHz` e `analysisMicros` (custo médio por quadro no aparelho, não latência). Nenhuma amostra cruza a ponte nem é gravada. Diagnóstico e afinador não dividem sessão: o segundo modo recebe `AUDIO_MODE_CONFLICT`. Faixa operacional: 73–988 Hz a 44,1/48 kHz e 73–523 Hz a 16 kHz (hipótese do benchmark sintético). Conversão para nota/cents e comparação com a corda-alvo ficam em `src/domain/tuning`.

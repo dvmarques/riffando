@@ -11,6 +11,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
+- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Apply: afinador cromático e modo guitarra (E2 A2 D3 G3 B3 E4) com análise MPM nativa sobre a captura PCM existente, rota `/afinador`, nota grande, ponteiro, cents e estados em pt-BR; sem gravação, upload ou telemetria. Em validação: sem medição em aparelho físico e sem CI Kotlin verificado neste registro.
+
 - `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Refinamento técnico: spec com deltas válidos, parâmetros e critérios mensuráveis, benchmark sintético reproduzível (YIN × MPM × ACF, `experiments/gc-014`) e protocolo de validação física do afinador no Galaxy S25 FE. Sem Apply, sem implementação do afinador e sem medição em Android.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.

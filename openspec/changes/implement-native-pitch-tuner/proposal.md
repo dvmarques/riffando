@@ -77,4 +77,4 @@ Módulo Expo Android existente, adaptador TypeScript, domínio musical puro, tel
 
 ## Aprovação
 
-Aprovado apenas o **refinamento e a criação de artefatos OpenSpec**. **Apply, alteração de arquitetura relevante, archive, PR de implementação e merge dependem de autorizações separadas.** Hipóteses pendentes estão na tabela acima. As metas ±5 cents, 300 ms e ≈ 10 Hz são exploratórias; só os sinais sintéticos as sustentam, e nada foi comprovado em Android físico.
+Aprovados: o **refinamento e os artefatos OpenSpec** e, em **29/10/2026, o Apply** desta change pelo mantenedor, incluindo a decisão de **não incluir a guarda de oitava no v1**. **Archive, merge, release, alteração de arquitetura relevante e nova biblioteca seguem sem autorização.** Hipóteses pendentes estão na tabela acima. As metas ±5 cents, 300 ms e ≈ 10 Hz são exploratórias; só os sinais sintéticos as sustentam, e nada foi comprovado em Android físico.

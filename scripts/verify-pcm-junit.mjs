@@ -6,10 +6,11 @@ import { resolve } from 'node:path';
 const directory = resolve(
   '..', 'modules', 'riffando-audio', 'android', 'build', 'test-results', 'testDebugUnitTest',
 );
-// Suites e quantidades esperadas: divergência indica teste removido ou não executado.
+// Suites e quantidades esperadas (captura GC-013 e afinador GC-014): divergência indica teste removido ou não executado.
 const expected = {
   PcmSignalAccumulatorTest: 4,
   CaptureLifecycleTest: 6,
+  PitchPipelineTest: 9,
 };
 
 const results = {};
