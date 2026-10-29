@@ -61,7 +61,7 @@ As funcionalidades serão desenvolvidas **por fases**; esta lista representa a v
 4. Treinador inteligente e indicadores de progresso.
 5. Estúdio de áudio local, acessibilidade, testes e publicação Android.
 
-O roadmap e as estimativas serão refinados antes do início da implementação.
+O roadmap e as estimativas serão refinados conforme a implementação e as validações evoluírem.
 
 ## Licenciamento
 
@@ -76,6 +76,10 @@ Contribuições não comerciais e propostas de melhorias são bem-vindas. Antes 
 ## Aviso
 
 O projeto está em fase inicial. Informações de compatibilidade de dispositivos, precisão de análise musical e datas de lançamento só serão confirmadas após testes.
+
+## Diagnóstico experimental de áudio (GC-013)
+
+A captura PCM nativa Android está em implementação na [PR #60](https://github.com/dvmarques/riffando/pull/60) e **não foi validada em aparelho físico nem integrada à main**. Consulte o [guia de captura de áudio](docs/development/AUDIO_CAPTURE.md) para permissões, testes e limitações. Não confundir essa implementação em branch com afinador funcional.
 
 ## Executar a fundação
 

@@ -38,7 +38,7 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 - Avaliar compatibilidade de licenças das dependências e autorização de contribuições para eventual licença comercial (CLA).
 - Criar GitHub Project, milestones, labels e relações de dependência.
 - Determinar critérios objetivos para MVP e publicação.
-- Decidir quando iniciar a implementação; **não iniciada**.
+- Prosseguir com a validação física da GC-013 antes de decidir sua conclusão; as demais funcionalidades continuam sujeitas a refinamento e autorização.
 
 ## Como registrar uma nova decisão
 
@@ -69,3 +69,7 @@ A aprovação arquitetural foi seguida de autorização separada de Apply. SDK/t
 ## Estado da fundação
 
 GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.
+
+## Captura PCM nativa — implementação experimental, 28/10/2026
+
+A implementação Kotlin/AudioRecord está em curso na [GC-013 / PR #60](https://github.com/dvmarques/riffando/pull/60), sob a change `implement-native-pcm-capture`. O mantenedor autorizou Apply para o escopo aprovado; **isso não comprova precisão, latência, áudio em hardware nem autoriza archive/squash**. Validar build e comportamento no celular Android físico com guitarra amplificada antes de confirmar a solução. C++/USB continuam fora desta etapa e sem decisão definitiva. O uso de `RECORD_AUDIO` é contextual, somente para diagnóstico iniciado manualmente, e não deve gravar PCM em arquivo. Em 28/10/2026 a captura foi observada no Galaxy S25 FE (Android 16, fonte `MIC`, 48 kHz mono PCM16): silêncio, guitarra, 10 min, 20 ciclos e segundo plano passaram; permissão revogada em primeiro plano fecha o app e o modo avião com captura ainda não foi testado. Isso não comprova latência, precisão nem outros aparelhos. Metadados observados e limitações em [AUDIO_CAPTURE.md](development/AUDIO_CAPTURE.md).

@@ -89,3 +89,7 @@ Histórico do planejamento em 26/10/2026, antes da autorização separada de App
 ## Estado da fundação
 
 GC-001 foi implementado e as 20 tarefas verificadas na PR #53. Matriz, evidências Windows/Linux, TalkBack e limites em [guia mobile](development/MOBILE.md). Archive/sync/squash autorizados pelo mantenedor em 27/10/2026, condicionados a revisão sem bloqueadores e CI verde no commit final.
+
+## Execução GC-013 — 28/10/2026
+
+O mantenedor autorizou avançar com o Apply da [issue #23](https://github.com/dvmarques/riffando/issues/23). Há uma [PR #60](https://github.com/dvmarques/riffando/pull/60) com a change ativa `implement-native-pcm-capture`, módulo local Kotlin/AudioRecord, integração Expo e tela de diagnóstico em desenvolvimento. **Não considerar esta feature entregue** até build, CI, revisão e principalmente teste com Android físico. O mantenedor dispõe de Android físico e guitarra amplificada; modelo/OS/medições não foram fornecidos e permanecem pendentes. O módulo não faz pitch, USB, iOS, calibração de latência ou gravações. Documentação operacional: [AUDIO_CAPTURE](development/AUDIO_CAPTURE.md).

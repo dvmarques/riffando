@@ -85,6 +85,25 @@ test('cache de build Gradle só é habilitado em CI e a prova negativa não o us
 test('jobs Windows e Linux continuam compilando o APK nativo', () => {
   assert.ok(runs(jobs.windows).includes('npm run build:android'));
   assert.ok(runs(jobs.android).includes('npm run build:android'));
+  assert.ok(runs(jobs.android).some(command => command.includes(':riffando-audio:testDebugUnitTest') && command.includes('node ../scripts/verify-pcm-junit.mjs')));
   assert.ok(runs(jobs.android).includes('node scripts/probe-android-compilation.mjs'));
   assert.ok(jobs.emulator.steps.some(step => step.with?.script === 'node scripts/smoke-android.mjs'));
+});
+// Majors cujo action.yml declara `using: node20` (verificado em 28/10/2026).
+// Isto é o runtime interno das actions, independente do Node instalado por setup-node.
+const node20Actions = {
+  'android-actions/setup-android': ['v3'],
+  'actions/upload-artifact': ['v4'],
+  'actions/download-artifact': ['v4'],
+};
+
+test('nenhuma action usa major com runtime interno Node.js 20 e o Node do projeto é preservado', () => {
+  for (const [name, job] of Object.entries(jobs)) {
+    for (const step of job.steps ?? []) {
+      if (!step.uses) continue;
+      const [action, ref] = step.uses.split('@');
+      assert.ok(!node20Actions[action]?.includes(ref), `${name}: ${step.uses}`);
+      if (action === 'actions/setup-node') assert.equal(step.with['node-version'], '24.21.0', name);
+    }
+  }
 });
