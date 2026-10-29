@@ -134,7 +134,9 @@ export default function AudioDiagnosticsScreen() {
       if (!mounted.current || id !== operation.current || AppState.currentState === 'background') return;
       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
         setStatus('error');
-        setError('O microfone precisa de autorização para iniciar a captura.');
+        setError(granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN
+          ? 'O microfone está bloqueado para o Riffando. Ative-o em Configurações > Apps > Riffando > Permissões > Microfone e tente de novo.'
+          : 'O microfone precisa de autorização para iniciar a captura.');
         return;
       }
 
@@ -163,7 +165,7 @@ export default function AudioDiagnosticsScreen() {
     else router.replace('/');
   };
 
-  const format = (value: number | undefined) => value === undefined ? '—' : Number.isFinite(value) ? value.toFixed(1) : '—';
+  const format = (value: number | undefined) => value === undefined ? '—' : Number.isFinite(value) ? value.toFixed(1).replace('.', ',') : '—';
 
   return (
     <Screen>
@@ -174,7 +176,7 @@ export default function AudioDiagnosticsScreen() {
       <View style={styles.card}>
         <Text accessibilityRole="header" style={styles.heading}>Estado do microfone</Text>
         <Text accessibilityRole="text" accessibilityLiveRegion="polite" style={styles.value}>{statusLabels[status]}</Text>
-        {error ? <Text accessibilityRole="alert" style={styles.warning}>{error}</Text> : null}
+        {error ? <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.warning}>{error}</Text> : null}
         <Text style={styles.body}>
           Ao iniciar, o aplicativo solicita acesso ao microfone. O áudio não é gravado nem enviado.
         </Text>

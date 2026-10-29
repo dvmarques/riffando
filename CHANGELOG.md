@@ -48,6 +48,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Fixed
 
+- `implement-native-pcm-capture` (Refs #23; PR #60) - Revisão de arquitetura/acessibilidade: sessão não fica presa se `Thread.start()` falhar com `Error`, contexto nativo ausente passa a reportar `AUDIO_CONTEXT_UNAVAILABLE`, erro de captura é anunciado como região ativa, métricas usam vírgula decimal (pt-BR) e a negativa permanente orienta a ativar o microfone em Configurações.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - A ponte `nativeCapture` passa a rejeitar (e não lançar de forma síncrona) quando o módulo nativo está ausente, evitando falha na limpeza da tela de diagnóstico e no listener de AppState no Expo Go; teste de regressão adicionado.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Patches Expo, dev-client e Router atualizados conforme catálogo SDK 58; checagem compatível preservada e inventário/licenças reavaliados. Auditoria passou a três avisos high de tooling em Zod, já aceitos temporariamente.

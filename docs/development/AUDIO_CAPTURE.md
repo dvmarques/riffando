@@ -68,6 +68,13 @@ Pré-requisitos: APK `riffando-validation.apk` do artefato `android-validation` 
 
 Observação: o limiar de "Saturação detectada" (amostra ≥ 32760) é estrito; pico de −0,4 dBFS já está praticamente no teto e não foi marcado. Um aviso de "próximo da saturação" seria uma decisão de produto fora do escopo da GC-013.
 
+### Limitações conhecidas da revisão (28/10/2026)
+
+- O callback de ciclo de vida nativo e o `startCapture` compartilham o mesmo lock; um start lento pode atrasar o callback, e um background que chegue antes da sessão ser registrada só é fechado pelo `stop()` do JS (guarda por `operation`). A janela é curta e não foi observada nos testes físicos.
+- Um evento de erro tardio de uma sessão anterior pode, em janela muito estreita, ser atribuído a uma nova sessão (o evento não carrega id de sessão).
+- Leitores de tela: o motivo do erro agora é região ativa assertiva, mas o agrupamento das métricas, o botão único com estado desabilitado e a revisão com TalkBack real continuam pendentes; as métricas não são anunciadas continuamente de propósito.
+- Não há `AudioRecord` simulado no JVM: os testes Kotlin cobrem RMS/pico, decisão de start/stop, ciclos, concorrência da decisão e timestamps sem valores inventados; o comportamento real do gravador foi observado apenas no Galaxy S25 FE.
+
 ## Limites e próximos passos
 
 O estágio não identifica nota, cents ou afinação (#24), não seleciona USB (#25), não implementa redução avançada de ruído (#26), não executa DSP C++ nem valida iOS. A precisão do relógio e a diferença entre frames/tempo de notificação não bastam para medir latência real; nenhum alvo de jitter/precisão foi comprovado.

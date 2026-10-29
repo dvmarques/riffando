@@ -154,3 +154,24 @@ it('não abre o diálogo de permissão nem encerra a captura quando o app fica i
   await act(async () => { resolvePermission('granted'); });
   await waitFor(() => expect(screen.getByText('Captura ativa')).toBeVisible());
 });
+
+it('formata métricas com vírgula decimal e anuncia o erro como região ativa', async () => {
+  await renderRouter(route, { initialUrl: '/diagnostico-audio' });
+  const metrics = jest.mocked(nativeCapture.onMetrics).mock.calls[0]?.[0];
+  const errors = jest.mocked(nativeCapture.onError).mock.calls[0]?.[0];
+  await act(async () => {
+    metrics?.({ rmsDbfs: -42.24, peakDbfs: -22.5, clipping: false, framesRead: 100, timestampOrigin: 'audio-record', timestampNanos: '1', timestampFrame: 1, observedAtNanos: '2' });
+  });
+  expect(screen.getByText('RMS: -42,2 dBFS')).toBeVisible();
+  expect(screen.getByText('Pico: -22,5 dBFS')).toBeVisible();
+  await act(async () => { errors?.({ code: 'AUDIO_READ_FAILED' }); });
+  expect(screen.getByRole('alert').props.accessibilityLiveRegion).toBe('assertive');
+});
+
+it('orienta a ativar o microfone nas configurações quando o Android não pergunta mais', async () => {
+  jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN);
+  await renderRouter(route, { initialUrl: '/diagnostico-audio' });
+  await userEvent.setup().press(screen.getByRole('button', { name: 'Iniciar captura' }));
+  await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent(/Ative-o em Configurações/));
+  expect(nativeCapture.start).not.toHaveBeenCalled();
+});

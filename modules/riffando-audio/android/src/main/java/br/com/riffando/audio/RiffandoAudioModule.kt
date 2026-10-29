@@ -107,7 +107,7 @@ class RiffandoAudioModule : Module() {
           current = session
           try {
             session.worker.start()
-          } catch (failure: Exception) {
+          } catch (failure: Throwable) {
             current = null
             session.active.set(false)
             throw failure
@@ -174,7 +174,11 @@ class RiffandoAudioModule : Module() {
     try {
       while (session.active.get()) {
         val context = appContext.reactContext
-        if (context == null || ContextCompat.checkSelfPermission(
+        if (context == null) {
+          errorCode = "AUDIO_CONTEXT_UNAVAILABLE"
+          break
+        }
+        if (ContextCompat.checkSelfPermission(
             context, Manifest.permission.RECORD_AUDIO
           ) != PackageManager.PERMISSION_GRANTED) {
           errorCode = "AUDIO_PERMISSION_REVOKED"
