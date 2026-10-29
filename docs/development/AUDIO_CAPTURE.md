@@ -33,21 +33,21 @@ cd android && ./gradlew :riffando-audio:testDebugUnitTest && node ../scripts/ver
 
 | Campo | Valor / evidência |
 | --- | --- |
-| Modelo Android físico | Pendente |
-| Android / API / fabricante | Pendente |
-| Microfone/entrada efetiva | Pendente |
-| Commit SHA e APK instalado | Pendente |
-| Sample rate, encoding, source, buffer efetivos | Pendente |
-| Timestamp de hardware disponível? | Pendente |
-| Permissão concedida, negada, revogada | Pendente |
-| Silêncio por 30 segundos | Pendente |
-| Guitarra amplificada, volume moderado, 2 minutos | Pendente |
-| Notas suaves/fortes, distâncias diferentes, clipping | Pendente |
+| Modelo Android físico | Samsung Galaxy S25 FE (SM-S731B), aparelho do mantenedor (28/10/2026) |
+| Android / API / fabricante | Android 16 / API 36 / Samsung |
+| Microfone/entrada efetiva | Microfone embutido, fonte `MIC` ("Microfone padrão"); `UNPROCESSED` não foi selecionada, então pode haver processamento do fabricante |
+| Commit SHA e APK instalado | `90d27e3`; APK `riffando-validation.apk` do artefato `android-validation` da run 40794999831, instalado via adb |
+| Sample rate, encoding, source, buffer efetivos | 48000 Hz, mono PCM 16-bit, `MIC`, buffer nativo 19200 bytes |
+| Timestamp de hardware disponível? | `AudioRecord` forneceu timestamp monotônico; não prova timestamp de hardware nem latência |
+| Permissão concedida, negada, revogada | Negada: aviso pt-BR, sem captura. Concedida: captura iniciou. Revogada: pendente |
+| Silêncio por 30 segundos | OK. Silêncio ambiente com portas fechadas: RMS −54,4 dBFS, pico −35,8, sem saturação; frames crescentes. Primeira leitura, com ruído ambiente: RMS −42,2, pico −22,5 |
+| Guitarra amplificada, volume moderado, 2 minutos | OK (2 min, observação manual de prints pontuais, não de médias) |
+| Notas suaves/fortes, distâncias diferentes, clipping | 50 cm: fraco RMS −10,0/pico −1,2; forte RMS −11,5/pico −0,4 (sem margem; saturação não marcada, limiar ≈ 0 dBFS). 1 m: fraco RMS −23,5/pico −12,8; forte RMS −9,5/pico −3,8. Sem sinal de compressão forte; 1 m deixa margem de ~4 dB |
 | Captura contínua por 10 minutos | Pendente |
 | 20 ciclos iniciar/parar | Pendente |
 | Segundo plano/primeiro plano e saída da tela | Pendente |
 | Outro aplicativo de áudio, se reproduzível | Pendente |
-| Falhas, logs sanitizados, consumo percebido | Pendente |
+| Falhas, logs sanitizados, consumo percebido | Nenhuma falha observada nos testes feitos até aqui; logs não coletados |
 
 Testar offline e, se possível, com TalkBack e fonte ampliada. O emulador CI serve para validar navegação, APK e início sem rede; não mede captura acústica real ou USB. **Não afirmar sucesso físico ou estabilidade antes de observar**. Dados PCM pessoais não devem ser anexados ao repositório público nem capturados por logs. Screenshots apenas de métricas não sensíveis e com permissão do mantenedor.
 
@@ -65,6 +65,8 @@ Pré-requisitos: APK `riffando-validation.apk` do artefato `android-validation` 
 8. Revogar a permissão em Configurações com a captura ativa; esperar o aviso de revogação e o estado "Captura indisponível".
 9. Opcional: abrir outro app de áudio durante a captura e registrar o efeito; repetir com TalkBack e fonte ampliada.
 10. Preencher a matriz abaixo com SHA, modelo/OS/API e resultados reais; só então marcar 4.3 e 4.4 em `tasks.md`.
+
+Observação: o limiar de "Saturação detectada" (amostra ≥ 32760) é estrito; pico de −0,4 dBFS já está praticamente no teto e não foi marcado. Um aviso de "próximo da saturação" seria uma decisão de produto fora do escopo da GC-013.
 
 ## Limites e próximos passos
 
