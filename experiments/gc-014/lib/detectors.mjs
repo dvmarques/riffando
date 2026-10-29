@@ -35,8 +35,21 @@ function correlations(x, fs) {
   return { r, m, W, tauMax };
 }
 
+/**
+ * Guarda de oitava para cima (opcional): se o erro no dobro do lag for claramente menor que no lag escolhido
+ * (< 50 %) e o lag escolhido não for quase perfeito (> 0,02), adota o dobro. Corrige corda tocada no ponto médio
+ * (harmônicos ímpares fracos), mas desloca para f/2 sinais com dobra de período real.
+ */
+function octaveGuard(err, tau, tauMax) {
+  const t2 = 2 * tau;
+  if (t2 + 1 > tauMax) return tau;
+  let best = t2;
+  for (const t of [t2 - 1, t2 + 1]) if (err[t] < err[best]) best = t;
+  return err[best] < 0.5 * err[tau] && err[tau] > 0.02 ? best : tau;
+}
+
 /** YIN: diferença quadrática, CMNDF, primeiro vale abaixo do limiar e interpolação parabólica. */
-export function yin(x, fs, { threshold = 0.2 } = {}) {
+export function yin(x, fs, { threshold = 0.2, guard = false } = {}) {
   const { tauMin, tauMax } = lagRange(fs);
   const W = x.length - tauMax - 1;
   const cm = new Float64Array(tauMax + 2).fill(1);
@@ -62,12 +75,13 @@ export function yin(x, fs, { threshold = 0.2 } = {}) {
     tau = tauMin;
     for (let t = tauMin; t <= tauMax; t++) if (cm[t] < cm[tau]) tau = t;
   }
+  if (guard) tau = octaveGuard(cm, tau, tauMax);
   const off = tau > tauMin && tau < tauMax ? parabolic(cm[tau - 1], cm[tau], cm[tau + 1]) : 0;
   return { hz: fs / (tau + off), conf: Math.max(0, 1 - cm[tau]), tau: tau + off };
 }
 
 /** MPM: NSDF = 2r/m, máximos-chave entre cruzamentos por zero, primeiro ≥ k·máximo, interpolação. */
-export function mpm(x, fs, { k = 0.9 } = {}) {
+export function mpm(x, fs, { k = 0.9, guard = false } = {}) {
   const { tauMin, tauMax } = lagRange(fs);
   const { r, m } = correlations(x, fs);
   const nsdf = new Float64Array(tauMax + 2);
@@ -86,7 +100,8 @@ export function mpm(x, fs, { k = 0.9 } = {}) {
   }
   if (!peaks.length) return { hz: null, conf: 0, tau: null };
   const top = Math.max(...peaks.map(p => nsdf[p]));
-  const tau = peaks.find(p => nsdf[p] >= k * top) ?? peaks[0];
+  let tau = peaks.find(p => nsdf[p] >= k * top) ?? peaks[0];
+  if (guard) tau = octaveGuard(Float64Array.from(nsdf, v => 1 - v), tau, tauMax);
   const off = parabolic(-nsdf[tau - 1], -nsdf[tau], -nsdf[tau + 1]);
   const peakValue = nsdf[tau] - 0.25 * (nsdf[tau - 1] - nsdf[tau + 1]) * off;
   return { hz: fs / (tau + off), conf: Math.max(0, Math.min(1, peakValue)), tau: tau + off };
@@ -117,11 +132,11 @@ export function acfGlobal(x, fs) {
 }
 
 /** Algoritmos avaliados; `params` permite ablações (limiar do YIN, fator k do MPM). */
-export function makeAlgorithms({ yinThreshold = 0.2, mpmK = 0.9 } = {}) {
+export function makeAlgorithms({ yinThreshold = 0.2, mpmK = 0.9, guard = false } = {}) {
   return {
     'ACF global (baseline)': (x, fs) => acfGlobal(x, fs),
-    YIN: (x, fs) => yin(x, fs, { threshold: yinThreshold }),
-    'MPM (ACF refinada)': (x, fs) => mpm(x, fs, { k: mpmK }),
+    YIN: (x, fs) => yin(x, fs, { threshold: yinThreshold, guard }),
+    'MPM (ACF refinada)': (x, fs) => mpm(x, fs, { k: mpmK, guard }),
   };
 }
 export const VARIANTS = Object.keys(makeAlgorithms());

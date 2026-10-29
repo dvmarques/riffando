@@ -66,3 +66,14 @@ test('POC GC-014: estabilizador exige K quadros consistentes e a emissão a 10 H
   const { settleS } = settle(outs, { tc: 0.13, to: 150, from: 100 }, 5, 0.2);
   assert.ok(Math.abs(settleS - 0.05) < 1e-9);
 });
+
+test('POC GC-014: guarda de oitava corrige harmônicos ímpares fracos sem alterar nota limpa', () => {
+  const hz = midiToHz(45);
+  const odd = synth({ fs: FS, seconds: 0.3, f0: hz, partials: [0.2, 1, 0.2, 0.5, 0.1, 0.3, 0.06, 0.15], levelDb: -20, rng: mulberry32(9) });
+  const plain = makeAlgorithms().YIN(lastWindow(odd, 85), FS);
+  const guarded = makeAlgorithms({ guard: true }).YIN(lastWindow(odd, 85), FS);
+  assert.ok(Math.abs(centsBetween(plain.hz, hz * 2)) <= 50, 'sem guarda: lê a oitava acima');
+  assert.ok(Math.abs(centsBetween(guarded.hz, hz)) <= 5, 'com guarda: lê a fundamental');
+  const clean = lastWindow(tone(hz), 85);
+  assert.equal(makeAlgorithms({ guard: true }).YIN(clean, FS).hz, makeAlgorithms().YIN(clean, FS).hz);
+});

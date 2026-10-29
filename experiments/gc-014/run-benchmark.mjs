@@ -104,12 +104,13 @@ table(['Limiar', ...['YIN', 'MPM (ACF refinada)'].flatMap(v => [`${v} recall`, '
 // 5. Ablações
 log('ablações');
 md('## 5. Ablação do tratamento de oitava (48 kHz, 85 ms)',
-  'Variação do limiar de seleção do YIN e do fator k do MPM (k = 1,0 equivale a escolher o maior pico-chave). Colunas: recall (±50 c) em 01–05, erros de oitava em 08 (ímpares fracos) e 08 (dobra de período), FP em ruído.');
+  'Variação do limiar de seleção do YIN, do fator k do MPM (k = 1,0 equivale a escolher o maior pico-chave) e da guarda opcional de oitava 2τ (adota 2τ se o erro ali for < 50 % do erro em τ e este > 0,02; ver `octaveGuard`). Colunas: recall (±50 c) em 01–05, erros de oitava em 08 (ímpares fracos) e 08 (dobra de período), FP em ruído.');
 const abl = [];
 const ablCats = [CAT.clean, CAT.detune, CAT.chroma, CAT.weak, CAT.noiseL];
 for (const [label, params, variant] of [
   ['YIN limiar 0,10', { yinThreshold: 0.1 }, 'YIN'], ['YIN limiar 0,15', { yinThreshold: 0.15 }, 'YIN'], ['YIN limiar 0,20 (padrão)', { yinThreshold: 0.2 }, 'YIN'], ['YIN limiar 0,30', { yinThreshold: 0.3 }, 'YIN'],
   ['MPM k 0,80', { mpmK: 0.8 }, 'MPM (ACF refinada)'], ['MPM k 0,90 (padrão)', { mpmK: 0.9 }, 'MPM (ACF refinada)'], ['MPM k 0,95', { mpmK: 0.95 }, 'MPM (ACF refinada)'], ['MPM k 1,00 (pico máximo)', { mpmK: 1 }, 'MPM (ACF refinada)'],
+  ['YIN + guarda de oitava 2τ', { guard: true }, 'YIN'], ['MPM + guarda de oitava 2τ', { guard: true }, 'MPM (ACF refinada)'],
 ]) {
   const rows = runStatic({ fs: 48000, windowsMs: [REF_MS], algorithms: { [variant]: makeAlgorithms(params)[variant] }, filter: c => ['01', '02', '03', '04', '05', '08', '10'].includes(c.category.slice(0, 2)) });
   const of = cats => aggregate(rows.filter(r => [].concat(cats).includes(r.category)), THR);

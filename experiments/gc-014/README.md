@@ -1,43 +1,40 @@
-# GC-014 — POC isolada: YIN vs autocorrelação
+# GC-014 — Benchmark sintético de detecção de pitch
 
-## Estado
-Experimento independente em Node 22; **não é Apply**, não altera módulo Expo/Kotlin, não integra afinador e não constitui validação em Android. Executado localmente em 29/10/2026. Código reproduzível: [compare-pitch.mjs](compare-pitch.mjs).
+## Estado e escopo
 
-## OpenSpec — revisão antes da POC
-- Inspecionados `proposal.md`, `design.md`, `tasks.md` e `specs/native-pitch-tuner/spec.md` da change `implement-native-pitch-tuner` na branch de Propose.
-- Os quatro artefatos existem, os cenários da spec contêm Requirements/WHEN/THEN, as tarefas não estão marcadas como concluídas e o escopo não autoriza Apply.
-- **Validação formal pendente:** não foi possível executar `npm exec -- openspec validate implement-native-pitch-tuner --strict` ou `npm exec -- openspec list --json` no checkout remoto nesta execução. Portanto não declarar a change validada pelo CLI.
+Experimento **isolado** em Node 22+, sem dependências, sem gravações e sem integração com o app. **Não é Apply**, não altera o módulo Expo/Kotlin e **não constitui validação em Android**. Substitui o POC inicial (YIN × ACF simples, 11 sinais), cujo código está no histórico do Git da PR #61. Resultados: [results/report.md](results/report.md) (determinístico) e [results/timing.md](results/timing.md) (tempos de Node, não determinísticos).
 
-## Configuração e método
-Sinais gerados determinísticamente, PCM simulado em Float64, amostragem 8 kHz; janela 2.048 amostras = 256 ms; faixa pesquisada de 70–1.000 Hz. Sem amostras acústicas, sem dispositivo físico. YIN de diferença quadrática com limiar CMNDF 0,12 e interpolação parabólica; autocorrelação normalizada simples com pico global e limiar 0,65, sem interpolação. Tempos de execução foram medidos localmente e **não são latência Android, latência ponta a ponta nem benchmark justo de implementação otimizada**.
-
-## Resultados observados (erros em cents)
-| Caso | ACF | YIN |
-|---|---:|---:|
-| E2 limpa | +1,4 | +0,1 |
-| A2 limpa | −6,5 | +0,1 |
-| D3 limpa | −1200,5 | +0,1 |
-| G3 limpa | −7,8 | +0,4 |
-| B3 limpa | −1898,6 | +0,5 |
-| E4 limpa | −2398,6 | +1,2 |
-| A4 limpa | −2788,0 | +2,5 |
-| A2 com harmônico | −6,5 | +0,1 |
-| E2 +15 cents | +4,4 | +0,1 |
-| B3 com ruído baixo | −1205,5 | +0,7 |
-| Silêncio | sem nota | sem nota |
-
-**Contagem correta:** YIN 10/10 tons dentro de ±5 cents; ACF 2/10 (E2 e E2 +15c). Ambos rejeitaram o silêncio. Valores podem variar entre implementações nas condições numéricas, mas a entrada é determinística.
-
-## Interpretação e limitações
-YIN é o candidato mais forte desta configuração; a estratégia ACF de pico global tem falhas de oitava graves. A comparação não demonstra superioridade universal de YIN sobre autocorrelação refinada e não valida ruído forte, ataques, transientes, distorção, vibrato, mudança rápida, microfone real, CPU/bateria/latência Android ou precisão universal ±5 cents. A janela de 256 ms já representa um tradeoff importante frente à meta exploratória de resposta ≤300 ms.
-
-## Antes do Apply
-1. Executar validador OpenSpec oficial e corrigir erros, se existirem.
-2. Refinar algoritmo/limiares com corpus mais amplo e mesma janela/custo computacional, incluindo ACF com seleção adequada de picos e interpolação.
-3. Definir protocolo para Android real: seis cordas, afinador de referência, distância/volume, erro mediano/P95, estabilidade, falsos positivos, tempo de estabilização, uso de CPU, condições de rejeição e documentação de aparelho/build.
-4. Manter autorização de implementação e merge separadas. Nenhum desempenho físico é reivindicado.
-
-## Comando
 ```bash
-node experiments/gc-014/compare-pitch.mjs
+node experiments/gc-014/run-benchmark.mjs   # ≈ 4 min em Node 22; reescreve results/
+node --test tests/tooling/gc-014-pitch-poc.test.mjs   # testes de contrato do POC (rápidos)
 ```
+
+## Método
+
+- **Sinais:** PRNG `mulberry32` com sementes fixas; parciais com inarmonicidade B = 5·10⁻⁵ (estresse: 3·10⁻⁴), PCM16 simulado, ruído ambiente de −54 dBFS nos cenários de baixa amplitude (medido na GC-013). 423 casos em 11 categorias × 2 instantes de janela: cordas soltas, desafinações ±5…±40 c, faixa cromática D2–B5, fundamental fraca, ruído leve (SNR 20–30 dB) e moderado (5–10 dB), baixa amplitude, vibrato (frequência instantânea conhecida), erros de oitava, inarmonicidade alta, silêncio/ruído/sinais ambíguos.
+- **Algoritmos** (mesmo buffer e faixa 70–1000 Hz): ACF de pico global (baseline), YIN (CMNDF, limiar 0,2, interpolação) e MPM (NSDF, picos-chave k = 0,9, interpolação). Variante opcional: guarda de oitava 2τ (ablação).
+- **Janelas:** 32, 48, 64, 85 e 128 ms a 48 kHz; 64, 85 e 128 ms a 16 kHz (N, τmax e conversões escalam com a taxa).
+- **Política:** gate de nível −50 dBFS (RMS da janela) e confiança ≥ 0,85 a priori; sensibilidade 0,70–0,95 no relatório. Sem calibração com o corpus de avaliação.
+- **Métricas:** erro absoluto mediano e P95 (cents) entre leituras aceitas com a nota correta, taxa dentro de ±5 c sobre todas as amostras (rejeições contam como falha), erros de oitava/harmônico/outro, rejeições por gate e confiança, falsos positivos em sinais sem tom, tempo de estabilização em 24 trocas de nota e 12 palhetadas (estabilizador K = 2/3/5, saída interna a 50 Hz e emissão a 10 Hz em quatro fases), tempo exibindo a nota antiga.
+- **Vibrato:** erro contra a média da frequência instantânea na janela e contra o centro nominal.
+
+## Principais resultados (48 kHz, 85 ms; ver o relatório para tudo)
+
+| Categoria | ACF global | YIN | MPM |
+| --- | ---: | ---: | ---: |
+| Limpas + desafinadas + cromáticas (n = 280) | 74 % | 100 % | 100 % |
+| Fundamental fraca (n = 72) | 67 % | 100 % | 100 % |
+| Ruído leve (n = 72) | 81 % | 100 % | 100 % |
+| Ruído moderado (n = 72) | 24 % | 38 % | 49 % |
+| Vibrato vs. média da janela (n = 72) | 78 % | 81 % | 81 % |
+| Erro mediano / P95 em limpas (cents) | 1,4 / 3,5 | 1,3 / 1,5 | 1,3 / 1,5 |
+
+Células: amostras aceitas com erro ≤ 5 cents; rejeições contam como falha. Estabilização (K = 3, emissão a 10 Hz, tolerância ±5 c): mediana 150 ms e P95 200 ms para janelas de 64–85 ms, em trocas de nota e palhetadas. Ruído moderado: nenhuma nota errada aceita (só rejeições). Erro de oitava com harmônicos ímpares ≲ 20 % dos pares: YIN 48/48, MPM 36/48; a guarda 2τ corrige metade e cria 14 erros no caso de dobra de período. A 16 kHz notas a partir de 784 Hz excedem ±5 c.
+
+## Limitações
+
+- Sintético: sem microfone, guitarra, amplificador, processamento do fabricante, saturação ou ruído real; a inarmonicidade das cordas reais é desconhecida e afeta o viés (B = 3·10⁻⁴ ⇒ +7,9 c).
+- O instante t de cada saída é o fim da janela; **o atraso de entrada/saída do Android e a latência ponta a ponta não estão incluídos**.
+- Os tempos de Node/V8 não representam Kotlin/ART nem o Galaxy S25 FE; usar apenas o custo relativo e a contagem W·τmax.
+- 44,1 kHz, hum de 100/120 Hz, voz e instrumentos não guitarra não foram avaliados. O corpus é limitado a 11 categorias e poucas sementes por caso; não permite extrapolar precisão universal.
+- Nenhum resultado físico foi obtido. Protocolo: [TUNER_VALIDATION.md](../../docs/development/TUNER_VALIDATION.md).

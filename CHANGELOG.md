@@ -11,6 +11,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
+- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Refinamento técnico: spec com deltas válidos, parâmetros e critérios mensuráveis, benchmark sintético reproduzível (YIN × MPM × ACF, `experiments/gc-014`) e protocolo de validação física do afinador no Galaxy S25 FE. Sem Apply, sem implementação do afinador e sem medição em Android.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
 
 - `issue-54-adaptive-ai-workflow` (issue #54) - Fluxo adaptativo Fast/Standard/Critical, mapa de contexto, política de modelos e qualidade, revisores consultivos e validação de skills próprias entre Codex e Claude, sem app implementado.
