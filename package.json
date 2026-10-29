@@ -32,7 +32,7 @@
     "test:tooling": "node scripts/smoke-openspec.mjs",
     "validate:openspec": "node scripts/validate-openspec.mjs",
     "validate": "npm run validate:docs && npm run lint && npm run typecheck && npm run test:foundation-tooling && npm run test:ci",
-    "validate:docs": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills && npm run test:agent-skills",
+    "validate:docs": "npm run lint:docs && npm run check:links && npm run ai:check && npm run test:tooling && npm run validate:openspec && npm run check:agent-skills && npm run test:agent-skills && npm run check:agent-reviewers && npm run test:agent-reviewers",
     "start": "expo start --dev-client --localhost",
     "android": "expo run:android",
     "lint": "eslint app src tests/mobile",
@@ -48,7 +48,9 @@
     "sync:agent-skills": "node scripts/sync-agent-skills.mjs",
     "check:agent-skills": "node scripts/sync-agent-skills.mjs --check",
     "test:agent-skills": "node --test scripts/sync-agent-skills.test.mjs",
-    "check:env:gradle": "node scripts/check-gradle-environment.mjs"
+    "check:env:gradle": "node scripts/check-gradle-environment.mjs",
+    "check:agent-reviewers": "node scripts/check-agent-reviewers.mjs",
+    "test:agent-reviewers": "node --test scripts/check-agent-reviewers.test.mjs"
   },
   "overrides": {
     "micromark-extension-math": {
@@ -65,7 +67,7 @@
     "expo-router": "58.0.28",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "react-native": "0.88.0",
+    "react-native": "0.88.1",
     "react-native-safe-area-context": "5.10.1",
     "react-native-screens": "4.30.0"
   },

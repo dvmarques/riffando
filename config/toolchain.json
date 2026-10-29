@@ -3,7 +3,7 @@
   "npm": "12.2.1",
   "expo": "58.0.21",
   "react": "19.3.0",
-  "reactNative": "0.88.0",
+  "reactNative": "0.88.1",
   "typescript": "6.0.3",
   "javaMajor": 17,
   "compileSdk": 37,

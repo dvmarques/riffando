@@ -11,6 +11,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
+- `paridade-revisores-codex-claude` (Refs #54; PR #62) - Revisores consultivos de arquitetura e acessibilidade disponíveis para Codex, com verificação de equivalência ao Claude.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
 
 - `issue-54-adaptive-ai-workflow` (issue #54) - Fluxo adaptativo Fast/Standard/Critical, mapa de contexto, política de modelos e qualidade, revisores consultivos e validação de skills próprias entre Codex e Claude, sem app implementado.
@@ -22,6 +24,12 @@ por versão e pelas changes correspondentes do OpenSpec.
 - `setup-ai-development` (PR #52; Refs #1, #14) - Preparação do fluxo de desenvolvimento com OpenSpec 1.15.0, instruções comuns para Codex e Claude Code, integrações oficiais, templates GitHub e CI de documentação/ferramentas em Linux e Windows. Sem implementação do aplicativo.
 
 #### Changed
+
+- `paridade-revisores-codex-claude` (Refs #54, #59; PR #62) - Change concluída com spec de CI proporcional sincronizada e arquivada antes da integração.
+
+- `paridade-revisores-codex-claude` (PR #62) - React Native atualizado de 0.88.0 para 0.88.1 conforme catálogo do Expo SDK 58, com matriz e lockfile sincronizados.
+
+- `paridade-revisores-codex-claude` (Refs #59; PR #62) - CI de PRs seleciona validações por impacto, com fallback completo e gate que verifica resultados esperados.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Change concluída (17/17 tarefas) arquivada com sync da spec `native-pcm-capture`; validada em CI e no Galaxy S25 FE (um aparelho, sem conclusões de latência ou precisão).
 
