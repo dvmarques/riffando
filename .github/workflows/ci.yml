@@ -23,6 +23,23 @@ env:
   NPM_CONFIG_FUND: 'false'
 
 jobs:
+  scope:
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    name: Classificação do CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      scope: ${{ steps.classify.outputs.scope }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.21.0
+      - id: classify
+        run: node scripts/ci-scope.mjs
+
   documentation:
     if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
     name: Documentação e OpenSpec (${{ matrix.os }})
@@ -41,9 +58,11 @@ jobs:
       - run: npm install --global npm@12.2.1
       - run: npm ci --ignore-scripts
       - run: npm run validate:docs
+      - run: node --test tests/tooling/ci-scope.test.mjs tests/tooling/gate.test.mjs tests/tooling/ci-workflow.test.mjs
 
   javascript:
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: scope
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && needs.scope.outputs.scope == 'full'
     name: Qualidade e exportação Android
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -72,7 +91,8 @@ jobs:
           if-no-files-found: error
 
   windows:
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: scope
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && needs.scope.outputs.scope == 'full'
     name: Instalação e scripts Windows
     runs-on: windows-latest
     timeout-minutes: 45
@@ -115,7 +135,8 @@ jobs:
           retention-days: 7
 
   android:
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: scope
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && needs.scope.outputs.scope == 'full'
     name: APK Android nativo
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -156,9 +177,9 @@ jobs:
           retention-days: 7
 
   emulator:
-    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && needs.scope.outputs.scope == 'full'
     name: Smoke Android offline
-    needs: android
+    needs: [scope, android]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -194,7 +215,7 @@ jobs:
   gate:
     name: Fundação — gate agregado
     if: always() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    needs: [documentation, javascript, windows, android, emulator]
+    needs: [scope, documentation, javascript, windows, android, emulator]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

@@ -14,6 +14,7 @@ const normalize = condition => String(condition).replace(/\s+/g, ' ').trim();
 
 const notDraft = "github.event_name != 'pull_request' || github.event.pull_request.draft == false";
 const expectedNames = {
+  scope: 'Classificação do CI',
   documentation: 'Documentação e OpenSpec (${{ matrix.os }})',
   javascript: 'Qualidade e exportação Android',
   windows: 'Instalação e scripts Windows',
@@ -44,7 +45,7 @@ test('workflow mantém permissões mínimas e telemetria/ruído de npm desativad
 test('todo job obrigatório tem exatamente a condição de não executar em PR Draft', () => {
   assert.deepEqual(Object.keys(jobs).sort(), Object.keys(expectedNames).sort());
   for (const [name, job] of Object.entries(jobs)) {
-    const expected = name === 'gate' ? `always() && (${notDraft})` : notDraft;
+    const expected = name === 'gate' ? `always() && (${notDraft})` : ['javascript', 'windows', 'android', 'emulator'].includes(name) ? `(${notDraft}) && needs.scope.outputs.scope == 'full'` : notDraft;
     assert.equal(normalize(job.if), expected, name);
   }
 });
@@ -62,8 +63,13 @@ test('nomes dos checks e dependências do gate não mudam', () => {
     assert.equal(jobs[name].name, expected, name);
   }
   assert.deepEqual(jobs.documentation.strategy.matrix.os, ['ubuntu-latest', 'windows-latest']);
-  assert.deepEqual([...jobs.gate.needs].sort(), ['android', 'documentation', 'emulator', 'javascript', 'windows']);
-  assert.equal(jobs.emulator.needs, 'android');
+  assert.deepEqual([...jobs.gate.needs].sort(), ['android', 'documentation', 'emulator', 'javascript', 'scope', 'windows']);
+  assert.deepEqual(jobs.emulator.needs, ['scope', 'android']);
+  for (const name of ['javascript', 'windows', 'android']) assert.equal(jobs[name].needs, 'scope');
+  assert.equal(jobs.scope.steps[0].with['fetch-depth'], 0);
+  assert.equal(jobs.scope.needs, undefined);
+  assert.equal(jobs.documentation.needs, undefined);
+  assert.ok(runs(jobs.documentation).some(command => command.includes('tests/tooling/ci-scope.test.mjs') && command.includes('tests/tooling/gate.test.mjs') && command.includes('tests/tooling/ci-workflow.test.mjs')));
 });
 
 test('jobs que instalam dependências fixam o npm do packageManager', () => {
