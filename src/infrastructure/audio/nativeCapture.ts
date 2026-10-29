@@ -39,9 +39,10 @@ function getNative(): AudioNativeModule {
 }
 
 export const nativeCapture = {
-  start: () => getNative().startCapture(),
-  stop: () => getNative().stopCapture(),
-  status: () => getNative().getCaptureStatus(),
+  // async: módulo ausente (Expo Go) vira rejeição, nunca exceção síncrona em cleanup/AppState.
+  start: async () => getNative().startCapture(),
+  stop: async () => getNative().stopCapture(),
+  status: async () => getNative().getCaptureStatus(),
   onMetrics: (listener: (value: CaptureMetrics) => void) => getNative().addListener('onMetrics', listener),
   onError: (listener: (value: CaptureError) => void) => getNative().addListener('onCaptureError', listener),
 };

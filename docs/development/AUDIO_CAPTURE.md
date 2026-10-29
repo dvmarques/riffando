@@ -51,6 +51,21 @@ cd android && ./gradlew :riffando-audio:testDebugUnitTest && node ../scripts/ver
 
 Testar offline e, se possível, com TalkBack e fonte ampliada. O emulador CI serve para validar navegação, APK e início sem rede; não mede captura acústica real ou USB. **Não afirmar sucesso físico ou estabilidade antes de observar**. Dados PCM pessoais não devem ser anexados ao repositório público nem capturados por logs. Screenshots apenas de métricas não sensíveis e com permissão do mantenedor.
 
+## Roteiro objetivo para o Android físico
+
+Pré-requisitos: APK `riffando-validation.apk` do artefato `android-validation` do CI no SHA a validar (ou `npm run build:android`), aparelho com depuração USB, guitarra com amplificador e microfone do aparelho voltado ao amplificador. Nenhum PCM deve ser salvo; registre apenas números e capturas das métricas.
+
+1. `adb install -r riffando-validation.apk`; anotar `adb shell getprop ro.product.model`, `ro.build.version.release` e `ro.build.version.sdk`. Abrir o app, entrar em **Diagnóstico de áudio** e confirmar que nenhuma permissão foi pedida antes de **Iniciar captura**.
+2. Permissão: negar (esperar o aviso em pt-BR e nenhuma captura), iniciar de novo e conceder. Anotar "Configuração real" (entrada, frequência, buffer).
+3. Silêncio, 30 s: RMS/pico próximos do piso, sem saturação, "Frames observados" crescente.
+4. Guitarra amplificada em volume moderado, 2 min: notas suaves e fortes, em duas distâncias; anotar RMS/pico e se "Saturação detectada" aparece.
+5. 10 min contínuos com a tela ligada; conferir que as métricas continuam atualizando e que o aparelho não aquece de forma anormal.
+6. 20 ciclos Iniciar/Parar (o botão deve alternar sem erro; `adb logcat -d | grep -i riffando` sem exceções).
+7. Segundo plano: durante a captura, ir para a tela inicial e voltar; a captura deve estar parada ao voltar (indicador de microfone do Android apagado em segundo plano).
+8. Revogar a permissão em Configurações com a captura ativa; esperar o aviso de revogação e o estado "Captura indisponível".
+9. Opcional: abrir outro app de áudio durante a captura e registrar o efeito; repetir com TalkBack e fonte ampliada.
+10. Preencher a matriz abaixo com SHA, modelo/OS/API e resultados reais; só então marcar 4.3 e 4.4 em `tasks.md`.
+
 ## Limites e próximos passos
 
 O estágio não identifica nota, cents ou afinação (#24), não seleciona USB (#25), não implementa redução avançada de ruído (#26), não executa DSP C++ nem valida iOS. A precisão do relógio e a diferença entre frames/tempo de notificação não bastam para medir latência real; nenhum alvo de jitter/precisão foi comprovado.

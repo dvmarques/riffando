@@ -62,7 +62,7 @@ jobs:
       - run: npm run test:ci
       - run: npm run check:expo
       - run: npm run export:android
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: javascript-reports
           path: |
@@ -93,7 +93,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           cmdline-tools-version: 16111833
           packages: platform-tools
@@ -107,7 +107,7 @@ jobs:
         run: New-ItemProperty -Path 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -Name LongPathsEnabled -Value 1 -PropertyType DWORD -Force
       - run: npm run check:env:gradle
       - run: npm run build:android
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-validation-windows
           path: artifacts/riffando-validation.apk
@@ -130,7 +130,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
         with:
           cmdline-tools-version: 16111833
           packages: platform-tools
@@ -146,7 +146,7 @@ jobs:
           ./gradlew :riffando-audio:testDebugUnitTest
           node ../scripts/verify-pcm-junit.mjs
       - run: node scripts/probe-android-compilation.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: android-validation
           path: |
@@ -166,7 +166,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 24.21.0
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: android-validation
           path: artifacts
@@ -183,7 +183,7 @@ jobs:
           profile: pixel_7
           disable-animations: true
           script: node scripts/smoke-android.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: android-smoke-evidence

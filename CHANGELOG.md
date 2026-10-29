@@ -23,6 +23,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
+- `implement-native-pcm-capture` (Refs #23; PR #60) - Actions do CI com runtime Node.js 24: `setup-android` v3→v4, `upload-artifact` v4→v7 e `download-artifact` v4→v8 (matriz Node 24.21.0/npm 12.2.1/Java 17 preservada); teste impede retorno de majors Node 20.
+
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Patches da matriz Expo 58 e lockfile npm sincronizados em runner reproduzível, testes unitários Kotlin integrados ao CI e revisão da liberação segura da captura.
 
 - `optimize-ci-agent-efficiency` (issue #57; PR #58) - Cache de build Gradle somente no CI (`--build-cache`, prova negativa de compilação sem cache), npm sem auditoria/funding no CI, timeout do job Windows de 30 para 45 min, invariantes do workflow testadas, guia de agentes com leitura incremental, arquivos gerados fora do contexto padrão e consulta direcionada de logs. Jobs, checks, gate e cobertura preservados; mudanças de frequência de build e proteção de branch apenas propostas.
@@ -43,6 +45,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 - `setup-ai-development` (PR #52) - Changelog organizado por versão em andamento e categorias Added, Changed e Fixed, com identificação da change/issue e efeito objetivo; convenção de fechamento com data em português brasileiro e abertura da próxima versão em andamento.
 
 #### Fixed
+
+- `implement-native-pcm-capture` (Refs #23; PR #60) - A ponte `nativeCapture` passa a rejeitar (e não lançar de forma síncrona) quando o módulo nativo está ausente, evitando falha na limpeza da tela de diagnóstico e no listener de AppState no Expo Go; teste de regressão adicionado.
 
 - `define-mobile-foundation` (Refs #11; PR #53) - Patches Expo, dev-client e Router atualizados conforme catálogo SDK 58; checagem compatível preservada e inventário/licenças reavaliados. Auditoria passou a três avisos high de tooling em Zod, já aceitos temporariamente.
 

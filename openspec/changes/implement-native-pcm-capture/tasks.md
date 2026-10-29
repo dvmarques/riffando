@@ -5,8 +5,8 @@ GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/
 ## 1. Configuração, contrato e escolha de API (CA-01, CA-02, CA-04)
 
 - [x] 1.1 Conferir SDK/Expo Modules API e requisitos de `AudioRecord` no Android alvo; registrar alternativa Kotlin versus biblioteca/Oboe, licenças, dependências, versão e consequências para iOS. Evidência: docs/development/AUDIO_CAPTURE.md, design.md, documentação oficial Expo/Android; sem biblioteca adicional.
-- [ ] 1.2 Implementar configuração Expo regenerável de `RECORD_AUDIO`, removendo apenas seu bloqueio atual; verificar permissão no manifest do APK e que não houve inclusão de permissões amplas; documentar consentimento e revogação.
-- [ ] 1.3 Definir tipos TypeScript de `CaptureConfig`, `CaptureStatus`, `CaptureMetrics` e erros categorizados, mantendo fronteiras de UI/infraestrutura e sem APIs de USB/pitch não usadas.
+- [x] 1.2 Implementar configuração Expo regenerável de `RECORD_AUDIO`, removendo apenas seu bloqueio atual; verificar permissão no manifest do APK e que não houve inclusão de permissões amplas; documentar consentimento e revogação. Evidência: `app.json`, teste native-audio-config e `dumpsys` do smoke CI (RECORD_AUDIO declarada, granted=false até ação do usuário).
+- [x] 1.3 Definir tipos TypeScript de `CaptureConfig`, `CaptureStatus`, `CaptureMetrics` e erros categorizados, mantendo fronteiras de UI/infraestrutura e sem APIs de USB/pitch não usadas. Evidência: `src/infrastructure/audio/nativeCapture.ts`, typecheck CI.
 
 ## 2. Captura e temporização nativas (CA-02, CA-03, CA-04)
 
@@ -17,7 +17,7 @@ GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/
 
 ## 3. Interface técnica e testes automatizados (CA-01, CA-05, CA-06, CA-07)
 
-- [ ] 3.1 Implementar tela técnica de diagnóstico em pt-BR com start/stop, status, nível RMS/pico/clipping, configuração efetiva, timestamps/erros e acessibilidade; não representar afinador como funcional.
+- [x] 3.1 Implementar tela técnica de diagnóstico em pt-BR com start/stop, status, nível RMS/pico/clipping, configuração efetiva, timestamps/erros e acessibilidade; não representar afinador como funcional. Evidência: `AudioDiagnosticsScreen.tsx` e testes Jest; TalkBack físico segue em 4.4/docs.
 - [ ] 3.2 Testar estados e falhas na fronteira React Native/Expo, acessibilidade, permissões e recuperação; testes nativos controlados para RMS, buffers, temporização e corrida de lifecycle, diferenciando mocks de hardware.
 - [ ] 3.3 Validar configuração/permits e comportamento offline; confirmar que não há arquivos de PCM, upload, telemetria ou logs com dados sensíveis; atualizar inventário de dependências/licenças.
 
