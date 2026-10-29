@@ -35,7 +35,7 @@ Benchmark **sintético e determinístico** em Node ([experiments/gc-014](../../.
 | Emissão ao JS ≤ 10 Hz, estado estabilizado retido (zero-order hold) | Hipótese suportada por evidência sintética | §10 |
 | Faixa: 48 kHz = 73–988 Hz; 16 kHz = 73–523 Hz (784 Hz falha ±5 c); 44,1 kHz não testado | Hipótese; pendente de aparelho | §8, §9 |
 | A4 = 440 Hz fixo | Hipótese de escopo (A4 configurável fica fora) | PRD RF-01 |
-| Guarda de oitava 2τ | **Em aberto** (corrige uma falha, cria outra) | §5 |
+| Guarda de oitava 2τ | **Decisão do mantenedor (29/10/2026): fora do v1**; v1 apenas sinaliza “oitava acima/abaixo” da corda-alvo. Reavaliar após o passo 8 do protocolo físico | §5 |
 | ±5 c em sinal limpo e estável; estabilização ≤ 300 ms; atualização ≈ 10 Hz | **Metas exploratórias**: viáveis nos sinais sintéticos; sem comprovação física | §1, §10 |
 
 ## Achados que limitam as promessas

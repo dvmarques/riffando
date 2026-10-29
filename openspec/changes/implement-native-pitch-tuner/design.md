@@ -48,7 +48,7 @@ Células = proporção de amostras aceitas dentro de ±5 c; rejeições contam c
 | Erros de oitava | Sem guarda 2τ no v1; sinalização “oitava acima/abaixo” no modo guitarra | Ver abaixo |
 | Eventos de estado | Sem sinal / instável / não confiável | Sem frequência ou nota fictícia |
 
-**Erros de oitava.** Com harmônicos ímpares ≲ 20 % dos pares (corda tocada no ponto médio) o período aparente é T/2: YIN erra 48/48 e MPM 36/48. A guarda “adotar 2τ se o erro ali for < 50 % do erro em τ” corrige metade (r ≥ 0,1) sem afetar sinais limpos, mas desloca para f/2 sinais com dobra de período (2 → 16 erros em 36); a verdade musical desse segundo caso é ambígua. Para r ≤ 0,05 o erro é irredutível pelo período. A guarda fica **em aberto**: avaliar no aparelho com harmônico natural do 12º traste (soa uma oitava acima: leitura correta, não erro). Mitigação aprovada para o v1: sinalizar “oitava acima/abaixo” relativamente à corda-alvo.
+**Erros de oitava.** Com harmônicos ímpares ≲ 20 % dos pares (corda tocada no ponto médio) o período aparente é T/2: YIN erra 48/48 e MPM 36/48. A guarda “adotar 2τ se o erro ali for < 50 % do erro em τ” corrige metade (r ≥ 0,1) sem afetar sinais limpos, mas desloca para f/2 sinais com dobra de período (2 → 16 erros em 36); a verdade musical desse segundo caso é ambígua. Para r ≤ 0,05 o erro é irredutível pelo período. **Decisão do mantenedor (29/10/2026): a guarda não entra no v1.** O v1 apenas sinaliza “oitava acima/abaixo” relativamente à corda-alvo, o que cobre os dois erros sem risco. A guarda só será reavaliada com os resultados do aparelho (passo 8 do protocolo: harmônico natural do 12º traste soa uma oitava acima e é leitura correta, não erro).
 
 **Metas exploratórias.**
 
