@@ -11,7 +11,7 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
-- `paridade-revisores-codex-claude` - Revisores consultivos de arquitetura e acessibilidade disponíveis para Codex, com verificação de equivalência ao Claude.
+- `paridade-revisores-codex-claude` (Refs #54; PR #62) - Revisores consultivos de arquitetura e acessibilidade disponíveis para Codex, com verificação de equivalência ao Claude.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
 

@@ -82,3 +82,7 @@ Validação: `npm run validate` e `git diff --check` aprovados. O parser origina
 ## Archive antes do squash — 26/10/2026
 
 Após aprovação/autorização do mantenedor, list/status confirmaram 18/18 tarefas e todos os artefatos completos. O CLI oficial arquivou setup-ai-development em openspec/changes/archive/2026-10-26-setup-ai-development e sincronizou quatro requisitos em openspec/specs/ai-development-workflow/spec.md. Contexto e índice de specs atualizados. O diff final é validado e submetido ao CI antes do squash autorizado; registros anteriores de change ativa descrevem a fase anterior ao archive.
+
+## Revisores Codex e Claude
+
+Na change `paridade-revisores-codex-claude`, uma sessão nova `codex exec -s read-only` (Codex 0.164.0) iniciada na worktree listou `architecture-reviewer` e `mobile-accessibility-reviewer` sem ler arquivos ou invocar subagentes. Essa evidência verifica descoberta, não execução nem sandbox individual. A revisão Claude sugeriu `sandbox_mode` por agente, mas a [documentação oficial](https://developers.openai.com/codex/multi-agent) informa que subagentes herdam o sandbox do agente principal e essa chave não o sobrescreve.

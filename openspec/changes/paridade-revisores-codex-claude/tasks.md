@@ -11,4 +11,4 @@
 - [x] 2.1 Executar validações proporcionais e `npm run validate`, registrar evidências e limitações.
 - [x] 2.2 Revisar o diff e a coerência com a change.
 
-Evidências: `npm run validate` passou (inclui teste de divergência, 68 testes de tooling e 14 testes mobile). Diff revisado; discovery real nesta sessão pré-existente, sem comprovar execução dos revisores na nova worktree. CI depende da PR.
+Evidências: `npm run validate` passou (inclui 6 testes de revisores, 68 testes de tooling da fundação e 14 testes mobile). Diff revisado; discovery confirmado em sessão Codex nova na worktree; execução dos revisores não verificada. CI depende da PR.

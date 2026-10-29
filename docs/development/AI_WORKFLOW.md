@@ -40,7 +40,7 @@ Inicie na raiz e reinicie a sessão após regenerar integrações. Codex encontr
 
 Os revisores consultivos `architecture-reviewer` e `mobile-accessibility-reviewer` ficam em `.codex/agents` e `.claude/agents`. O Codex descobre os TOML do projeto em uma sessão confiável; reinicie a sessão quando necessário. `npm run check:agent-reviewers` verifica a equivalência de nome, descrição e instruções. No Claude, as ferramentas são limitadas a leitura na definição; no Codex, a orientação de não editar é uma instrução, não uma restrição técnica de sandbox.
 
-No aplicativo desktop Codex, as skills também podem ser selecionadas pelo painel Skills. A confirmação de discovery na sessão real de cada agente está pendente; veja [VALIDATION.md](VALIDATION.md).
+No aplicativo desktop Codex, as skills também podem ser selecionadas pelo painel Skills. A confirmação de discovery das skills em sessão real de cada agente está pendente; veja [VALIDATION.md](VALIDATION.md).
 
 Exemplo para iniciar: “Leia AGENTS.md e a issue #N. Explore o escopo e apresente os riscos. Depois, proponha a change nome-da-change seguindo os gates do repositório.”
 
