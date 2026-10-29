@@ -1,6 +1,6 @@
 # Tasks — GC-014
 
-**Apply autorizado pelo mantenedor em 29/10/2026** (implementação até a PR; archive, merge e release seguem não autorizados). Refs #24, PR #61. Estado: implementação nativa e de interface escrita; testes Jest e de tooling executados localmente; **JUnit/Kotlin não pôde ser compilado neste executor (aguarda o CI) e nada foi medido em aparelho físico.** Rastreabilidade: **CA** em [proposal.md](proposal.md) → **Requisito** em [spec](specs/native-pitch-tuner/spec.md) → tarefa → teste/evidência. Protocolo físico: [TUNER_VALIDATION.md](../../../docs/development/TUNER_VALIDATION.md). Autorização, archive, merge e fechamento de issue ficam no checklist da PR (AGENTS.md).
+**Apply autorizado pelo mantenedor em 29/10/2026** (implementação até a PR; archive, merge e release seguem não autorizados). Refs #24, PR #61. Estado: implementação nativa e de interface escrita; testes Jest e de tooling executados localmente; **Kotlin compilado e JUnit executado no CI (run 40891321478, SHA 7d31997, todos os jobs verdes); nada foi medido em aparelho físico.** Rastreabilidade: **CA** em [proposal.md](proposal.md) → **Requisito** em [spec](specs/native-pitch-tuner/spec.md) → tarefa → teste/evidência. Protocolo físico: [TUNER_VALIDATION.md](../../../docs/development/TUNER_VALIDATION.md). Autorização, archive, merge e fechamento de issue ficam no checklist da PR (AGENTS.md).
 
 ## 1. Refinar e medir (CA-05, CA-06)
 
@@ -10,8 +10,8 @@
 
 ## 2. Motor nativo (CA-01, CA-02, CA-05, CA-06)
 
-- [ ] 2.1 Integrar MPM (NSDF, k = 0,9, janela 64 ms, hop 20 ms, faixa 70–1000 Hz) ao worker nativo existente, sem segundo `AudioRecord` e sem PCM cru no JS. Estado: `MpmPitchDetector.kt`, `PitchPipeline.kt` e `RiffandoAudioModule.kt` escritos; teste estático `native-pitch-config.test.mjs` executado; `PitchPipelineTest` (paridade com o POC, |Δ| ≤ 0,5 c) **aguarda execução no CI**.
-- [ ] 2.2 Gate −50 dBFS, confiança ≥ 0,90, estabilizador K = 3 (dispersão ≤ 50 c, mediana), estados e emissão ≤ 10 Hz. Estado: implementado em `PitchPipeline.kt`/módulo; comportamento antecipado por simulação Node idêntica ao algoritmo; JUnit **aguarda o CI**.
+- [x] 2.1 Integrar MPM (NSDF, k = 0,9, janela 64 ms, hop 20 ms, faixa 70–1000 Hz) ao worker nativo existente, sem segundo `AudioRecord` e sem PCM cru no JS. Estado: `MpmPitchDetector.kt`, `PitchPipeline.kt` e `RiffandoAudioModule.kt` escritos; teste estático `native-pitch-config.test.mjs` executado; `PitchPipelineTest` (9 testes, paridade com o POC |Δ| ≤ 0,5 c) executado e verde no CI (SHA 7d31997).
+- [x] 2.2 Gate −50 dBFS, confiança ≥ 0,90, estabilizador K = 3 (dispersão ≤ 50 c, mediana), estados e emissão ≤ 10 Hz. Estado: implementado em `PitchPipeline.kt`/módulo; JUnit verde no CI (gate, ruído, troca de nota, faixa a 16 kHz, reset).
 - [ ] 2.3 Testar sessão, interrupções, permissões, ciclo de vida, buffers e erro sem retenção de PCM; eventos tardios descartados por `sessionId`/`sequence`. Estado: filtro de sessão e UI testados em Jest (executados); ciclo de vida nativo e interrupções **dependem do CI e do aparelho**.
 - [ ] 2.4 Registrar custo por quadro no Kotlin (ms/quadro no aparelho) e decidir, com evidência, se decimação/otimização é necessária. Estado: o evento `onPitch` já informa `analysisMicros` (média por quadro); **medição no aparelho pendente**.
 
