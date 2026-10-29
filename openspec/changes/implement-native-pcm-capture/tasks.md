@@ -19,7 +19,7 @@ GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/
 
 - [x] 3.1 Implementar tela técnica de diagnóstico em pt-BR com start/stop, status, nível RMS/pico/clipping, configuração efetiva, timestamps/erros e acessibilidade; não representar afinador como funcional. Evidência: `AudioDiagnosticsScreen.tsx` e testes Jest; TalkBack físico segue em 4.4/docs.
 - [x] 3.2 Testar estados e falhas na fronteira React Native/Expo, acessibilidade, permissões e recuperação; testes nativos controlados para RMS, buffers, temporização e corrida de lifecycle, diferenciando mocks de hardware. Evidência: Jest (14 testes: estados, permissão negada/NEVER_ASK_AGAIN, segundo plano, erro nativo, acessibilidade do alerta) e JUnit (10 testes, CI run 40805928617). Não há AudioRecord simulado no JVM; hardware real só no aparelho; TalkBack real pendente.
-- [ ] 3.3 Validar configuração/permits e comportamento offline; confirmar que não há arquivos de PCM, upload, telemetria ou logs com dados sensíveis; atualizar inventário de dependências/licenças.
+- [x] 3.3 Validar configuração/permits e comportamento offline; confirmar que não há arquivos de PCM, upload, telemetria ou logs com dados sensíveis; atualizar inventário de dependências/licenças. Evidência: modo avião no Galaxy S25 FE (1 min, sem erro); native-audio-config.test.mjs (sem FileOutputStream/rede, permissões mínimas); sem dependência nativa nova.
 
 ## 4. Compilação, dispositivo físico e evidências (CA-02…CA-08)
 
@@ -31,5 +31,5 @@ GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/
 ## 5. Revisão, documentação e alinhamento (CA-01…CA-08)
 
 - [x] 5.1 Atualizar documentação de execução, segurança/privacidade, limitações do microfone, `docs/DECISIONS.md` e `CHANGELOG.md` na versão “Em andamento”; ADR se a implementação exigir alteração estrutural. Evidência: AUDIO_CAPTURE.md (matriz, limites), DECISIONS.md, GITHUB.md, CHANGELOG.md; sem ADR, pois não houve mudança estrutural.
-- [ ] 5.2 Verificar coerência entre issue, proposta, specs, tasks, testes e evidências; executar OpenSpec Verify e revisão de código, corrigir achados, registrar o resultado final e limitações da CI/aparelho.
+- [x] 5.2 Verificar coerência entre issue, proposta, specs, tasks, testes e evidências; executar OpenSpec Verify e revisão de código, corrigir achados, registrar o resultado final e limitações da CI/aparelho. Evidência (Verify 28/10/2026): 16/17 tarefas concluídas (5.3 pendente); requisitos implementados e cobertos por CI e aparelho; avisos não críticos: fallback de formato/fonte e o aviso pt-BR de revogação em primeiro plano não foram exercitados; limitações de lock, evento sem id de sessão e TalkBack em docs/development/AUDIO_CAPTURE.md; revisões de arquitetura e acessibilidade aplicadas, sem achado crítico.
 - [ ] 5.3 Preparar descrição da PR de implementação com rastreabilidade de cada CA, resultados, licenças, risco e evidências do Android físico; aguardar autorização de archive/sync, CI do commit final e merge por squash.

@@ -47,6 +47,7 @@ cd android && ./gradlew :riffando-audio:testDebugUnitTest && node ../scripts/ver
 | 20 ciclos iniciar/parar | OK: 20 ciclos sem erros |
 | Segundo plano/primeiro plano e saída da tela | OK: com a captura ativa, ao sair do app o ponto do microfone apagou; ao voltar, a captura estava parada |
 | Outro aplicativo de áudio, se reproduzível | Não testado |
+| Captura em modo avião (Wi-Fi/dados desligados), 1 min | OK: métricas normais, sem erro; sem arquivos de PCM, upload ou telemetria no código (teste estático) |
 | Falhas, logs sanitizados, consumo percebido | Nenhuma falha observada nos testes feitos até aqui; logs não coletados |
 
 Testar offline e, se possível, com TalkBack e fonte ampliada. O emulador CI serve para validar navegação, APK e início sem rede; não mede captura acústica real ou USB. **Não afirmar sucesso físico ou estabilidade antes de observar**. Dados PCM pessoais não devem ser anexados ao repositório público nem capturados por logs. Screenshots apenas de métricas não sensíveis e com permissão do mantenedor.
