@@ -23,7 +23,7 @@ GC-013 / issue #23 — `implement-native-pcm-capture`. **Apply autorizado em 28/
 
 ## 4. Compilação, dispositivo físico e evidências (CA-02…CA-08)
 
-- [x] 4.1 Executar `npm run validate`, `npm run check:expo`, exportação Android e builds reais em Windows/Linux via CI, preservando gate agregado; registrar SHA, comandos, falhas e resultados. Evidência: CI 7/7 no SHA 90d27e3 (https://github.com/dvmarques/riffando/actions/runs/40794999831), com Kotlin JUnit verificado e APK em Linux e Windows.
+- [x] 4.1 Executar `npm run validate`, `npm run check:expo`, exportação Android e builds reais em Windows/Linux via CI, preservando gate agregado; registrar SHA, comandos, falhas e resultados. Evidência: CI 7/7 no SHA 90d27e3 ([run 40794999831](https://github.com/dvmarques/riffando/actions/runs/40794999831)), com Kotlin JUnit verificado e APK em Linux e Windows.
 - [x] 4.2 Produzir APK interno com JS embarcado e validar início offline/emulador apenas como smoke de UI; diferenciar evidência simulada de execução de microfone real. Evidência: APK com JS embarcado e smoke offline no emulador API 36 (UI apenas; não é microfone real).
 - [ ] 4.3 Instalar no **Android físico do mantenedor** e registrar modelo/OS/API/entrada, build SHA e formato efetivo; testar silêncio por 30 s, guitarra com amplificador por 2 min, notas suaves/fortes, e distância/volume moderados, documentando níveis/clipping/timestamps.
 - [ ] 4.4 Testar 10 min de captura contínua, 20 ciclos iniciar/parar, negar/revogar permissão, background/foreground e interferência quando reproduzível; registrar resultados, falhas e limites, sem alegar testes não realizados.
