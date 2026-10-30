@@ -88,6 +88,16 @@ it('não mostra nota nem ponteiro sem sinal, instável ou não confiável', asyn
   }
 });
 
+it('trata nota não identificada em nível muito baixo como sem sinal, sem alternar mensagens', async () => {
+  await startTuner();
+  await emit(event({ sequence: 1, state: 'unreliable', rmsDbfs: -48 }));
+  expect(screen.getByText(t.noSignal)).toBeVisible();
+  await emit(event({ sequence: 2, state: 'no-signal', rmsDbfs: -52 }));
+  expect(screen.getByText(t.noSignal)).toBeVisible();
+  await emit(event({ sequence: 3, state: 'unreliable', rmsDbfs: -25 }));
+  expect(screen.getByText(t.unreliable)).toBeVisible();
+});
+
 it('ignora eventos de outra sessão e eventos repetidos ou atrasados', async () => {
   await startTuner();
   await emit(event({ sequence: 5, state: 'reading', frequencyHz: 440 }));

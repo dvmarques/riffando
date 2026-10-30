@@ -39,6 +39,7 @@ internal class PitchPipeline(
   private val history = arrayOfNulls<Double>(PitchConfig.STABILITY_FRAMES)
   private var historyCount = 0
   private var historyHead = 0
+  private var gateOpen = false
 
   /** Informa um [PitchOutput] por quadro analisado (hop de ~20 ms). */
   fun push(buffer: ShortArray, count: Int, onFrame: (PitchOutput) -> Unit) {
@@ -56,7 +57,7 @@ internal class PitchPipeline(
   }
 
   fun reset() {
-    next = 0; filled = 0; sinceLast = 0; historyCount = 0; historyHead = 0
+    next = 0; filled = 0; sinceLast = 0; historyCount = 0; historyHead = 0; gateOpen = false
     history.fill(null)
   }
 
@@ -69,10 +70,13 @@ internal class PitchPipeline(
     }
     val rms = sqrt(squared / size)
     val rmsDbfs = if (rms == 0.0) -120.0 else max(-120.0, 20 * log10(rms))
-    if (rmsDbfs < PitchConfig.GATE_DBFS) {
+    val threshold = if (gateOpen) PitchConfig.GATE_DBFS else PitchConfig.GATE_REOPEN_DBFS
+    if (rmsDbfs < threshold) {
+      gateOpen = false
       remember(null)
       return PitchOutput(PitchState.NO_SIGNAL, null, 0.0, rmsDbfs)
     }
+    gateOpen = true
     val estimate = detector.detect(window)
     val accepted = estimate != null &&
       estimate.confidence >= PitchConfig.MIN_CONFIDENCE &&

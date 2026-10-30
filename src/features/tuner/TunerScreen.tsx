@@ -10,6 +10,9 @@ import { useThrottledValue, useTuner, type TunerStatus } from './useTuner';
 
 type Mode = 'chromatic' | 'guitar';
 
+/** Abaixo deste nível (RMS, dBFS) a ausência de nota é tratada como silêncio ambiente. */
+const QUIET_DBFS = -40;
+
 const statusText: Record<Exclude<TunerStatus, 'listening' | 'error'>, string> = {
   idle: t.idle,
   requestingPermission: t.requestingPermission,
@@ -34,7 +37,8 @@ function present(state: ReturnType<typeof useTuner>, mode: Mode, target: GuitarS
   const { pitch } = state;
   if (!pitch) return none(t.listening);
   if (pitch.state === 'no-signal') return none(t.noSignal);
-  if (pitch.state === 'unreliable') return none(t.unreliable);
+  // Nível muito baixo é ambiente silencioso, não “nota pouco clara”: evita alternar mensagens.
+  if (pitch.state === 'unreliable') return none(pitch.rmsDbfs < QUIET_DBFS ? t.noSignal : t.unreliable);
   if (pitch.state === 'unstable' || pitch.frequencyHz === null) return none(t.unstable);
   const note = frequencyToNote(pitch.frequencyHz);
   if (!note) return none(t.unreliable);

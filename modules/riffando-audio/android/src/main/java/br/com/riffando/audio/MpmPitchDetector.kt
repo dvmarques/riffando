@@ -16,6 +16,9 @@ internal object PitchConfig {
   const val PEAK_RATIO_K = 0.9
   const val MIN_CONFIDENCE = 0.90
   const val GATE_DBFS = -50.0
+
+  /** Histerese: com o gate fechado só reabre acima deste nível, evitando oscilar com ruído ambiente perto de −50 dBFS. */
+  const val GATE_REOPEN_DBFS = -47.0
   const val STABILITY_FRAMES = 3
   const val MAX_SPREAD_CENTS = 50.0
   const val EMIT_INTERVAL_NANOS = 100_000_000L

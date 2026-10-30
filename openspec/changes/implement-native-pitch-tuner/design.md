@@ -41,7 +41,7 @@ Células = proporção de amostras aceitas dentro de ±5 c; rejeições contam c
 | Hop / sobreposição | 20 ms (≈ 69 %) | Resolução temporal da estabilização (50 quadros/s internos) |
 | Faixa de busca | 70–1000 Hz | Cordas E2–E4 e cromático D2–B5 em 48 kHz |
 | Faixa operacional anunciada | 48/44,1 kHz: 73–988 Hz (44,1 kHz não testado); 16 kHz: 73–523 Hz | A 16 kHz, 784 Hz e 988 Hz excedem ±5 c |
-| Gate de nível | RMS da janela ≥ −50 dBFS | Ruído ambiente medido na GC-013: −54 dBFS; guitarra 50 cm/1 m: −23…−9 dBFS |
+| Gate de nível | RMS da janela ≥ −50 dBFS; histerese: fechado, reabre acima de −47 dBFS (ajuste após o teste rápido: ruído ambiente oscilava perto de −50) | Ruído ambiente medido na GC-013: −54 dBFS; guitarra 50 cm/1 m: −23…−9 dBFS |
 | Confiança | NSDF interpolado ≥ 0,90 | Recall igual de 0,80 a 0,90; a 0,90 desaparece o falso positivo do dueto E4+F4; a 0,95 o recall cai (93 % → 85 %) |
 | Estabilização | K = 3 quadros aceitos consecutivos, dispersão ≤ 50 c, saída = mediana | Estabilização (10 Hz, ±5 c): mediana 150 ms, P95 200 ms em trocas de nota e palhetadas |
 | Emissão ao JS | Estado estabilizado retido, ≤ 10 eventos/s | P95 ≤ 200 ms em 10 Hz (K = 3, janela 64–85 ms); K = 5 chega a 250 ms |

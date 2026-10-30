@@ -24,6 +24,7 @@ test('parâmetros do afinador seguem a change: janela 64 ms, ≤ 10 eventos/s, g
   assert.match(detector, /HOP_SECONDS = 0\.02/);
   assert.match(detector, /EMIT_INTERVAL_NANOS = 100_000_000L/);
   assert.match(detector, /GATE_DBFS = -50\.0/);
+  assert.match(detector, /GATE_REOPEN_DBFS = -47\.0/);
   assert.match(detector, /MIN_CONFIDENCE = 0\.90/);
   assert.match(detector, /STABILITY_FRAMES = 3/);
   assert.match(detector, /MAX_SPREAD_CENTS = 50\.0/);

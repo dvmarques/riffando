@@ -87,6 +87,17 @@ class PitchPipelineTest {
   }
 
   @Test
+  fun gateTemHistereseNoLimiar() {
+    // ≈ −48,5 dBFS: acima do gate de −50, mas abaixo do nível de reabertura de −47.
+    val quiet = tone(110.0, rate, level = 0.004454)
+    val closed = run(PitchPipeline(rate), quiet)
+    assertTrue(closed.all { it.state == PitchState.NO_SIGNAL })
+    // Depois de aberto por um sinal forte, o mesmo nível baixo não fecha o gate.
+    val reopened = run(PitchPipeline(rate), tone(110.0, rate / 2) + quiet)
+    assertTrue(reopened.takeLast(5).none { it.state == PitchState.NO_SIGNAL })
+  }
+
+  @Test
   fun ruidoDeBandaLargaEhRejeitado() {
     var seed = 12345L
     val noise = ShortArray(rate) {

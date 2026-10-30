@@ -10,7 +10,7 @@ const directory = resolve(
 const expected = {
   PcmSignalAccumulatorTest: 4,
   CaptureLifecycleTest: 6,
-  PitchPipelineTest: 9,
+  PitchPipelineTest: 10,
 };
 
 const results = {};
