@@ -75,7 +75,7 @@ it('exibe nota grande, cents e estado em texto para uma leitura estável', async
   await startTuner(true);
   await settle(110 * 2 ** (12 / 1200));
   expect(screen.getByText('Lá2')).toBeVisible();
-  expect(screen.getByText('A2')).toBeVisible();
+  expect(screen.getByText('A2 · 110,77 Hz')).toBeVisible();
   expect(screen.getByText('+12 cents')).toBeVisible();
   expect(screen.getByText(t.sharp)).toBeVisible();
   await settle(110 * 2 ** (-2 / 1200));

@@ -23,6 +23,7 @@ const statusText: Record<Exclude<TunerStatus, 'listening' | 'error'>, string> = 
 };
 
 const statusLabel = (value: TuningStatus) => value === 'in-tune' ? t.inTune : value === 'flat' ? t.flat : t.sharp;
+const formatHz = (hz: number) => `${hz.toFixed(2).replace('.', ',')} Hz`;
 const signed = (cents: number) => `${cents > 0 ? '+' : cents < 0 ? '−' : ''}${Math.abs(cents).toFixed(0)}`;
 
 type View_ = {
@@ -33,11 +34,13 @@ type View_ = {
   deviationLabel: string;
   /** Leitura mantida após perder o sinal: exibida como “última leitura”, nunca como ao vivo. */
   held: boolean;
+  /** Frequência detectada (mediana das últimas leituras), em Hz. */
+  hz: number | null;
 };
 
 /** Combina estado nativo, modo e corda-alvo; sem leitura confiável, nada de nota nem ponteiro. */
 function present(state: ReturnType<typeof useTuner>, mode: Mode, target: GuitarString | null): View_ {
-  const none = (message: string): View_ => ({ note: null, cents: null, status: null, message, deviationLabel: '', held: false });
+  const none = (message: string): View_ => ({ note: null, cents: null, status: null, message, deviationLabel: '', held: false, hz: null });
   const { pitch } = state;
   // Ao vivo: mediana das últimas leituras (≈ 0,8 s). Sem leitura ao vivo, mantém a última por alguns segundos.
   const live = pitch?.state === 'reading' ? state.smoothedHz : null;
@@ -54,14 +57,14 @@ function present(state: ReturnType<typeof useTuner>, mode: Mode, target: GuitarS
   if (!note) return none(t.unreliable);
   if (mode === 'chromatic' || !target) {
     const status = tuningStatus(note.cents);
-    return { note, cents: note.cents, status, message: mode === 'guitar' ? t.guitarHint : statusLabel(status), deviationLabel: 'em relação à nota mais próxima', held };
+    return { note, cents: note.cents, status, message: mode === 'guitar' ? t.guitarHint : statusLabel(status), deviationLabel: 'em relação à nota mais próxima', held, hz };
   }
   const comparison = compareToTarget(hz, target);
   if (comparison.kind === 'target') {
-    return { note, cents: comparison.cents, status: comparison.status, message: statusLabel(comparison.status), deviationLabel: `em relação à corda ${target.number}, ${noteLabel(target)}`, held };
+    return { note, cents: comparison.cents, status: comparison.status, message: statusLabel(comparison.status), deviationLabel: `em relação à corda ${target.number}, ${noteLabel(target)}`, held, hz };
   }
   const message = comparison.kind === 'octave-above' ? t.octaveAbove : comparison.kind === 'octave-below' ? t.octaveBelow : t.otherNote;
-  return { note, cents: null, status: null, message, deviationLabel: '', held };
+  return { note, cents: null, status: null, message, deviationLabel: '', held, hz };
 }
 
 function Pointer({ cents }: { cents: number | null }) {
@@ -132,7 +135,7 @@ export default function TunerScreen() {
             <Text accessibilityLabel={view.note ? `Nota ${noteLabel(view.note)}` : 'Nenhuma nota identificada'} style={styles.bigNote}>
               {view.note ? `${view.note.solfege}${view.note.octave}` : '—'}
             </Text>
-            <Text style={styles.noteSub}>{view.note ? `${view.note.letter}${view.note.octave}` : ' '}</Text>
+            <Text style={styles.noteSub}>{view.note && view.hz !== null ? `${view.note.letter}${view.note.octave} · ${formatHz(view.hz)}` : ' '}</Text>
             <Pointer cents={view.cents} />
             <Text accessibilityLabel={shownCents === null ? 'Desvio indisponível' : `Desvio de ${signed(shownCents)} cents ${view.deviationLabel}`} style={styles.cents}>
               {shownCents === null ? '— cents' : `${signed(shownCents)} cents`}
