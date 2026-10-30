@@ -20,16 +20,25 @@ const event = (over: Partial<PitchEvent> & Pick<PitchEvent, 'sequence' | 'state'
   sessionId: 7, frequencyHz: null, confidence: 0.99, rmsDbfs: -20, windowMs: 64, sampleRateHz: 48000, observedAtNanos: '1', analysisMicros: 900, ...over,
 });
 
-async function startTuner() {
+let seq = 0;
+async function startTuner(fakeTimers = false) {
+  if (fakeTimers) jest.useFakeTimers();
   jest.spyOn(PermissionsAndroid, 'request').mockResolvedValue(PermissionsAndroid.RESULTS.GRANTED);
   await renderRouter(routes, { initialUrl: '/afinador' });
-  await userEvent.setup().press(screen.getByRole('button', { name: t.start }));
+  const user = userEvent.setup(fakeTimers ? { advanceTimers: jest.advanceTimersByTime } : undefined);
+  await user.press(screen.getByRole('button', { name: t.start }));
   await waitFor(() => expect(screen.getByRole('button', { name: t.stop })).toBeVisible());
 }
 const emit = (value: PitchEvent) => act(async () => { pitchListener?.(value); });
+/** Cinco leituras iguais (mediana de ≈ 0,5 s) e tempo para o número de cents atualizar (fake timers). */
+async function settle(frequencyHz: number) {
+  for (let i = 0; i < 5; i++) await emit(event({ sequence: ++seq, state: 'reading', frequencyHz }));
+  await act(async () => { jest.advanceTimersByTime(450); });
+}
 
 beforeEach(() => {
   jest.clearAllMocks();
+  seq = 0;
   pitchListener = undefined;
   errorListener = undefined;
   jest.mocked(nativeTuner.onPitch).mockImplementation((listener) => { pitchListener = listener; return { remove: jest.fn() }; });
@@ -63,17 +72,27 @@ it('não inicia o afinador quando a permissão é negada', async () => {
 });
 
 it('exibe nota grande, cents e estado em texto para uma leitura estável', async () => {
-  await startTuner();
-  await emit(event({ sequence: 1, state: 'reading', frequencyHz: 110 * 2 ** (12 / 1200) }));
+  await startTuner(true);
+  await settle(110 * 2 ** (12 / 1200));
   expect(screen.getByText('Lá2')).toBeVisible();
   expect(screen.getByText('A2')).toBeVisible();
   expect(screen.getByText('+12 cents')).toBeVisible();
   expect(screen.getByText(t.sharp)).toBeVisible();
-  await emit(event({ sequence: 2, state: 'reading', frequencyHz: 110 * 2 ** (-2 / 1200) }));
+  await settle(110 * 2 ** (-2 / 1200));
+  expect(screen.getByText('−2 cents')).toBeVisible();
   expect(screen.getByText(t.inTune)).toBeVisible();
-  await emit(event({ sequence: 3, state: 'reading', frequencyHz: 110 * 2 ** (-20 / 1200) }));
+  await settle(110 * 2 ** (-20 / 1200));
   expect(screen.getByText('−20 cents')).toBeVisible();
   expect(screen.getByText(t.flat)).toBeVisible();
+});
+
+it('suaviza a variação rápida: um valor isolado não muda o número exibido', async () => {
+  await startTuner(true);
+  await settle(110);
+  expect(screen.getByText('0 cents')).toBeVisible();
+  await emit(event({ sequence: ++seq, state: 'reading', frequencyHz: 110 * 2 ** (30 / 1200) }));
+  await act(async () => { jest.advanceTimersByTime(450); });
+  expect(screen.getByText('0 cents')).toBeVisible();
 });
 
 it('não mostra nota nem ponteiro sem sinal, instável ou não confiável', async () => {
@@ -109,18 +128,18 @@ it('ignora eventos de outra sessão e eventos repetidos ou atrasados', async () 
 });
 
 it('modo guitarra: mede o desvio da corda-alvo e não declara afinada outra nota ou oitava', async () => {
-  await startTuner();
-  const user = userEvent.setup();
+  await startTuner(true);
+  const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
   await user.press(screen.getByRole('radio', { name: t.modeGuitar }));
   await user.press(screen.getByRole('radio', { name: 'Corda 5, Lá2 (A2)' }));
-  await emit(event({ sequence: 1, state: 'reading', frequencyHz: 110 * 2 ** (-30 / 1200) }));
+  await settle(110 * 2 ** (-30 / 1200));
   expect(screen.getByText('−30 cents')).toBeVisible();
   expect(screen.getByText(t.flat)).toBeVisible();
-  await emit(event({ sequence: 2, state: 'reading', frequencyHz: 220 }));
+  await settle(220);
   expect(screen.getByText(t.octaveAbove)).toBeVisible();
   expect(screen.queryByText(t.inTune)).toBeNull();
   expect(screen.getByText('— cents')).toBeVisible();
-  await emit(event({ sequence: 3, state: 'reading', frequencyHz: 82.4069 }));
+  await settle(82.4069);
   expect(screen.getByText(t.otherNote)).toBeVisible();
   expect(screen.queryByText(t.inTune)).toBeNull();
 });

@@ -24,7 +24,7 @@ export const messages = {
 /** Textos do afinador (GC-014); a identificação das notas fica em src/domain/tuning, sem texto de interface. */
 export const tunerMessages = {
   title: 'Afinador',
-  intro: 'Toque uma corda de cada vez, perto do microfone do aparelho. O áudio não é gravado nem enviado.',
+  intro: 'Toque uma corda de cada vez, perto do microfone do aparelho (20 a 50 cm). Em ambiente barulhento, toque mais forte ou aproxime o celular. O áudio não é gravado nem enviado.',
   validation: 'Em validação: a precisão ainda não foi comprovada em aparelhos reais. Confira com outro afinador.',
   modeChromatic: 'Cromático',
   modeGuitar: 'Guitarra',

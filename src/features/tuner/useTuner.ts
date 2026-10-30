@@ -18,6 +18,14 @@ export const errorLabels: Record<string, string> = {
 
 /** Sem eventos por este tempo a leitura é tratada como indisponível, nunca como nota atual. */
 export const STALE_AFTER_MS = 1200;
+/** Leituras consecutivas usadas na mediana exibida (≈ 0,5 s a 10 eventos/s). */
+export const SMOOTHING_FRAMES = 5;
+
+const median = (values: number[]) => {
+  if (!values.length) return null;
+  const sorted = [...values].sort((a, b) => a - b);
+  return sorted[Math.floor(sorted.length / 2)] ?? null;
+};
 
 export function useTuner() {
   const [status, setStatus] = useState<TunerStatus>('idle');
@@ -25,6 +33,7 @@ export function useTuner() {
   const [moduleUnavailable, setModuleUnavailable] = useState(false);
   const [pitch, setPitch] = useState<PitchEvent | null>(null);
   const [session, setSession] = useState<TunerSession | null>(null);
+  const [recent, setRecent] = useState<number[]>([]);
   const mounted = useRef(true);
   const operation = useRef(0);
   const startPending = useRef(false);
@@ -69,9 +78,15 @@ export function useTuner() {
       pitchSubscription = nativeTuner.onPitch((event) => {
         if (!mounted.current || !sessionFilter.accept(event)) return;
         setPitch(event);
+        setRecent((previous) => event.state === 'reading' && event.frequencyHz !== null
+          ? [...previous.slice(-(SMOOTHING_FRAMES - 1)), event.frequencyHz]
+          : []);
         clearStale();
         staleTimer.current = setTimeout(() => {
-          if (mounted.current) setPitch(null);
+          if (mounted.current) {
+            setPitch(null);
+            setRecent([]);
+          }
         }, STALE_AFTER_MS);
       });
       errorSubscription = nativeTuner.onError(({ code }) => {
@@ -82,6 +97,7 @@ export function useTuner() {
           setError(errorLabels[code] ?? 'Ocorreu um erro ao capturar áudio.');
           setStatus('error');
           setPitch(null);
+          setRecent([]);
           setSession(null);
         }
       });
@@ -105,6 +121,7 @@ export function useTuner() {
         if (mounted.current) {
           setStatus('idle');
           setPitch(null);
+          setRecent([]);
           setSession(null);
         }
       }
@@ -127,6 +144,7 @@ export function useTuner() {
     const id = ++operation.current;
     setError('');
     setPitch(null);
+    setRecent([]);
     if (Platform.OS !== 'android') {
       startPending.current = false;
       setStatus('error');
@@ -170,7 +188,8 @@ export function useTuner() {
     }
   }, [busy, moduleUnavailable, status]);
 
-  return { status, busy, error, moduleUnavailable, pitch, session, start, stop };
+  const smoothedHz = median(recent);
+  return { status, busy, error, moduleUnavailable, pitch, smoothedHz, session, start, stop };
 }
 
 /** Valor atualizado no máximo uma vez por intervalo; evita anúncios frequentes aos leitores de tela. */

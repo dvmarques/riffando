@@ -12,6 +12,8 @@ type Mode = 'chromatic' | 'guitar';
 
 /** Abaixo deste nível (RMS, dBFS) a ausência de nota é tratada como silêncio ambiente. */
 const QUIET_DBFS = -40;
+/** Intervalo mínimo entre atualizações do número de cents e do estado em texto. */
+const DISPLAY_INTERVAL_MS = 400;
 
 const statusText: Record<Exclude<TunerStatus, 'listening' | 'error'>, string> = {
   idle: t.idle,
@@ -39,14 +41,16 @@ function present(state: ReturnType<typeof useTuner>, mode: Mode, target: GuitarS
   if (pitch.state === 'no-signal') return none(t.noSignal);
   // Nível muito baixo é ambiente silencioso, não “nota pouco clara”: evita alternar mensagens.
   if (pitch.state === 'unreliable') return none(pitch.rmsDbfs < QUIET_DBFS ? t.noSignal : t.unreliable);
-  if (pitch.state === 'unstable' || pitch.frequencyHz === null) return none(t.unstable);
-  const note = frequencyToNote(pitch.frequencyHz);
+  // Mediana das últimas leituras (≈ 0,5 s): reduz a variação de cents sem inventar leitura.
+  const hz = state.smoothedHz;
+  if (pitch.state === 'unstable' || hz === null) return none(t.unstable);
+  const note = frequencyToNote(hz);
   if (!note) return none(t.unreliable);
   if (mode === 'chromatic' || !target) {
     const status = tuningStatus(note.cents);
     return { note, cents: note.cents, status, message: mode === 'guitar' ? t.guitarHint : statusLabel(status), deviationLabel: 'em relação à nota mais próxima' };
   }
-  const comparison = compareToTarget(pitch.frequencyHz, target);
+  const comparison = compareToTarget(hz, target);
   if (comparison.kind === 'target') {
     return { note, cents: comparison.cents, status: comparison.status, message: statusLabel(comparison.status), deviationLabel: `em relação à corda ${target.number}, ${noteLabel(target)}` };
   }
@@ -70,9 +74,11 @@ export default function TunerScreen() {
   const [mode, setMode] = useState<Mode>('chromatic');
   const [target, setTarget] = useState<GuitarString | null>(null);
   const view = useMemo(() => present(tuner, mode, target), [tuner, mode, target]);
+  const shownCents = useThrottledValue(view.cents === null ? null : Math.round(view.cents), DISPLAY_INTERVAL_MS);
+  const shownStatus = view.status === null || shownCents === null ? null : tuningStatus(shownCents);
 
   const summary = view.note
-    ? `${noteLabel(view.note)}${view.status ? `, ${statusLabel(view.status).split(' — ')[0]}` : ''}`
+    ? `${noteLabel(view.note)}${shownStatus ? `, ${statusLabel(shownStatus).split(' — ')[0]}` : ''}`
     : '';
   // Anúncio por leitor de tela espaçado: muda só com a nota/estado e no máximo a cada 2 s.
   const announced = useThrottledValue(summary, 2000);
@@ -122,11 +128,11 @@ export default function TunerScreen() {
             </Text>
             <Text style={styles.noteSub}>{view.note ? `${view.note.letter}${view.note.octave}` : ' '}</Text>
             <Pointer cents={view.cents} />
-            <Text accessibilityLabel={view.cents === null ? 'Desvio indisponível' : `Desvio de ${signed(view.cents)} cents ${view.deviationLabel}`} style={styles.cents}>
-              {view.cents === null ? '— cents' : `${signed(view.cents)} cents`}
+            <Text accessibilityLabel={shownCents === null ? 'Desvio indisponível' : `Desvio de ${signed(shownCents)} cents ${view.deviationLabel}`} style={styles.cents}>
+              {shownCents === null ? '— cents' : `${signed(shownCents)} cents`}
             </Text>
-            {view.cents !== null && Math.abs(view.cents) > 50 ? <Text style={styles.note}>{t.beyond}</Text> : null}
-            <Text style={[styles.status, view.status === 'in-tune' && styles.statusOk]}>{view.message}</Text>
+            {shownCents !== null && Math.abs(shownCents) > 50 ? <Text style={styles.note}>{t.beyond}</Text> : null}
+            <Text style={[styles.status, shownStatus === 'in-tune' && styles.statusOk]}>{shownStatus ? statusLabel(shownStatus) : view.message}</Text>
           </>
         ) : (
           <Text style={styles.body}>{tuner.status === 'error' ? '' : statusText[tuner.status as keyof typeof statusText] ?? t.idle}</Text>
@@ -135,6 +141,13 @@ export default function TunerScreen() {
         <Text accessibilityLiveRegion="polite" style={styles.hidden}>{announced}</Text>
       </View>
 
+      {listening ? (
+        <Text style={styles.note}>
+          {tuner.pitch
+            ? `Detalhes técnicos: nível ${tuner.pitch.rmsDbfs.toFixed(0)} dBFS · confiança ${tuner.pitch.confidence.toFixed(2)} · ${tuner.pitch.sampleRateHz} Hz · ${tuner.pitch.analysisMicros} µs/quadro`
+            : 'Detalhes técnicos: aguardando leitura'}
+        </Text>
+      ) : null}
       {tuner.error ? <Text accessibilityRole="alert" accessibilityLiveRegion="assertive" style={styles.warning}>{tuner.error}</Text> : null}
       {tuner.moduleUnavailable ? (
         <Text style={styles.note}>O afinador não está disponível nesta instalação.</Text>
