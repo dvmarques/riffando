@@ -97,24 +97,25 @@ it('suaviza a variação rápida: um valor isolado não muda o número exibido',
 
 it('não mostra nota nem ponteiro sem sinal, instável ou não confiável', async () => {
   await startTuner();
-  await emit(event({ sequence: 1, state: 'reading', frequencyHz: 440 }));
-  expect(screen.getByText('Lá4')).toBeVisible();
-  for (const [sequence, state, text] of [[2, 'unreliable', t.unreliable], [3, 'no-signal', t.noSignal], [4, 'unstable', t.unstable]] as const) {
+  for (const [sequence, state, text] of [[1, 'unreliable', t.unreliable], [2, 'no-signal', t.noSignal], [3, 'unstable', t.unstable]] as const) {
     await emit(event({ sequence, state }));
-    expect(screen.queryByText('Lá4')).toBeNull();
+    expect(screen.queryByText(/^Lá/)).toBeNull();
     expect(screen.getByText('— cents')).toBeVisible();
     expect(screen.getByText(text)).toBeVisible();
   }
 });
 
-it('trata nota não identificada em nível muito baixo como sem sinal, sem alternar mensagens', async () => {
-  await startTuner();
-  await emit(event({ sequence: 1, state: 'unreliable', rmsDbfs: -48 }));
-  expect(screen.getByText(t.noSignal)).toBeVisible();
-  await emit(event({ sequence: 2, state: 'no-signal', rmsDbfs: -52 }));
-  expect(screen.getByText(t.noSignal)).toBeVisible();
-  await emit(event({ sequence: 3, state: 'unreliable', rmsDbfs: -25 }));
-  expect(screen.getByText(t.unreliable)).toBeVisible();
+it('mantém a última leitura por 3 s, marcada como não ao vivo, e depois a apaga', async () => {
+  await startTuner(true);
+  await settle(110);
+  expect(screen.getByText(t.inTune)).toBeVisible();
+  await emit(event({ sequence: ++seq, state: 'unreliable', rmsDbfs: -30 }));
+  expect(screen.getByText('Lá2')).toBeVisible();
+  expect(screen.getByText(new RegExp(`^${t.lastReading}`))).toBeVisible();
+  expect(screen.queryByText(t.inTune)).toBeNull();
+  await act(async () => { jest.advanceTimersByTime(3100); });
+  expect(screen.queryByText('Lá2')).toBeNull();
+  expect(screen.getByText('— cents')).toBeVisible();
 });
 
 it('ignora eventos de outra sessão e eventos repetidos ou atrasados', async () => {
@@ -154,6 +155,8 @@ it('trata a leitura como indisponível quando os eventos param de chegar', async
   await emit(event({ sequence: 1, state: 'reading', frequencyHz: 440 }));
   expect(screen.getByText('Lá4')).toBeVisible();
   await act(async () => { jest.advanceTimersByTime(1300); });
+  expect(screen.getByText(new RegExp(`^${t.lastReading}`))).toBeVisible();
+  await act(async () => { jest.advanceTimersByTime(3100); });
   expect(screen.queryByText('Lá4')).toBeNull();
 });
 

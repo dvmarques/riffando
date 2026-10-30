@@ -40,6 +40,7 @@ export const tunerMessages = {
   starting: 'Iniciando o microfone…',
   stopping: 'Encerrando o microfone…',
   listening: 'Ouvindo. Toque uma corda.',
+  lastReading: 'Última leitura',
   noSignal: 'Sem sinal. Toque uma corda perto do microfone.',
   unreliable: 'Não identifiquei uma nota clara. Toque uma corda de cada vez e reduza o ruído ao redor.',
   unstable: 'Identificando a nota…',

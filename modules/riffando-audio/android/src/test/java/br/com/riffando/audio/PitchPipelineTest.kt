@@ -82,14 +82,14 @@ class PitchPipelineTest {
     val silent = run(PitchPipeline(rate), ShortArray(rate / 2))
     assertTrue(silent.isNotEmpty())
     assertTrue(silent.all { it.state == PitchState.NO_SIGNAL && it.frequencyHz == null })
-    val quiet = run(PitchPipeline(rate), tone(110.0, rate / 2, level = 0.0004)) // ≈ −66 dBFS, abaixo do gate
+    val quiet = run(PitchPipeline(rate), tone(110.0, rate / 2, level = 0.0004)) // ≈ −69 dBFS, abaixo do gate
     assertTrue(quiet.all { it.state == PitchState.NO_SIGNAL && it.frequencyHz == null })
   }
 
   @Test
   fun gateTemHistereseNoLimiar() {
-    // ≈ −48,5 dBFS: acima do gate de −50, mas abaixo do nível de reabertura de −47.
-    val quiet = tone(110.0, rate, level = 0.004454)
+    // ≈ −58,5 dBFS: acima do gate de −60, mas abaixo do nível de reabertura de −57.
+    val quiet = tone(110.0, rate, level = 0.001409)
     val closed = run(PitchPipeline(rate), quiet)
     assertTrue(closed.all { it.state == PitchState.NO_SIGNAL })
     // Depois de aberto por um sinal forte, o mesmo nível baixo não fecha o gate.

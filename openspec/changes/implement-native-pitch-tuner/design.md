@@ -41,9 +41,9 @@ Células = proporção de amostras aceitas dentro de ±5 c; rejeições contam c
 | Hop / sobreposição | 20 ms (≈ 69 %) | Resolução temporal da estabilização (50 quadros/s internos) |
 | Faixa de busca | 70–1000 Hz | Cordas E2–E4 e cromático D2–B5 em 48 kHz |
 | Faixa operacional anunciada | 48/44,1 kHz: 73–988 Hz (44,1 kHz não testado); 16 kHz: 73–523 Hz | A 16 kHz, 784 Hz e 988 Hz excedem ±5 c |
-| Gate de nível | RMS da janela ≥ −50 dBFS; histerese: fechado, reabre acima de −47 dBFS (ajuste após o teste rápido: ruído ambiente oscilava perto de −50) | Ruído ambiente medido na GC-013: −54 dBFS; guitarra 50 cm/1 m: −23…−9 dBFS |
-| Confiança | NSDF interpolado ≥ 0,90 | Recall igual de 0,80 a 0,90; a 0,90 desaparece o falso positivo do dueto E4+F4; a 0,95 o recall cai (93 % → 85 %) |
-| Estabilização | K = 3 quadros aceitos consecutivos, dispersão ≤ 50 c, saída = mediana | Estabilização (10 Hz, ±5 c): mediana 150 ms, P95 200 ms em trocas de nota e palhetadas |
+| Gate de nível | RMS da janela ≥ −60 dBFS; histerese: fechado, reabre acima de −57 dBFS | Ajustado após o teste rápido no aparelho (iniciais: −50 dBFS, 0,90, 3 consecutivos); ruído ambiente de −54 dBFS é rejeitado pela confiança, não pelo gate |
+| Confiança | NSDF interpolado ≥ 0,75 (a 0,70–0,85 o recall sintético é igual e o FP em ruído é 0; ajustado de 0,90 após o teste no aparelho) | Ajustado após o teste rápido no aparelho (iniciais: −50 dBFS, 0,90, 3 consecutivos); ruído ambiente de −54 dBFS é rejeitado pela confiança, não pelo gate |
+| Estabilização | 3 leituras aceitas entre os últimos 5 quadros, dispersão ≤ 50 c, mediana; tolera até 2 quadros rejeitados (≈ 40 ms) | Na tela: mediana das últimas 8 leituras (≈ 0,8 s), número atualizado a cada 400 ms, última leitura mantida por 3 s como “Última leitura” |
 | Emissão ao JS | Estado estabilizado retido, ≤ 10 eventos/s | P95 ≤ 200 ms em 10 Hz (K = 3, janela 64–85 ms); K = 5 chega a 250 ms |
 | Erros de oitava | Sem guarda 2τ no v1; sinalização “oitava acima/abaixo” no modo guitarra | Ver abaixo |
 | Eventos de estado | Sem sinal / instável / não confiável | Sem frequência ou nota fictícia |

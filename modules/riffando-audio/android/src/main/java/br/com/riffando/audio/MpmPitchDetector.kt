@@ -14,12 +14,15 @@ internal object PitchConfig {
   const val SEARCH_MIN_HZ = 70.0
   const val SEARCH_MAX_HZ = 1000.0
   const val PEAK_RATIO_K = 0.9
-  const val MIN_CONFIDENCE = 0.90
-  const val GATE_DBFS = -50.0
+  const val MIN_CONFIDENCE = 0.75
+  const val GATE_DBFS = -60.0
 
-  /** Histerese: com o gate fechado só reabre acima deste nível, evitando oscilar com ruído ambiente perto de −50 dBFS. */
-  const val GATE_REOPEN_DBFS = -47.0
+  /** Histerese: com o gate fechado só reabre acima deste nível, evitando oscilar com ruído ambiente. */
+  const val GATE_REOPEN_DBFS = -57.0
   const val STABILITY_FRAMES = 3
+
+  /** Quadros recentes considerados: tolera até 2 quadros rejeitados entre leituras aceitas (≈ 40 ms). */
+  const val STABILITY_WINDOW = 5
   const val MAX_SPREAD_CENTS = 50.0
   const val EMIT_INTERVAL_NANOS = 100_000_000L
   const val OPERATIONAL_MIN_HZ = 73.0

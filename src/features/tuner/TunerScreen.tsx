@@ -31,31 +31,37 @@ type View_ = {
   status: TuningStatus | null;
   message: string;
   deviationLabel: string;
+  /** Leitura mantida após perder o sinal: exibida como “última leitura”, nunca como ao vivo. */
+  held: boolean;
 };
 
 /** Combina estado nativo, modo e corda-alvo; sem leitura confiável, nada de nota nem ponteiro. */
 function present(state: ReturnType<typeof useTuner>, mode: Mode, target: GuitarString | null): View_ {
-  const none = (message: string): View_ => ({ note: null, cents: null, status: null, message, deviationLabel: '' });
+  const none = (message: string): View_ => ({ note: null, cents: null, status: null, message, deviationLabel: '', held: false });
   const { pitch } = state;
-  if (!pitch) return none(t.listening);
-  if (pitch.state === 'no-signal') return none(t.noSignal);
-  // Nível muito baixo é ambiente silencioso, não “nota pouco clara”: evita alternar mensagens.
-  if (pitch.state === 'unreliable') return none(pitch.rmsDbfs < QUIET_DBFS ? t.noSignal : t.unreliable);
-  // Mediana das últimas leituras (≈ 0,5 s): reduz a variação de cents sem inventar leitura.
-  const hz = state.smoothedHz;
-  if (pitch.state === 'unstable' || hz === null) return none(t.unstable);
+  // Ao vivo: mediana das últimas leituras (≈ 0,8 s). Sem leitura ao vivo, mantém a última por alguns segundos.
+  const live = pitch?.state === 'reading' ? state.smoothedHz : null;
+  const held = live === null && state.heldHz !== null;
+  const hz = live ?? state.heldHz;
+  if (hz === null) {
+    if (!pitch) return none(t.listening);
+    if (pitch.state === 'no-signal') return none(t.noSignal);
+    // Nível muito baixo é ambiente silencioso, não “nota pouco clara”: evita alternar mensagens.
+    if (pitch.state === 'unreliable') return none(pitch.rmsDbfs < QUIET_DBFS ? t.noSignal : t.unreliable);
+    return none(t.unstable);
+  }
   const note = frequencyToNote(hz);
   if (!note) return none(t.unreliable);
   if (mode === 'chromatic' || !target) {
     const status = tuningStatus(note.cents);
-    return { note, cents: note.cents, status, message: mode === 'guitar' ? t.guitarHint : statusLabel(status), deviationLabel: 'em relação à nota mais próxima' };
+    return { note, cents: note.cents, status, message: mode === 'guitar' ? t.guitarHint : statusLabel(status), deviationLabel: 'em relação à nota mais próxima', held };
   }
   const comparison = compareToTarget(hz, target);
   if (comparison.kind === 'target') {
-    return { note, cents: comparison.cents, status: comparison.status, message: statusLabel(comparison.status), deviationLabel: `em relação à corda ${target.number}, ${noteLabel(target)}` };
+    return { note, cents: comparison.cents, status: comparison.status, message: statusLabel(comparison.status), deviationLabel: `em relação à corda ${target.number}, ${noteLabel(target)}`, held };
   }
   const message = comparison.kind === 'octave-above' ? t.octaveAbove : comparison.kind === 'octave-below' ? t.octaveBelow : t.otherNote;
-  return { note, cents: null, status: null, message, deviationLabel: '' };
+  return { note, cents: null, status: null, message, deviationLabel: '', held };
 }
 
 function Pointer({ cents }: { cents: number | null }) {
@@ -77,7 +83,7 @@ export default function TunerScreen() {
   const shownCents = useThrottledValue(view.cents === null ? null : Math.round(view.cents), DISPLAY_INTERVAL_MS);
   const shownStatus = view.status === null || shownCents === null ? null : tuningStatus(shownCents);
 
-  const summary = view.note
+  const summary = view.note && !view.held
     ? `${noteLabel(view.note)}${shownStatus ? `, ${statusLabel(shownStatus).split(' — ')[0]}` : ''}`
     : '';
   // Anúncio por leitor de tela espaçado: muda só com a nota/estado e no máximo a cada 2 s.
@@ -120,7 +126,7 @@ export default function TunerScreen() {
         </View>
       ) : null}
 
-      <View style={styles.card}>
+      <View style={[styles.card, view.held && styles.dim]}>
         {listening || view.note ? (
           <>
             <Text accessibilityLabel={view.note ? `Nota ${noteLabel(view.note)}` : 'Nenhuma nota identificada'} style={styles.bigNote}>
@@ -132,7 +138,9 @@ export default function TunerScreen() {
               {shownCents === null ? '— cents' : `${signed(shownCents)} cents`}
             </Text>
             {shownCents !== null && Math.abs(shownCents) > 50 ? <Text style={styles.note}>{t.beyond}</Text> : null}
-            <Text style={[styles.status, shownStatus === 'in-tune' && styles.statusOk]}>{shownStatus ? statusLabel(shownStatus) : view.message}</Text>
+            <Text style={[styles.status, shownStatus === 'in-tune' && !view.held && styles.statusOk]}>
+              {view.held ? `${t.lastReading} — ` : ''}{shownStatus ? statusLabel(shownStatus) : view.message}
+            </Text>
           </>
         ) : (
           <Text style={styles.body}>{tuner.status === 'error' ? '' : statusText[tuner.status as keyof typeof statusText] ?? t.idle}</Text>
@@ -186,5 +194,6 @@ const styles = StyleSheet.create({
   cents: { color: '#F5F7F8', fontSize: 28, fontWeight: '700' },
   status: { color: '#F4B860', fontSize: 20, fontWeight: '700', textAlign: 'center' },
   statusOk: { color: '#5EE0B5' },
+  dim: { opacity: 0.6 },
   hidden: { height: 0, width: 0, opacity: 0 },
 });

@@ -36,7 +36,7 @@ internal class PitchPipeline(
   private var next = 0
   private var filled = 0
   private var sinceLast = 0
-  private val history = arrayOfNulls<Double>(PitchConfig.STABILITY_FRAMES)
+  private val history = arrayOfNulls<Double>(PitchConfig.STABILITY_WINDOW)
   private var historyCount = 0
   private var historyHead = 0
   private var gateOpen = false
@@ -84,7 +84,13 @@ internal class PitchPipeline(
       estimate.frequencyHz <= PitchConfig.operationalMaxHz(sampleRate)
     if (!accepted) {
       remember(null)
-      return PitchOutput(PitchState.UNRELIABLE, null, estimate?.confidence ?: 0.0, rmsDbfs)
+      // Falha curta entre leituras aceitas não derruba a leitura (até 2 quadros); sem nota recente, vira não confiável.
+      val held = stableFrequency()
+      return if (held != null) {
+        PitchOutput(PitchState.READING, held, estimate?.confidence ?: 0.0, rmsDbfs)
+      } else {
+        PitchOutput(PitchState.UNRELIABLE, null, estimate?.confidence ?: 0.0, rmsDbfs)
+      }
     }
     remember(estimate!!.frequencyHz)
     val stable = stableFrequency()
@@ -101,9 +107,16 @@ internal class PitchPipeline(
     if (historyCount < history.size) historyCount++
   }
 
+  /** Mediana das [PitchConfig.STABILITY_FRAMES] leituras aceitas mais recentes da janela, se concordarem (≤ 50 cents). */
   private fun stableFrequency(): Double? {
-    if (historyCount < history.size) return null
-    val values = history.map { it ?: return null }.sorted()
-    return if (centsBetween(values.last(), values.first()) <= PitchConfig.MAX_SPREAD_CENTS) values[values.size / 2] else null
+    val recent = ArrayList<Double>(PitchConfig.STABILITY_FRAMES)
+    for (offset in 1..historyCount) {
+      val value = history[(historyHead - offset + history.size) % history.size] ?: continue
+      recent += value
+      if (recent.size == PitchConfig.STABILITY_FRAMES) break
+    }
+    if (recent.size < PitchConfig.STABILITY_FRAMES) return null
+    val sorted = recent.sorted()
+    return if (centsBetween(sorted.last(), sorted.first()) <= PitchConfig.MAX_SPREAD_CENTS) sorted[sorted.size / 2] else null
   }
 }

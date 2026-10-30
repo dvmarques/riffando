@@ -18,8 +18,10 @@ export const errorLabels: Record<string, string> = {
 
 /** Sem eventos por este tempo a leitura é tratada como indisponível, nunca como nota atual. */
 export const STALE_AFTER_MS = 1200;
-/** Leituras consecutivas usadas na mediana exibida (≈ 0,5 s a 10 eventos/s). */
-export const SMOOTHING_FRAMES = 5;
+/** Leituras consecutivas usadas na mediana exibida (≈ 0,8 s a 10 eventos/s). */
+export const SMOOTHING_FRAMES = 8;
+/** Última leitura mantida na tela, claramente marcada como não ao vivo, por este tempo. */
+export const HOLD_MS = 3000;
 
 const median = (values: number[]) => {
   if (!values.length) return null;
@@ -34,6 +36,9 @@ export function useTuner() {
   const [pitch, setPitch] = useState<PitchEvent | null>(null);
   const [session, setSession] = useState<TunerSession | null>(null);
   const [recent, setRecent] = useState<number[]>([]);
+  const [heldHz, setHeldHz] = useState<number | null>(null);
+  const recentRef = useRef<number[]>([]);
+  const holdTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const mounted = useRef(true);
   const operation = useRef(0);
   const startPending = useRef(false);
@@ -47,6 +52,25 @@ export function useTuner() {
     staleTimer.current = undefined;
   }, []);
 
+  const clearHold = useCallback(() => {
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    holdTimer.current = undefined;
+    recentRef.current = [];
+    setRecent([]);
+    setHeldHz(null);
+  }, []);
+
+  /** Perdeu a leitura: guarda a mediana recente como “última leitura” por HOLD_MS (sem tratá-la como ao vivo). */
+  const holdLast = useCallback(() => {
+    const last = median(recentRef.current);
+    recentRef.current = [];
+    setRecent([]);
+    if (last === null) return;
+    setHeldHz(last);
+    if (holdTimer.current) clearTimeout(holdTimer.current);
+    holdTimer.current = setTimeout(() => setHeldHz(null), HOLD_MS);
+  }, []);
+
   const stop = useCallback(async () => {
     operation.current++;
     filter.current.end();
@@ -56,6 +80,7 @@ export function useTuner() {
       await nativeTuner.stop();
       if (mounted.current) {
         setPitch(null);
+        clearHold();
         setSession(null);
         setError('');
         setStatus('idle');
@@ -66,7 +91,7 @@ export function useTuner() {
         setError('Não foi possível encerrar o afinador. Feche e abra o aplicativo.');
       }
     }
-  }, [clearStale]);
+  }, [clearStale, clearHold]);
 
   useEffect(() => {
     mounted.current = true;
@@ -78,14 +103,20 @@ export function useTuner() {
       pitchSubscription = nativeTuner.onPitch((event) => {
         if (!mounted.current || !sessionFilter.accept(event)) return;
         setPitch(event);
-        setRecent((previous) => event.state === 'reading' && event.frequencyHz !== null
-          ? [...previous.slice(-(SMOOTHING_FRAMES - 1)), event.frequencyHz]
-          : []);
+        if (event.state === 'reading' && event.frequencyHz !== null) {
+          if (holdTimer.current) clearTimeout(holdTimer.current);
+          holdTimer.current = undefined;
+          setHeldHz(null);
+          recentRef.current = [...recentRef.current.slice(-(SMOOTHING_FRAMES - 1)), event.frequencyHz];
+          setRecent(recentRef.current);
+        } else {
+          holdLast();
+        }
         clearStale();
         staleTimer.current = setTimeout(() => {
           if (mounted.current) {
             setPitch(null);
-            setRecent([]);
+            holdLast();
           }
         }, STALE_AFTER_MS);
       });
@@ -97,7 +128,7 @@ export function useTuner() {
           setError(errorLabels[code] ?? 'Ocorreu um erro ao capturar áudio.');
           setStatus('error');
           setPitch(null);
-          setRecent([]);
+          clearHold();
           setSession(null);
         }
       });
@@ -121,7 +152,7 @@ export function useTuner() {
         if (mounted.current) {
           setStatus('idle');
           setPitch(null);
-          setRecent([]);
+          clearHold();
           setSession(null);
         }
       }
@@ -136,7 +167,7 @@ export function useTuner() {
       appState.remove();
       void nativeTuner.stop().catch(() => {});
     };
-  }, [clearStale]);
+  }, [clearStale, clearHold, holdLast]);
 
   const start = useCallback(async () => {
     if (moduleUnavailable || busy || status === 'listening' || startPending.current) return;
@@ -144,7 +175,7 @@ export function useTuner() {
     const id = ++operation.current;
     setError('');
     setPitch(null);
-    setRecent([]);
+    clearHold();
     if (Platform.OS !== 'android') {
       startPending.current = false;
       setStatus('error');
@@ -186,10 +217,10 @@ export function useTuner() {
     } finally {
       startPending.current = false;
     }
-  }, [busy, moduleUnavailable, status]);
+  }, [busy, clearHold, moduleUnavailable, status]);
 
   const smoothedHz = median(recent);
-  return { status, busy, error, moduleUnavailable, pitch, smoothedHz, session, start, stop };
+  return { status, busy, error, moduleUnavailable, pitch, smoothedHz, heldHz, session, start, stop };
 }
 
 /** Valor atualizado no máximo uma vez por intervalo; evita anúncios frequentes aos leitores de tela. */

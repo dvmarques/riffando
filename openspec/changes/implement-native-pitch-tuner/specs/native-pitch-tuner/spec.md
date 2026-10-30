@@ -64,12 +64,12 @@ O afinador MUST oferecer reconhecimento cromático em toda a faixa operacional e
 
 ### Requirement: Feedback visual acessível e veraz
 
-A tela MUST exibir nota grande, ponteiro centrado em 0 cents e valor em cents, MUST indicar Grave/Afinado/Agudo também por texto (não apenas por cor), MUST funcionar com fonte ampliada e TalkBack, MUST NOT anunciar cada atualização de leitura aos leitores de tela e MUST NOT apresentar leitura antiga como atual quando a captura parar ou a confiança cair.
+A tela MUST exibir nota grande, ponteiro centrado em 0 cents e valor em cents, MUST indicar Grave/Afinado/Agudo também por texto (não apenas por cor), MUST funcionar com fonte ampliada e TalkBack, MUST NOT anunciar cada atualização de leitura aos leitores de tela e MUST NOT apresentar leitura antiga como atual quando a captura parar ou a confiança cair (uma última leitura rotulada, por até 3 s, não é apresentada como atual).
 
 #### Scenario: Confiança perdida ou captura interrompida
 
 - **WHEN** a leitura deixa de ser confiável ou a captura é interrompida
-- **THEN** a nota, o ponteiro e os cents deixam de ser exibidos como leitura ao vivo e o estado é descrito em pt-BR sem depender de cor
+- **THEN** a nota, o ponteiro e os cents deixam de ser exibidos como leitura ao vivo; a última leitura estável pode permanecer por no máximo 3 s, visualmente atenuada e rotulada como “Última leitura”, sem estado “afinado” e sem anúncio por leitor de tela, e depois é apagada; o estado é descrito em pt-BR sem depender de cor
 
 #### Scenario: Leitor de tela
 
@@ -78,7 +78,7 @@ A tela MUST exibir nota grande, ponteiro centrado em 0 cents e valor em cents, M
 
 ### Requirement: Estabilização, taxa de eventos e correção de sessão
 
-O afinador MUST estabilizar leituras exigindo K quadros consecutivos aceitos com dispersão máxima de 50 cents e reportando a mediana, MUST emitir ao JavaScript no máximo 10 eventos por segundo e MUST descartar eventos de sessões já encerradas por identificador de sessão e sequência.
+O afinador MUST estabilizar leituras exigindo K leituras aceitas recentes (janela de 5 quadros) com dispersão máxima de 50 cents e reportando a mediana, MUST emitir ao JavaScript no máximo 10 eventos por segundo e MUST descartar eventos de sessões já encerradas por identificador de sessão e sequência.
 
 #### Scenario: Troca de nota
 
