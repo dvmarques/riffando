@@ -22,9 +22,17 @@ Preparar ruleset com PR obrigatório, uma aprovação independente quando dispon
 
 Esta é recomendação, não configuração aplicada. Verificar permissões administrativas, plano GitHub, colaboradores capazes de revisar e impactos antes de ativar: exigir aprovador independente pode bloquear mantenedor único. Não usar aprovação automática por IA nem auto-merge como substituto.
 
+## Seleção de validações por impacto
+
+Em PR pronta, o job de classificação compara o ponto de divergência da base com o head, com histórico completo. Somente caminhos reconhecidos como documentação e definições de agentes recebem CI documental: documentação/OpenSpec em Linux e Windows e testes do classificador e gate. App, dependências, scripts, configuração de CI e qualquer caminho desconhecido exigem a matriz completa. Diff vazio também exige matriz completa; erro de classificação faz o gate falhar. Renomes são tratados como remoção e adição; links simbólicos, submódulos e outros modos de arquivo exigem matriz completa. As skills Claude admitem arquivos Markdown adicionais; no Codex apenas `SKILL.md` é reconhecido para evitar tratar outros arquivos arbitrários como documentação.
+
+Como o workflow e o gate são executados a partir da PR, classificação não substitui revisão independente de mudanças em `.github/**` e `scripts/ci-*`; exigir revisão desses caminhos deve ser avaliado no ruleset, ainda não aplicado.
+
+O gate exige sucesso da classificação e da documentação; na matriz completa exige também os jobs mobile. Na seleção documental, só aceita os jobs pesados explicitamente skipped. Push na main e execução manual sempre usam a matriz completa. Esta mudança altera o próprio CI, portanto sua PR também exige a matriz completa. O catálogo remoto Expo pode divergir da matriz fixada, como na PR #62; não se deve mascarar falha nem alterar dependências sem tratamento apropriado.
+
 ## CI e PRs Draft
 
-Enquanto a PR estiver em **Draft**, o job de validação do CI fica skipped. Ao marcar **Ready for review**, o evento `ready_for_review` executa a validação completa (Linux e Windows) sobre o commit corrente. `push` na `main` e execução manual (`workflow_dispatch`) continuam rodando normalmente; para medir ou diagnosticar o CI completo de uma branch Draft sem marcar Ready, use `gh workflow run ci.yml --ref <branch>`. A execução manual não substitui o CI do PR exigido para integração. Em Draft, rode `npm run validate` localmente; a integração exige CI verde no commit final, portanto a PR precisa estar Ready.
+Enquanto a PR estiver em **Draft**, o job de validação do CI fica skipped. Ao marcar **Ready for review**, o evento `ready_for_review` executa as validações aplicáveis ao diff sobre o commit corrente. `push` na `main` e execução manual (`workflow_dispatch`) continuam rodando normalmente; para medir ou diagnosticar o CI completo de uma branch Draft sem marcar Ready, use `gh workflow run ci.yml --ref <branch>`. A execução manual não substitui o CI do PR exigido para integração. Em Draft, rode `npm run validate` localmente; a integração exige CI verde no commit final, portanto a PR precisa estar Ready.
 
 ## Runtime das actions (Node.js 20 → 24)
 

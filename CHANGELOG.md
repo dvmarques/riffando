@@ -11,9 +11,11 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
-- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Apply: afinador cromático e modo guitarra (E2 A2 D3 G3 B3 E4) com análise MPM nativa sobre a captura PCM existente, rota `/afinador`, nota grande, ponteiro, cents e estados em pt-BR; sem gravação, upload ou telemetria. Em validação: sem medição em aparelho físico e sem CI Kotlin verificado neste registro.
+- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Apply: afinador cromático e modo guitarra (E2 A2 D3 G3 B3 E4) com análise MPM nativa sobre a captura PCM existente, rota `/afinador`, nota grande, ponteiro, cents e estados em pt-BR; sem gravação, upload ou telemetria. Em validação: CI Kotlin verde, sem medição em aparelho físico.
 
 - `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Refinamento técnico: spec com deltas válidos, parâmetros e critérios mensuráveis, benchmark sintético reproduzível (YIN × MPM × ACF, `experiments/gc-014`) e protocolo de validação física do afinador no Galaxy S25 FE. Sem Apply, sem implementação do afinador e sem medição em Android.
+
+- `paridade-revisores-codex-claude` (Refs #54; PR #62) - Revisores consultivos de arquitetura e acessibilidade disponíveis para Codex, com verificação de equivalência ao Claude.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
 
@@ -27,7 +29,11 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
-- `implement-native-pitch-tuner` (Refs #24; PR #61) - `react-native` 0.88.0 → 0.88.1 (exato), versão esperada pelo Expo SDK 58 no `check:expo`; lock, `config/toolchain.json` e inventário de dependências/licenças alinhados. Autorizado pelo mantenedor em 29/10/2026.
+- `paridade-revisores-codex-claude` (Refs #54, #59; PR #62) - Change concluída com spec de CI proporcional sincronizada e arquivada antes da integração.
+
+- `paridade-revisores-codex-claude` (PR #62) - React Native atualizado de 0.88.0 para 0.88.1 conforme catálogo do Expo SDK 58, com matriz e lockfile sincronizados.
+
+- `paridade-revisores-codex-claude` (Refs #59; PR #62) - CI de PRs seleciona validações por impacto, com fallback completo e gate que verifica resultados esperados.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Change concluída (17/17 tarefas) arquivada com sync da spec `native-pcm-capture`; validada em CI e no Galaxy S25 FE (um aparelho, sem conclusões de latência ou precisão).
 
