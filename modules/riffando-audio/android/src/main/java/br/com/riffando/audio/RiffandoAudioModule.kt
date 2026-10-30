@@ -229,6 +229,7 @@ class RiffandoAudioModule : Module() {
                 "frequencyHz" to output.frequencyHz,
                 "confidence" to output.confidence,
                 "rmsDbfs" to output.rmsDbfs,
+                "refined" to output.refined,
                 "windowMs" to (PitchConfig.WINDOW_SECONDS * 1000).toInt(),
                 "sampleRateHz" to session.sampleRate,
                 "observedAtNanos" to now.toString(),

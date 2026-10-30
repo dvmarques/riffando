@@ -155,7 +155,7 @@ export default function TunerScreen() {
       {listening ? (
         <Text style={styles.note}>
           {tuner.pitch
-            ? `Detalhes técnicos: nível ${tuner.pitch.rmsDbfs.toFixed(0)} dBFS · confiança ${tuner.pitch.confidence.toFixed(2)} · ${tuner.pitch.sampleRateHz} Hz · ${tuner.pitch.analysisMicros} µs/quadro`
+            ? `Detalhes técnicos: nível ${tuner.pitch.rmsDbfs.toFixed(0)} dBFS · confiança ${tuner.pitch.confidence.toFixed(2)} · ${tuner.pitch.refined ? 'fundamental' : 'período'} · ${tuner.pitch.sampleRateHz} Hz · ${tuner.pitch.analysisMicros} µs/quadro`
             : 'Detalhes técnicos: aguardando leitura'}
         </Text>
       ) : null}

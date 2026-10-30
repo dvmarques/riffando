@@ -2,6 +2,7 @@ package br.com.riffando.audio
 
 import kotlin.math.log10
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
@@ -18,6 +19,8 @@ internal data class PitchOutput(
   val frequencyHz: Double?,
   val confidence: Double,
   val rmsDbfs: Double,
+  /** true quando a frequência vem da fundamental medida; false quando vem do período (MPM). */
+  val refined: Boolean = false,
 )
 
 /**
@@ -31,6 +34,7 @@ internal class PitchPipeline(
 ) {
   private val size = detector.windowSize
   private val hop = max(1, (sampleRate * PitchConfig.HOP_SECONDS).roundToInt())
+  private val refiner = FundamentalRefiner(sampleRate, size)
   private val ring = DoubleArray(size)
   private val window = DoubleArray(size)
   private var next = 0
@@ -40,6 +44,10 @@ internal class PitchPipeline(
   private var historyCount = 0
   private var historyHead = 0
   private var gateOpen = false
+  private val levels = DoubleArray(PitchConfig.ONSET_LOOKBACK_FRAMES)
+  private var levelCount = 0
+  private var levelHead = 0
+  private var attackFramesLeft = 0
 
   /** Informa um [PitchOutput] por quadro analisado (hop de ~20 ms). */
   fun push(buffer: ShortArray, count: Int, onFrame: (PitchOutput) -> Unit) {
@@ -58,6 +66,7 @@ internal class PitchPipeline(
 
   fun reset() {
     next = 0; filled = 0; sinceLast = 0; historyCount = 0; historyHead = 0; gateOpen = false
+    levelCount = 0; levelHead = 0; attackFramesLeft = 0
     history.fill(null)
   }
 
@@ -70,6 +79,15 @@ internal class PitchPipeline(
     }
     val rms = sqrt(squared / size)
     val rmsDbfs = if (rms == 0.0) -120.0 else max(-120.0, 20 * log10(rms))
+    // Ataque: subida brusca de nível indica nota nova; a afinação do início da nota não é lida.
+    var lowest = rmsDbfs
+    for (index in 0 until levelCount) lowest = min(lowest, levels[index])
+    if (levelCount > 0 && rmsDbfs - lowest >= PitchConfig.ONSET_RISE_DB && attackFramesLeft == 0) {
+      attackFramesLeft = PitchConfig.ATTACK_HOLD_FRAMES
+    }
+    levels[levelHead] = rmsDbfs
+    levelHead = (levelHead + 1) % levels.size
+    if (levelCount < levels.size) levelCount++
     val threshold = if (gateOpen) PitchConfig.GATE_DBFS else PitchConfig.GATE_REOPEN_DBFS
     if (rmsDbfs < threshold) {
       gateOpen = false
@@ -77,6 +95,11 @@ internal class PitchPipeline(
       return PitchOutput(PitchState.NO_SIGNAL, null, 0.0, rmsDbfs)
     }
     gateOpen = true
+    if (attackFramesLeft > 0) {
+      attackFramesLeft--
+      remember(null)
+      return PitchOutput(PitchState.UNSTABLE, null, 0.0, rmsDbfs)
+    }
     val estimate = detector.detect(window)
     val accepted = estimate != null &&
       estimate.confidence >= PitchConfig.MIN_CONFIDENCE &&
@@ -92,12 +115,14 @@ internal class PitchPipeline(
         PitchOutput(PitchState.UNRELIABLE, null, estimate?.confidence ?: 0.0, rmsDbfs)
       }
     }
-    remember(estimate!!.frequencyHz)
+    // Fundamental medida (sem o viés de inarmonicidade do período) quando for confiável; senão o período.
+    val refinedHz = refiner.refine(window, estimate!!.frequencyHz)
+    remember(refinedHz ?: estimate.frequencyHz)
     val stable = stableFrequency()
     return if (stable == null) {
       PitchOutput(PitchState.UNSTABLE, null, estimate.confidence, rmsDbfs)
     } else {
-      PitchOutput(PitchState.READING, stable, estimate.confidence, rmsDbfs)
+      PitchOutput(PitchState.READING, stable, estimate.confidence, rmsDbfs, refined = refinedHz != null)
     }
   }
 

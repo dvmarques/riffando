@@ -20,8 +20,6 @@ export const errorLabels: Record<string, string> = {
 export const STALE_AFTER_MS = 1200;
 /** Leituras consecutivas usadas na mediana exibida (≈ 0,8 s a 10 eventos/s). */
 export const SMOOTHING_FRAMES = 8;
-/** Última leitura mantida na tela, claramente marcada como não ao vivo, por este tempo. */
-export const HOLD_MS = 3000;
 
 const median = (values: number[]) => {
   if (!values.length) return null;
@@ -60,15 +58,13 @@ export function useTuner() {
     setHeldHz(null);
   }, []);
 
-  /** Perdeu a leitura: guarda a mediana recente como “última leitura” por HOLD_MS (sem tratá-la como ao vivo). */
+  /** Perdeu a leitura: guarda a mediana recente como “última leitura” até a próxima leitura ou parar (nunca como ao vivo). */
   const holdLast = useCallback(() => {
     const last = median(recentRef.current);
     recentRef.current = [];
     setRecent([]);
     if (last === null) return;
     setHeldHz(last);
-    if (holdTimer.current) clearTimeout(holdTimer.current);
-    holdTimer.current = setTimeout(() => setHeldHz(null), HOLD_MS);
   }, []);
 
   const stop = useCallback(async () => {

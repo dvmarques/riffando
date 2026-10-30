@@ -21,6 +21,13 @@ internal object PitchConfig {
   const val GATE_REOPEN_DBFS = -57.0
   const val STABILITY_FRAMES = 3
 
+  /** Ataque: subida de nível ≥ 6 dB sobre o mínimo dos últimos 5 quadros marca uma nota nova. */
+  const val ONSET_RISE_DB = 6.0
+  const val ONSET_LOOKBACK_FRAMES = 5
+
+  /** Cordas tocadas com força soam mais agudas logo após o ataque (até ≈ +16 cents) e assentam em ~0,2 s; não ler esse trecho. */
+  const val ATTACK_HOLD_FRAMES = 10
+
   /** Quadros recentes considerados: tolera até 2 quadros rejeitados entre leituras aceitas (≈ 40 ms). */
   const val STABILITY_WINDOW = 5
   const val MAX_SPREAD_CENTS = 50.0

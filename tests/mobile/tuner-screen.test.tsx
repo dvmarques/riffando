@@ -17,7 +17,7 @@ jest.mock('@/infrastructure/audio/nativeTuner', () => ({
 const originalPlatform = Platform.OS;
 const routes = { _layout: Layout, index: Home, afinador: Tuner };
 const event = (over: Partial<PitchEvent> & Pick<PitchEvent, 'sequence' | 'state'>): PitchEvent => ({
-  sessionId: 7, frequencyHz: null, confidence: 0.99, rmsDbfs: -20, windowMs: 64, sampleRateHz: 48000, observedAtNanos: '1', analysisMicros: 900, ...over,
+  sessionId: 7, frequencyHz: null, confidence: 0.99, rmsDbfs: -20, refined: true, windowMs: 64, sampleRateHz: 48000, observedAtNanos: '1', analysisMicros: 900, ...over,
 });
 
 let seq = 0;
@@ -105,7 +105,7 @@ it('não mostra nota nem ponteiro sem sinal, instável ou não confiável', asyn
   }
 });
 
-it('mantém a última leitura por 3 s, marcada como não ao vivo, e depois a apaga', async () => {
+it('mantém a última leitura, em cinza e marcada, até a próxima leitura ou parar', async () => {
   await startTuner(true);
   await settle(110);
   expect(screen.getByText(t.inTune)).toBeVisible();
@@ -113,9 +113,14 @@ it('mantém a última leitura por 3 s, marcada como não ao vivo, e depois a apa
   expect(screen.getByText('Lá2')).toBeVisible();
   expect(screen.getByText(new RegExp(`^${t.lastReading}`))).toBeVisible();
   expect(screen.queryByText(t.inTune)).toBeNull();
-  await act(async () => { jest.advanceTimersByTime(3100); });
-  expect(screen.queryByText('Lá2')).toBeNull();
-  expect(screen.getByText('— cents')).toBeVisible();
+  await act(async () => { jest.advanceTimersByTime(60_000); });
+  expect(screen.getByText('Lá2')).toBeVisible();
+  await settle(220);
+  expect(screen.getByText('Lá3')).toBeVisible();
+  expect(screen.queryByText(new RegExp(`^${t.lastReading}`))).toBeNull();
+  await emit(event({ sequence: ++seq, state: 'no-signal', rmsDbfs: -70 }));
+  await userEvent.setup({ advanceTimers: jest.advanceTimersByTime }).press(screen.getByRole('button', { name: t.stop }));
+  await waitFor(() => expect(screen.queryByText('Lá3')).toBeNull());
 });
 
 it('ignora eventos de outra sessão e eventos repetidos ou atrasados', async () => {
@@ -156,8 +161,8 @@ it('trata a leitura como indisponível quando os eventos param de chegar', async
   expect(screen.getByText('Lá4')).toBeVisible();
   await act(async () => { jest.advanceTimersByTime(1300); });
   expect(screen.getByText(new RegExp(`^${t.lastReading}`))).toBeVisible();
-  await act(async () => { jest.advanceTimersByTime(3100); });
-  expect(screen.queryByText('Lá4')).toBeNull();
+  await act(async () => { jest.advanceTimersByTime(60_000); });
+  expect(screen.getByText('Lá4')).toBeVisible();
 });
 
 it('exibe erro nativo sem manter leitura antiga e para ao tocar em parar', async () => {

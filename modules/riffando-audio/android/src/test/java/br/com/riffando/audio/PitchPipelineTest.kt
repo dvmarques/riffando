@@ -4,6 +4,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sin
+import kotlin.math.sqrt
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -95,6 +96,47 @@ class PitchPipelineTest {
     // Depois de aberto por um sinal forte, o mesmo nível baixo não fecha o gate.
     val reopened = run(PitchPipeline(rate), tone(110.0, rate / 2) + quiet)
     assertTrue(reopened.takeLast(5).none { it.state == PitchState.NO_SIGNAL })
+  }
+
+  @Test
+  fun fundamentalMedidaRemoveViesDeInarmonicidadeDoPeriodo() {
+    // Corda inarmônica (B = 6e-4): o período lê ≈ +3,4 cents; a fundamental medida fica a < 1 cent da verdade.
+    val truth = 110.0 * sqrt(1 + 6e-4)
+    val pcm = ShortArray(rate / 2) { i ->
+      var v = 0.0
+      for (k in 1..4) v += sin(2 * PI * k * 110.0 * sqrt(1 + 6e-4 * k * k) * i / rate) / k
+      (0.15 * v * 32768).roundToInt().toShort()
+    }
+    val detector = MpmPitchDetector(rate)
+    val periodOnly = requireNotNull(detector.detect(normalized(pcm.copyOfRange(0, detector.windowSize))))
+    assertTrue("período: ${absCents(periodOnly.frequencyHz, truth)} c", absCents(periodOnly.frequencyHz, truth) > 2.0)
+    val reading = run(PitchPipeline(rate), pcm).last { it.state == PitchState.READING }
+    assertTrue(reading.refined)
+    assertTrue("fundamental: ${absCents(reading.frequencyHz!!, truth)} c", absCents(reading.frequencyHz!!, truth) < 1.0)
+  }
+
+  @Test
+  fun semFundamentalAEstimativaVoltaAoPeriodo() {
+    // Fundamental ausente: nada a medir no primeiro parcial, o pipeline mantém o período (refined = false).
+    val pcm = ShortArray(rate / 2) { i ->
+      var v = 0.0
+      for (k in 2..5) v += sin(2 * PI * k * 110.0 * i / rate) / k
+      (0.2 * v * 32768).roundToInt().toShort()
+    }
+    val reading = run(PitchPipeline(rate), pcm).last { it.state == PitchState.READING }
+    assertTrue(!reading.refined)
+    assertTrue(absCents(reading.frequencyHz!!, 110.0) <= 5.0)
+  }
+
+  @Test
+  fun inicioDaNotaNaoEhLidoAteAfinacaoAssentar() {
+    // Silêncio digital e depois nota: a subida de nível marca o ataque e o primeiro trecho não vira leitura.
+    val outputs = run(PitchPipeline(rate), ShortArray(rate / 5) + tone(110.0, rate))
+    val firstOpen = outputs.indexOfFirst { it.state != PitchState.NO_SIGNAL }
+    val firstReading = outputs.indexOfFirst { it.state == PitchState.READING }
+    assertTrue(firstOpen >= 0 && firstReading >= 0)
+    assertTrue("leitura cedo demais: ${firstReading - firstOpen} quadros", firstReading - firstOpen >= PitchConfig.ATTACK_HOLD_FRAMES)
+    assertTrue(outputs.take(firstReading).none { it.frequencyHz != null })
   }
 
   @Test

@@ -77,3 +77,22 @@ test('POC GC-014: guarda de oitava corrige harmônicos ímpares fracos sem alter
   const clean = lastWindow(tone(hz), 85);
   assert.equal(makeAlgorithms({ guard: true }).YIN(clean, FS).hz, makeAlgorithms().YIN(clean, FS).hz);
 });
+
+test('POC GC-014: refinação da fundamental remove o viés de inarmonicidade e recua sem fundamental', async () => {
+  const { refineFundamental } = await import('../../experiments/gc-014/refine-fundamental.mjs');
+  const B = 6e-4;
+  const n = windowSamples(FS, 64);
+  const make = (partials) => Float64Array.from({ length: n }, (_, i) => {
+    let v = 0;
+    for (const k of partials) v += Math.sin((2 * Math.PI * k * 110 * Math.sqrt(1 + B * k * k) * i) / FS) / k;
+    return Math.round(0.15 * v * 32768) / 32768;
+  });
+  const strong = make([1, 2, 3, 4]);
+  const period = makeAlgorithms()['MPM (ACF refinada)'](strong, FS);
+  const truth = 110 * Math.sqrt(1 + B);
+  assert.ok(centsBetween(period.hz, truth) > 2, 'o período tem viés positivo');
+  const refined = refineFundamental(strong, FS, period.hz);
+  assert.ok(refined && Math.abs(centsBetween(refined.hz, truth)) < 1, 'a fundamental medida fica a < 1 cent');
+  const noFundamental = make([2, 3, 4, 5]);
+  assert.equal(refineFundamental(noFundamental, FS, makeAlgorithms()['MPM (ACF refinada)'](noFundamental, FS).hz), null);
+});

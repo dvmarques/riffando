@@ -11,6 +11,8 @@ export type PitchEvent = {
   frequencyHz: number | null;
   confidence: number;
   rmsDbfs: number;
+  /** true: frequência da fundamental medida; false: do período (pode ter viés de inarmonicidade). */
+  refined: boolean;
   windowMs: number;
   sampleRateHz: number;
   observedAtNanos: string;
