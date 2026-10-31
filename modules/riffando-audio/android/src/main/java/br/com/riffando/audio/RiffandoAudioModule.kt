@@ -16,11 +16,14 @@ import kotlin.math.max
 
 /**
  * Captura exclusiva em memória; JS recebe métricas a no máximo 5 Hz.
+ * Com o afinador (GC-014) o mesmo worker alimenta [PitchPipeline] e o JS recebe estados/frequências
+ * estabilizados a no máximo 10 Hz; nenhum PCM cru cruza a ponte e nenhum segundo AudioRecord é aberto.
  * O gravador só é liberado pelo worker, depois da última chamada read().
  */
 class RiffandoAudioModule : Module() {
   private val lock = Any()
   private var current: Session? = null
+  private var lastSessionId = 0
 
   private class Session(
     val recorder: AudioRecord,
@@ -28,6 +31,8 @@ class RiffandoAudioModule : Module() {
     val source: Int,
     val bufferBytes: Int,
     val readSamples: Int,
+    val id: Int,
+    val pitch: PitchPipeline?,
   ) {
     val active = AtomicBoolean(true)
     lateinit var worker: Thread
@@ -35,9 +40,10 @@ class RiffandoAudioModule : Module() {
 
   override fun definition() = ModuleDefinition {
     Name("RiffandoAudio")
-    Events("onMetrics", "onCaptureError")
+    Events("onMetrics", "onCaptureError", "onPitch")
 
-    AsyncFunction("startCapture") { startCaptureInternal() }
+    AsyncFunction("startCapture") { startCaptureInternal(withPitch = false) }
+    AsyncFunction("startTuner") { startCaptureInternal(withPitch = true) }
     AsyncFunction("stopCapture") { stopCaptureInternal(waitForRelease = true) }
     AsyncFunction("getCaptureStatus") {
       synchronized(lock) {
@@ -50,10 +56,14 @@ class RiffandoAudioModule : Module() {
     OnActivityDestroys { stopCaptureInternal() }
   }
 
-  private fun startCaptureInternal(): Map<String, Any> = synchronized(lock) {
+  private fun startCaptureInternal(withPitch: Boolean): Map<String, Any> = synchronized(lock) {
     val existing = current
     when (decideStart(existing != null, existing?.active?.get() == true)) {
-      StartDecision.REUSE_ACTIVE -> return@synchronized describe(existing!!)
+      StartDecision.REUSE_ACTIVE -> {
+        // Diagnóstico e afinador não dividem sessão: um segundo modo nunca abre outro AudioRecord.
+        if ((existing!!.pitch != null) != withPitch) throw IllegalStateException("AUDIO_MODE_CONFLICT")
+        return@synchronized describe(existing)
+      }
       StartDecision.REJECT_STOPPING -> throw IllegalStateException("AUDIO_STOPPING")
       StartDecision.CREATE -> Unit
     }
@@ -101,7 +111,9 @@ class RiffandoAudioModule : Module() {
           if (recorder.recordingState != AudioRecord.RECORDSTATE_RECORDING) continue
 
           val session = Session(
-            recorder, recorder.sampleRate, source, size, minOf(2048, max(256, size / 2))
+            recorder, recorder.sampleRate, source, size, minOf(2048, max(256, size / 2)),
+            id = ++lastSessionId,
+            pitch = if (withPitch) PitchPipeline(recorder.sampleRate) else null,
           )
           session.worker = Thread({ readLoop(session) }, "riffando-pcm")
           current = session
@@ -140,7 +152,8 @@ class RiffandoAudioModule : Module() {
     "channels" to 1,
     "encoding" to "pcm16",
     "bufferBytes" to session.bufferBytes,
-    "source" to if (session.source == MediaRecorder.AudioSource.UNPROCESSED) "unprocessed" else "mic"
+    "source" to if (session.source == MediaRecorder.AudioSource.UNPROCESSED) "unprocessed" else "mic",
+    "sessionId" to session.id
   )
 
   /**
@@ -169,6 +182,11 @@ class RiffandoAudioModule : Module() {
     val statistics = PcmSignalAccumulator()
     var frames = 0L
     var lastReport = System.nanoTime()
+    var lastPitchEmit = 0L
+    var sequence = 0
+    var latestPitch: PitchOutput? = null
+    var analysisNanos = 0L
+    var analysisFrames = 0L
     var errorCode: String? = null
 
     try {
@@ -195,6 +213,35 @@ class RiffandoAudioModule : Module() {
         frames += samples.toLong()
         statistics.add(buffer, samples)
         val now = System.nanoTime()
+        val pitch = session.pitch
+        if (pitch != null) {
+          val started = System.nanoTime()
+          pitch.push(buffer, samples) { latestPitch = it; analysisFrames++ }
+          analysisNanos += System.nanoTime() - started
+          val output = latestPitch
+          if (output != null && now - lastPitchEmit >= PitchConfig.EMIT_INTERVAL_NANOS) {
+            lastPitchEmit = now
+            try {
+              sendEvent("onPitch", mapOf(
+                "sessionId" to session.id,
+                "sequence" to ++sequence,
+                "state" to output.state.wire,
+                "frequencyHz" to output.frequencyHz,
+                "confidence" to output.confidence,
+                "rmsDbfs" to output.rmsDbfs,
+                "refined" to output.refined,
+                "windowMs" to (PitchConfig.WINDOW_SECONDS * 1000).toInt(),
+                "sampleRateHz" to session.sampleRate,
+                "observedAtNanos" to now.toString(),
+                // Custo médio por quadro (µs) no próprio aparelho, para a tarefa 2.4; não é latência.
+                "analysisMicros" to if (analysisFrames > 0) analysisNanos / analysisFrames / 1000 else 0L
+              ))
+            } catch (_: Exception) {
+              errorCode = "AUDIO_CONTEXT_UNAVAILABLE"
+              break
+            }
+          }
+        }
         if (now - lastReport < 200_000_000L) continue
         lastReport = now
 

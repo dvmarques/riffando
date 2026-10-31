@@ -63,31 +63,31 @@
     },
     {
       "name": "@react-native/asset-utils",
-      "version": "0.88.0",
+      "version": "0.88.1",
       "license": "MIT",
       "licenseFiles": [],
-      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.1/LICENSE"
     },
     {
       "name": "@react-native/js-polyfills",
-      "version": "0.88.0",
+      "version": "0.88.1",
       "license": "MIT",
       "licenseFiles": [],
-      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.1/LICENSE"
     },
     {
       "name": "@react-native/normalize-colors",
-      "version": "0.88.0",
+      "version": "0.88.1",
       "license": "MIT",
       "licenseFiles": [],
-      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.1/LICENSE"
     },
     {
       "name": "@react-native/virtualized-lists",
-      "version": "0.88.0",
+      "version": "0.88.1",
       "license": "MIT",
       "licenseFiles": [],
-      "licenseSource": "https://github.com/react/react-native/blob/v0.88.0/LICENSE"
+      "licenseSource": "https://github.com/react/react-native/blob/v0.88.1/LICENSE"
     },
     {
       "name": "@ungap/structured-clone",
@@ -275,7 +275,7 @@
     },
     {
       "name": "react-native",
-      "version": "0.88.0",
+      "version": "0.88.1",
       "license": "MIT",
       "licenseFiles": [
         "LICENSE"
