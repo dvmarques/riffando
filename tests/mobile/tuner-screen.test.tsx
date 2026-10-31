@@ -30,9 +30,9 @@ async function startTuner(fakeTimers = false) {
   await waitFor(() => expect(screen.getByRole('button', { name: t.stop })).toBeVisible());
 }
 const emit = (value: PitchEvent) => act(async () => { pitchListener?.(value); });
-/** Cinco leituras iguais (mediana de ≈ 0,5 s) e tempo para o número de cents atualizar (fake timers). */
+/** Trinta leituras iguais (a média móvel converge) e tempo para o número de cents atualizar (fake timers). */
 async function settle(frequencyHz: number) {
-  for (let i = 0; i < 5; i++) await emit(event({ sequence: ++seq, state: 'reading', frequencyHz }));
+  for (let i = 0; i < 30; i++) await emit(event({ sequence: ++seq, state: 'reading', frequencyHz }));
   await act(async () => { jest.advanceTimersByTime(450); });
 }
 

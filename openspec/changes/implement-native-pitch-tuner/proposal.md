@@ -30,7 +30,7 @@ Benchmark **sintético e determinístico** em Node ([experiments/gc-014](../../.
 | Afinador cromático + modo guitarra EADGBE, Android nativo, PCM nativo, nota grande/ponteiro/cents, offline, microfone embutido | **Decisão aprovada** (mantenedor, 29/10/2026, escopo de Propose) | Proposta original |
 | Apply, arquitetura relevante, archive, PR de implementação, merge | **Não autorizados** | Autorizações separadas |
 | Algoritmo inicial: MPM (NSDF + picos-chave, k = 0,9, interpolação parabólica); YIN como alternativa equivalente | Hipótese **suportada por evidência sintética**, pendente de aparelho | Relatório §1, §3, §5 |
-| Janela 64 ms (3072 amostras a 48 kHz, escalada por ms), hop 20 ms | Hipótese suportada por evidência sintética | §3, §10 |
+| Janela 128 ms (6144 amostras a 48 kHz, escalada por ms; inicial: 64 ms), hop 20 ms | Hipótese suportada por evidência sintética | §3, §10 |
 | Gate −60 dBFS RMS (reabre em −57); confiança ≥ 0,75; 3 leituras entre 5 quadros, dispersão ≤ 50 c, mediana (ajustados após o teste no aparelho; iniciais: −50 dBFS, 0,90, 3 consecutivos) | Hipótese suportada por evidência sintética | §4, §6, §10 |
 | Emissão ao JS ≤ 10 Hz, estado estabilizado retido (zero-order hold) | Hipótese suportada por evidência sintética | §10 |
 | Faixa: 48 kHz = 73–988 Hz; 16 kHz = 73–523 Hz (784 Hz falha ±5 c); 44,1 kHz não testado | Hipótese; pendente de aparelho | §8, §9 |

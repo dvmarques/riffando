@@ -37,7 +37,7 @@ Células = proporção de amostras aceitas dentro de ±5 c; rejeições contam c
 | Parâmetro | Valor inicial | Justificativa/evidência |
 | --- | --- | --- |
 | Algoritmo | MPM: NSDF, k = 0,9, interpolação parabólica | Melhor em ruído moderado; custo ≤ YIN no Node |
-| Janela | 64 ms (3072 amostras a 48 kHz = `round(fs·0,064)`), W = N − τmax − 1 | 100 % em sinais limpos já a 32 ms; 64 ms aproxima os ganhos de ruído de 128 ms e mantém a estabilização dentro do orçamento |
+| Janela | 128 ms (6144 amostras a 48 kHz = `round(fs·0,128)`), W = N − τmax − 1 | Antes 64 ms. Teste no aparelho: leitura oscilava e a E2 tem só ~5 ciclos em 64 ms. Benchmark: 128 ms é melhor em ruído moderado e vibrato; custo: ≈ +60 ms de latência e ≈ 2× o custo por quadro (medir `analysisMicros` no aparelho) |
 | Hop / sobreposição | 20 ms (≈ 69 %) | Resolução temporal da estabilização (50 quadros/s internos) |
 | Faixa de busca | 70–1000 Hz | Cordas E2–E4 e cromático D2–B5 em 48 kHz |
 | Faixa operacional anunciada | 48/44,1 kHz: 73–988 Hz (44,1 kHz não testado); 16 kHz: 73–523 Hz | A 16 kHz, 784 Hz e 988 Hz excedem ±5 c |

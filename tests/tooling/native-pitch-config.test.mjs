@@ -19,8 +19,8 @@ test('o afinador reutiliza a captura existente: um único AudioRecord e nenhum P
   }
 });
 
-test('parâmetros do afinador seguem a change: janela 64 ms, ≤ 10 eventos/s, gate, confiança e estabilizador', () => {
-  assert.match(detector, /WINDOW_SECONDS = 0\.064/);
+test('parâmetros do afinador seguem a change: janela 128 ms, ≤ 10 eventos/s, gate, confiança e estabilizador', () => {
+  assert.match(detector, /WINDOW_SECONDS = 0\.128/);
   assert.match(detector, /HOP_SECONDS = 0\.02/);
   assert.match(detector, /EMIT_INTERVAL_NANOS = 100_000_000L/);
   assert.match(detector, /GATE_DBFS = -60\.0/);

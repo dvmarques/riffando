@@ -9,7 +9,7 @@ import kotlin.math.roundToInt
 
 /** Parâmetros iniciais do afinador (GC-014); hipóteses sustentadas por benchmark sintético, a validar no aparelho. */
 internal object PitchConfig {
-  const val WINDOW_SECONDS = 0.064
+  const val WINDOW_SECONDS = 0.128
   const val HOP_SECONDS = 0.02
   const val SEARCH_MIN_HZ = 70.0
   const val SEARCH_MAX_HZ = 1000.0

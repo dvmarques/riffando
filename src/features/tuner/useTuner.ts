@@ -18,8 +18,12 @@ export const errorLabels: Record<string, string> = {
 
 /** Sem eventos por este tempo a leitura é tratada como indisponível, nunca como nota atual. */
 export const STALE_AFTER_MS = 1200;
-/** Leituras consecutivas usadas na mediana exibida (≈ 0,8 s a 10 eventos/s). */
-export const SMOOTHING_FRAMES = 8;
+/** Leituras na mediana que remove valores isolados (≈ 0,5 s a 10 eventos/s). */
+export const MEDIAN_FRAMES = 5;
+/** Média móvel exponencial depois da mediana: constante de tempo ≈ 1/α leituras (≈ 0,7 s). */
+export const EMA_ALPHA = 0.15;
+/** Salto acima disto (cents) é nota nova: a média recomeça em vez de arrastar a nota anterior. */
+export const EMA_RESET_CENTS = 50;
 
 const median = (values: number[]) => {
   if (!values.length) return null;
@@ -33,9 +37,10 @@ export function useTuner() {
   const [moduleUnavailable, setModuleUnavailable] = useState(false);
   const [pitch, setPitch] = useState<PitchEvent | null>(null);
   const [session, setSession] = useState<TunerSession | null>(null);
-  const [recent, setRecent] = useState<number[]>([]);
+  const [smoothedHz, setSmoothedHz] = useState<number | null>(null);
   const [heldHz, setHeldHz] = useState<number | null>(null);
   const recentRef = useRef<number[]>([]);
+  const emaLn = useRef<number | null>(null);
   const holdTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const mounted = useRef(true);
   const operation = useRef(0);
@@ -54,15 +59,17 @@ export function useTuner() {
     if (holdTimer.current) clearTimeout(holdTimer.current);
     holdTimer.current = undefined;
     recentRef.current = [];
-    setRecent([]);
+    emaLn.current = null;
+    setSmoothedHz(null);
     setHeldHz(null);
   }, []);
 
   /** Perdeu a leitura: guarda a mediana recente como “última leitura” até a próxima leitura ou parar (nunca como ao vivo). */
   const holdLast = useCallback(() => {
-    const last = median(recentRef.current);
+    const last = emaLn.current === null ? null : Math.exp(emaLn.current);
     recentRef.current = [];
-    setRecent([]);
+    emaLn.current = null;
+    setSmoothedHz(null);
     if (last === null) return;
     setHeldHz(last);
   }, []);
@@ -103,8 +110,13 @@ export function useTuner() {
           if (holdTimer.current) clearTimeout(holdTimer.current);
           holdTimer.current = undefined;
           setHeldHz(null);
-          recentRef.current = [...recentRef.current.slice(-(SMOOTHING_FRAMES - 1)), event.frequencyHz];
-          setRecent(recentRef.current);
+          recentRef.current = [...recentRef.current.slice(-(MEDIAN_FRAMES - 1)), event.frequencyHz];
+          const target = Math.log(median(recentRef.current) ?? event.frequencyHz);
+          const previous = emaLn.current;
+          emaLn.current = previous === null || Math.abs(1200 * (target - previous) / Math.LN2) > EMA_RESET_CENTS
+            ? target
+            : previous + EMA_ALPHA * (target - previous);
+          setSmoothedHz(Math.exp(emaLn.current));
         } else {
           holdLast();
         }
@@ -215,7 +227,6 @@ export function useTuner() {
     }
   }, [busy, clearHold, moduleUnavailable, status]);
 
-  const smoothedHz = median(recent);
   return { status, busy, error, moduleUnavailable, pitch, smoothedHz, heldHz, session, start, stop };
 }
 

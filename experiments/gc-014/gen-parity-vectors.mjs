@@ -16,7 +16,7 @@ export function closedForm(fs, hz, n) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   const fs = 48000;
-  const n = Math.round(fs * 0.064);
+  const n = Math.round(fs * 0.128);
   const cases = [...STRINGS.map(([name, midi]) => [name, midiToHz(midi)]), ['A2 +17c', 110 * 2 ** (17 / 1200)], ['C5', midiToHz(72)]];
   console.log(`// fs=${fs}, N=${n}, tauMax=${lagRange(fs).tauMax}`);
   for (const [name, hz] of cases) {

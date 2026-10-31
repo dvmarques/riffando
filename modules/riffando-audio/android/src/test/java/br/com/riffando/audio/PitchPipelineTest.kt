@@ -36,10 +36,10 @@ class PitchPipelineTest {
   @Test
   fun paridadeComPocParaCordasSoltasEDesafinacao() {
     val detector = MpmPitchDetector(rate)
-    assertEquals(3072, detector.windowSize)
+    assertEquals(6144, detector.windowSize)
     val expected = listOf(
-      82.406889 to 82.406848, 110.0 to 109.999887, 146.832384 to 146.831977, 195.997718 to 195.996958,
-      246.941651 to 246.941125, 329.627557 to 329.626094, 111.085475 to 111.085289, 523.251131 to 523.247924,
+      82.406889 to 82.406876, 110.0 to 109.999948, 146.832384 to 146.832200, 195.997718 to 195.997377,
+      246.941651 to 246.941467, 329.627557 to 329.626665, 111.085475 to 111.085395, 523.251131 to 523.246318,
     )
     for ((nominal, poc) in expected) {
       val estimate = requireNotNull(detector.detect(normalized(tone(nominal, detector.windowSize))))
@@ -161,7 +161,7 @@ class PitchPipelineTest {
     val changeFrame = (rate / 4 - MpmPitchDetector(rate).windowSize) / hop + 1
     val readings = outputs.withIndex().filter { it.index >= changeFrame && it.value.state == PitchState.READING }
     val firstNew = readings.first { absCents(it.value.frequencyHz!!, 146.832384) <= 5.0 }
-    assertTrue("estabilização lenta: ${firstNew.index - changeFrame} quadros", firstNew.index - changeFrame <= 9)
+    assertTrue("estabilização lenta (janela de 128 ms): ${firstNew.index - changeFrame} quadros", firstNew.index - changeFrame <= 14)
     // nenhuma leitura estável intermediária que não seja a nota antiga (antes da troca refletir) ou a nova
     for (reading in readings) {
       val hz = reading.value.frequencyHz!!
@@ -193,6 +193,6 @@ class PitchPipelineTest {
     val detector = MpmPitchDetector(rate)
     val estimate = requireNotNull(detector.detect(normalized(tone(246.941651, detector.windowSize))))
     assertTrue(estimate.confidence in 0.0..1.0)
-    assertTrue(abs(estimate.frequencyHz - 246.941125) < 0.01)
+    assertTrue(abs(estimate.frequencyHz - 246.941467) < 0.01)
   }
 }
