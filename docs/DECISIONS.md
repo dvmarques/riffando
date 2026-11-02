@@ -21,7 +21,7 @@ Este arquivo distingue **decisões aprovadas**, **propostas técnicas** e **pend
 | Tema | Proposta | Validação necessária |
 |---|---|---|
 | DSP | Núcleo C++ com adaptadores Kotlin/Swift e Expo Modules | Spike Android, custo de manutenção e portabilidade |
-| Pitch | YIN/pYIN ou alternativa | Precisão, ruído, CPU e latência |
+| Pitch | YIN/pYIN ou alternativa. Refinamento da GC-014 (PR #61): MPM (NSDF) candidato inicial e YIN equivalente em sinais limpos, com evidência **apenas sintética** | Precisão, ruído, CPU e latência em Android físico (protocolo em docs/development/TUNER_VALIDATION.md) |
 | Estado | Zustand | Necessidade real após protótipo |
 | Banco | SQLite + migrações; avaliar Drizzle | Prova de esquema, testes e backups |
 | Testes E2E | Maestro | Compatibilidade com Expo/dev builds |

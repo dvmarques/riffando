@@ -11,6 +11,10 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Added
 
+- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Apply: afinador cromático e modo guitarra (E2 A2 D3 G3 B3 E4) com análise MPM nativa sobre a captura PCM existente, rota `/afinador`, nota grande, ponteiro, cents e estados em pt-BR; sem gravação, upload ou telemetria. Em validação: teste rápido em aparelho motivou ajustes de sensibilidade (gate −60 dBFS, confiança ≥ 0,75, tolerância a falhas curtas) e de leitura na tela (mediana de 0,8 s, última leitura mantida em cinza até a próxima, frequência em Hz, ataque ignorado por 0,2 s, janela de análise de 128 ms e média móvel na leitura exibida), além de refinação pela fundamental medida para reduzir o viés de inarmonicidade; sem validação completa.
+
+- `implement-native-pitch-tuner` (Refs #24/GC-014; PR #61) - Refinamento técnico: spec com deltas válidos, parâmetros e critérios mensuráveis, benchmark sintético reproduzível (YIN × MPM × ACF, `experiments/gc-014`) e protocolo de validação física do afinador no Galaxy S25 FE. Sem Apply, sem implementação do afinador e sem medição em Android.
+
 - `paridade-revisores-codex-claude` (Refs #54; PR #62) - Revisores consultivos de arquitetura e acessibilidade disponíveis para Codex, com verificação de equivalência ao Claude.
 
 - `implement-native-pcm-capture` (Refs #23; PR #60) - Módulo local Kotlin/AudioRecord para captura PCM em memória, ponte de métricas e tela técnica pt-BR; testes e comprovação em Android físico ainda pendentes.
@@ -24,6 +28,8 @@ por versão e pelas changes correspondentes do OpenSpec.
 - `setup-ai-development` (PR #52; Refs #1, #14) - Preparação do fluxo de desenvolvimento com OpenSpec 1.15.0, instruções comuns para Codex e Claude Code, integrações oficiais, templates GitHub e CI de documentação/ferramentas em Linux e Windows. Sem implementação do aplicativo.
 
 #### Changed
+
+- `implement-native-pitch-tuner` (Refs #24; PR #61) - Patches do Expo SDK 58 alinhados ao catálogo (`check:expo`): expo 58.0.22, expo-router 58.0.29, expo-dev-client 58.0.18, @expo/metro-runtime 58.0.16, @expo/log-box 58.0.14 e react-native-screens 4.30.1; lock, matriz e inventário atualizados. Necessário para o CI gerar o APK de validação.
 
 - `paridade-revisores-codex-claude` (Refs #54, #59; PR #62) - Change concluída com spec de CI proporcional sincronizada e arquivada antes da integração.
 

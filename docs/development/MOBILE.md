@@ -6,7 +6,7 @@ GC-001/#11 implementado em app único, com 20 tarefas verificadas na PR #53. Rev
 
 ## Matriz e instalação
 
-config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.21, React/DOM 19.3.0, RN 0.88.1, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
+config/toolchain.json e package-lock.json são a matriz executável: Node **24.21.0**, npm **12.2.1**, Expo 58.0.22, React/DOM 19.3.0, RN 0.88.1, TS 6.0.3; JDK 17, Gradle 9.4.1, AGP 9.2.1, compileSdk 37, targetSdk 36, minSdk 24, build-tools 37.0.0, NDK 27.1.12297006. CLI Android 23.0, arquivo/diretório 16111833 e pacote platforms;android-37.0. Windows usa CMake 3.31.6/Ninja 1.12.1; Linux preserva o padrão da geração Expo.
 
 O engines aceita Node 24 como família, mas check:env exige as versões **exatas** Node/npm acima. Um patch diferente pode instalar e ser corretamente rejeitado pelo diagnóstico. Se o Node vier com outro npm, instalar conscientemente a versão fixada (npm install --global npm@12.2.1), ou usar runtime isolado; os scripts não fazem essa alteração por conta própria.
 

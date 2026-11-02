@@ -18,6 +18,7 @@ export default function HomeScreen() {
         <Text accessibilityRole="header" style={styles.heading}>{messages.unavailableTitle}</Text>
         <Text style={styles.body}>{messages.unavailable}</Text>
       </View>
+      <Action label={messages.tunerAction} onPress={() => router.push('/afinador')} />
       <Action label={messages.audioAction} onPress={() => router.push('/diagnostico-audio')} />
       <Action label={messages.aboutAction} onPress={() => router.push('/informacoes')} />
     </Screen>
