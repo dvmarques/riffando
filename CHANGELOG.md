@@ -29,7 +29,7 @@ por versão e pelas changes correspondentes do OpenSpec.
 
 #### Changed
 
-- `implement-native-pitch-tuner` (Refs #24; PR #61) - Patches do Expo SDK 58 alinhados ao catálogo (`check:expo`): expo 58.0.22, expo-router 58.0.29, expo-dev-client 58.0.18, @expo/metro-runtime 58.0.16 e react-native-screens 4.30.1; lock, matriz e inventário atualizados. Necessário para o CI gerar o APK de validação.
+- `implement-native-pitch-tuner` (Refs #24; PR #61) - Patches do Expo SDK 58 alinhados ao catálogo (`check:expo`): expo 58.0.22, expo-router 58.0.29, expo-dev-client 58.0.18, @expo/metro-runtime 58.0.16, @expo/log-box 58.0.14 e react-native-screens 4.30.1; lock, matriz e inventário atualizados. Necessário para o CI gerar o APK de validação.
 
 - `paridade-revisores-codex-claude` (Refs #54, #59; PR #62) - Change concluída com spec de CI proporcional sincronizada e arquivada antes da integração.
 
