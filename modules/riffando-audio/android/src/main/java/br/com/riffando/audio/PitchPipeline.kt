@@ -21,6 +21,11 @@ internal data class PitchOutput(
   val rmsDbfs: Double,
   /** true quando a frequência vem da fundamental medida; false quando vem do período (MPM). */
   val refined: Boolean = false,
+  /** Diagnóstico (sem PCM): frequência do quadro atual (fundamental ou período), período MPM e métricas da refinação. */
+  val rawHz: Double? = null,
+  val periodHz: Double? = null,
+  val refineProminence: Double? = null,
+  val refineRatio: Double? = null,
 )
 
 /**
@@ -116,14 +121,16 @@ internal class PitchPipeline(
       }
     }
     // Fundamental medida (sem o viés de inarmonicidade do período) quando for confiável; senão o período.
-    val refinedHz = refiner.refine(window, estimate!!.frequencyHz)
-    remember(refinedHz ?: estimate.frequencyHz)
+    val refinement = refiner.refine(window, estimate!!.frequencyHz)
+    val frameHz = refinement.hz ?: estimate.frequencyHz
+    remember(frameHz)
     val stable = stableFrequency()
-    return if (stable == null) {
-      PitchOutput(PitchState.UNSTABLE, null, estimate.confidence, rmsDbfs)
-    } else {
-      PitchOutput(PitchState.READING, stable, estimate.confidence, rmsDbfs, refined = refinedHz != null)
-    }
+    val state = if (stable == null) PitchState.UNSTABLE else PitchState.READING
+    return PitchOutput(
+      state, stable, estimate.confidence, rmsDbfs, refined = stable != null && refinement.hz != null,
+      rawHz = frameHz, periodHz = estimate.frequencyHz,
+      refineProminence = refinement.prominence, refineRatio = refinement.ratio,
+    )
   }
 
   private fun remember(hz: Double?) {

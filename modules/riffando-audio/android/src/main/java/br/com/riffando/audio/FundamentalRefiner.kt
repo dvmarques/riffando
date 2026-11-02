@@ -18,7 +18,10 @@ import kotlin.math.sin
 internal class FundamentalRefiner(private val sampleRate: Int, private val size: Int) {
   private val hann = DoubleArray(size) { 0.5 - 0.5 * cos(2 * PI * it / (size - 1)) }
 
-  fun refine(window: DoubleArray, f0: Double): Double? {
+  /** Resultado da refinação; [hz] é nulo quando a fundamental não é confiável (os demais campos servem ao diagnóstico). */
+  data class Result(val hz: Double?, val prominence: Double, val ratio: Double)
+
+  fun refine(window: DoubleArray, f0: Double): Result {
     require(window.size == size)
     val lo = f0 * 2.0.pow(-SEARCH_CENTS / 1200.0)
     val hi = f0 * 2.0.pow(SEARCH_CENTS / 1200.0)
@@ -26,7 +29,6 @@ internal class FundamentalRefiner(private val sampleRate: Int, private val size:
     val magnitudes = DoubleArray(STEPS) { magnitude(window, lo + step * it) }
     var best = 0
     for (index in 1 until STEPS) if (magnitudes[index] > magnitudes[best]) best = index
-    if (best == 0 || best == STEPS - 1) return null // pico na borda: ambíguo
 
     val bin = sampleRate.toDouble() / size
     var floorSum = 0.0
@@ -39,17 +41,19 @@ internal class FundamentalRefiner(private val sampleRate: Int, private val size:
       }
     }
     val floor = if (floorCount > 0) floorSum / floorCount else 0.0
-    if (magnitudes[best] < PROMINENCE * floor) return null
     val harmonic = max(magnitude(window, 2 * f0), magnitude(window, 3 * f0))
-    if (magnitudes[best] < MIN_RATIO * harmonic) return null
-    if (magnitudes[best - 1] <= 0.0 || magnitudes[best + 1] <= 0.0) return null
+    val prominence = if (floor > 0.0) magnitudes[best] / floor else Double.POSITIVE_INFINITY
+    val ratio = if (harmonic > 0.0) magnitudes[best] / harmonic else Double.POSITIVE_INFINITY
+    val atEdge = best == 0 || best == STEPS - 1 // pico na borda: ambíguo
+    if (atEdge || prominence < PROMINENCE || ratio < MIN_RATIO) return Result(null, prominence, ratio)
+    if (magnitudes[best - 1] <= 0.0 || magnitudes[best + 1] <= 0.0) return Result(null, prominence, ratio)
 
     val a = ln(magnitudes[best - 1])
     val b = ln(magnitudes[best])
     val c = ln(magnitudes[best + 1])
     val denominator = a - 2 * b + c
     val offset = if (denominator != 0.0) min(1.0, max(-1.0, 0.5 * (a - c) / denominator)) else 0.0
-    return lo + step * (best + offset)
+    return Result(lo + step * (best + offset), prominence, ratio)
   }
 
   /** |DFT| com janela de Hann em [frequency]; fasor rotativo evita trigonometria por amostra. */

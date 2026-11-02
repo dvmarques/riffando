@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { AppState, PermissionsAndroid, Platform } from 'react-native';
+import { AppState, PermissionsAndroid, Platform, Share } from 'react-native';
 import { createSessionFilter } from '@/domain/tuning/session';
 import { nativeTuner, type PitchEvent, type TunerSession } from '@/infrastructure/audio/nativeTuner';
 
@@ -24,6 +24,9 @@ export const MEDIAN_FRAMES = 5;
 export const EMA_ALPHA = 0.15;
 /** Salto acima disto (cents) é nota nova: a média recomeça em vez de arrastar a nota anterior. */
 export const EMA_RESET_CENTS = 50;
+/** Registro de diagnóstico mantido em memória (só números, nunca áudio): últimas leituras. */
+export const LOG_LIMIT = 600;
+const LOG_HEADER = 't_ms,seq,state,hz,rawHz,periodHz,shownHz,conf,rmsDbfs,refined,refineProminence,refineRatio,analysisMicros';
 
 const median = (values: number[]) => {
   if (!values.length) return null;
@@ -41,6 +44,9 @@ export function useTuner() {
   const [heldHz, setHeldHz] = useState<number | null>(null);
   const recentRef = useRef<number[]>([]);
   const emaLn = useRef<number | null>(null);
+  const logRef = useRef<string[]>([]);
+  const logStart = useRef(0);
+  const [logCount, setLogCount] = useState(0);
   const holdTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const mounted = useRef(true);
   const operation = useRef(0);
@@ -120,6 +126,14 @@ export function useTuner() {
         } else {
           holdLast();
         }
+        const f = (value: number | null | undefined, digits = 3) => (value === null || value === undefined ? '' : value.toFixed(digits));
+        logRef.current.push([
+          Date.now() - logStart.current, event.sequence, event.state, f(event.frequencyHz), f(event.rawHz), f(event.periodHz),
+          f(emaLn.current === null ? null : Math.exp(emaLn.current)), f(event.confidence, 2), f(event.rmsDbfs, 1), event.refined ? 1 : 0,
+          f(event.refineProminence, 2), f(event.refineRatio, 2), event.analysisMicros,
+        ].join(','));
+        if (logRef.current.length > LOG_LIMIT) logRef.current.shift();
+        setLogCount(logRef.current.length);
         clearStale();
         staleTimer.current = setTimeout(() => {
           if (mounted.current) {
@@ -184,6 +198,9 @@ export function useTuner() {
     setError('');
     setPitch(null);
     clearHold();
+    logRef.current = [];
+    logStart.current = Date.now();
+    setLogCount(0);
     if (Platform.OS !== 'android') {
       startPending.current = false;
       setStatus('error');
@@ -227,7 +244,13 @@ export function useTuner() {
     }
   }, [busy, clearHold, moduleUnavailable, status]);
 
-  return { status, busy, error, moduleUnavailable, pitch, smoothedHz, heldHz, session, start, stop };
+  /** Compartilha o registro (CSV de números) pelo menu de compartilhamento do Android; nenhum áudio é incluído. */
+  const shareLog = useCallback(async () => {
+    const text = [LOG_HEADER, ...logRef.current].join('\n');
+    await Share.share({ title: 'Registro do afinador (GC-014)', message: text });
+  }, []);
+
+  return { status, busy, error, moduleUnavailable, pitch, smoothedHz, heldHz, session, start, stop, shareLog, logCount };
 }
 
 /** Valor atualizado no máximo uma vez por intervalo; evita anúncios frequentes aos leitores de tela. */

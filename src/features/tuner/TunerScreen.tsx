@@ -169,6 +169,7 @@ export default function TunerScreen() {
       ) : (
         <Text style={styles.note}>{t.waiting}</Text>
       )}
+      {tuner.logCount > 0 && !tuner.busy ? <Action label={t.shareLog} onPress={() => { void tuner.shareLog(); }} /> : null}
       <Action label={t.back} onPress={back} />
       <Text style={styles.note}>{t.footer}</Text>
     </Screen>

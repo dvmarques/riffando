@@ -1,6 +1,6 @@
 import { renderRouter, screen } from 'expo-router/testing-library';
 import { act, userEvent, waitFor } from '@testing-library/react-native';
-import { PermissionsAndroid, Platform } from 'react-native';
+import { PermissionsAndroid, Platform, Share } from 'react-native';
 import Layout from '../../app/_layout';
 import Home from '../../app/index';
 import Tuner from '../../app/afinador';
@@ -179,4 +179,15 @@ it('para o microfone ao tocar em parar', async () => {
   await userEvent.setup().press(screen.getByRole('button', { name: t.stop }));
   await waitFor(() => expect(nativeTuner.stop).toHaveBeenCalled());
   await waitFor(() => expect(screen.getByRole('button', { name: t.start })).toBeVisible());
+});
+
+it('compartilha o registro de leituras como texto numérico, sem áudio', async () => {
+  const share = jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction', activityType: undefined });
+  await startTuner();
+  await emit(event({ sequence: 1, state: 'reading', frequencyHz: 110, rawHz: 110.2, periodHz: 110.4, refineProminence: 9.5, refineRatio: 0.8 }));
+  await userEvent.setup().press(screen.getByRole('button', { name: t.shareLog }));
+  expect(share).toHaveBeenCalledTimes(1);
+  const message = (share.mock.calls[0]?.[0] as { message: string }).message;
+  expect(message.split('\n')[0]).toContain('t_ms,seq,state,hz,rawHz,periodHz');
+  expect(message.split('\n')[1]).toMatch(/^\d+,1,reading,110\.000,110\.200,110\.400,/);
 });

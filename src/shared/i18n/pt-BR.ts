@@ -35,6 +35,7 @@ export const tunerMessages = {
   stop: 'Parar afinador',
   waiting: 'Aguarde a conclusão da operação.',
   back: 'Voltar ao início',
+  shareLog: 'Compartilhar registro (só números)',
   idle: 'Afinador parado. Toque em Iniciar para usar o microfone.',
   requestingPermission: 'Aguardando permissão do microfone…',
   starting: 'Iniciando o microfone…',

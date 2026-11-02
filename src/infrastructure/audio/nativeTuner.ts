@@ -13,6 +13,11 @@ export type PitchEvent = {
   rmsDbfs: number;
   /** true: frequência da fundamental medida; false: do período (pode ter viés de inarmonicidade). */
   refined: boolean;
+  /** Diagnóstico (nulos fora de leituras aceitas): frequência do quadro, período MPM e métricas da refinação. */
+  rawHz?: number | null;
+  periodHz?: number | null;
+  refineProminence?: number | null;
+  refineRatio?: number | null;
   windowMs: number;
   sampleRateHz: number;
   observedAtNanos: string;
